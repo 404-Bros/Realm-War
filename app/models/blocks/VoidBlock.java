@@ -1,8 +1,10 @@
 package models.blocks;
 
+import models.Position;
+
 public class VoidBlock extends Block {
-    public VoidBlock() {
-        super();
+    public VoidBlock(Position position) {
+        super(position);
     }
 
     @Override

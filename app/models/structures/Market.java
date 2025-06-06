@@ -1,12 +1,13 @@
 package models.structures;
 
+import models.Position;
 import models.blocks.Block;
 
 public class Market extends Structure {
     private int goldProduction;
 
-    public Market(int goldProduction, int maxLevel, int initialDurability, int maintenanceCost, Block baseBlock, int kingdomId) {
-        super(maxLevel, initialDurability, maintenanceCost, baseBlock, kingdomId);
+    public Market(int goldProduction, int maxLevel, int initialDurability, int maintenanceCost, Position position, Block baseBlock, int kingdomId) {
+        super(maxLevel, initialDurability, maintenanceCost, position, baseBlock, kingdomId);
         this.goldProduction = goldProduction;
     }
 

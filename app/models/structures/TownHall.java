@@ -1,5 +1,6 @@
 package models.structures;
 
+import models.Position;
 import models.blocks.Block;
 
 public class TownHall extends Structure {
@@ -7,8 +8,8 @@ public class TownHall extends Structure {
     private static final int FOOD_PRODUCTION = 5;
     private static final int UNIT_SPACE = 5;
 
-    public TownHall(Block baseBlock, int kingdomId) {
-        super(1, 50, 0, baseBlock, kingdomId);
+    public TownHall(Position position, Block baseBlock, int kingdomId) {
+        super(1, 50, 0, position, baseBlock, kingdomId);
     }
 
     @Override
