@@ -1,5 +1,6 @@
 package models.structures;
 
+import models.Position;
 import models.blocks.Block;
 
 public class Tower extends Structure {
@@ -9,8 +10,8 @@ public class Tower extends Structure {
     
     private int attackPower;
 
-    public Tower(Block baseBlock, int kingdomId) {
-        super(3, DURABILITY_BY_LEVEL[0], 10,  baseBlock, kingdomId);
+    public Tower(Position position, Block baseBlock, int kingdomId) {
+        super(3, DURABILITY_BY_LEVEL[0], 10, position, baseBlock, kingdomId);
         this.attackPower = ATTACK_POWER_BY_LEVEL[0];
     }
 

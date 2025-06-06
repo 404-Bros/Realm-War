@@ -1,5 +1,6 @@
 package models.structures;
 
+import models.Position;
 import models.blocks.Block;
 
 public class Farm extends Structure {
@@ -9,8 +10,8 @@ public class Farm extends Structure {
     
     private int foodProduction;
 
-    public Farm(Block baseBlock, int kingdomId) {
-        super(3, DURABILITY_BY_LEVEL[0], 5, baseBlock, kingdomId);
+    public Farm(Position position, Block baseBlock, int kingdomId) {
+        super(3, DURABILITY_BY_LEVEL[0], 5, position, baseBlock, kingdomId);
         this.foodProduction = FOOD_PRODUCTION_BY_LEVEL[0];
     }
 

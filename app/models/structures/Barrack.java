@@ -1,5 +1,6 @@
 package models.structures;
 
+import models.Position;
 import models.blocks.Block;
 
 public class Barrack extends Structure {
@@ -9,8 +10,8 @@ public class Barrack extends Structure {
     
     private int unitSpace;
 
-    public Barrack(Block baseBlock, int kingdomId) {
-        super(3, DURABILITY_BY_LEVEL[0], 5, baseBlock, kingdomId);
+    public Barrack(Position position, Block baseBlock, int kingdomId) {
+        super(3, DURABILITY_BY_LEVEL[0], 5, position, baseBlock, kingdomId);
         this.unitSpace = UNIT_SPACE_BY_LEVEL[0];
     }
 

@@ -1,8 +1,10 @@
 package models.blocks;
 
+import models.Position;
+
 public class ForestBlock extends Block {
-    public ForestBlock() {
-        super();
+    public ForestBlock(Position position) {
+        super(position);
     }
 
     @Override
@@ -12,8 +14,22 @@ public class ForestBlock extends Block {
 
     @Override
     public int getResourceYield(String resourceType) {
-        return 0;
-    }
+        if (!isAbsorbed()) return 0;
 
+        int resourceYield;
+        switch (resourceType) {
+            case "GOLD":
+                resourceYield = 0;
+                break;
+            case "FOOD":
+                resourceYield = 2;
+                break;
+            default:
+                resourceYield = 0;
+                break;
+        }
+        return resourceYield;
+
+    }
 
 }

@@ -1,8 +1,10 @@
 package models.blocks;
 
+import models.Position;
+
 public class EmptyBlock extends Block {
-    public EmptyBlock() {
-        super();
+    public EmptyBlock(Position position) {
+        super(position);
     }
 
     @Override
@@ -12,6 +14,21 @@ public class EmptyBlock extends Block {
 
     @Override
     public int getResourceYield(String resourceType) { //mean : daryaft manabe
-        return 0;
+        if (!isAbsorbed())
+            return 0;
+
+        int resourceYield;
+        switch (resourceType) {
+            case "GOLD":
+                resourceYield = 1;
+                break;
+            case "FOOD":
+                resourceYield = 0;
+                break;
+            default:
+                resourceYield = 0;
+                break;
+        }
+        return resourceYield;
     }
 }
