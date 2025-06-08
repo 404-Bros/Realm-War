@@ -18,7 +18,9 @@ public class TownHall extends Structure {
     }
 
     @Override
-    public void upgrade() {}
+    public void upgrade() {
+        throw new UnsupportedOperationException("TownHall cannot be upgraded");
+    }
 
     @Override
     public void performTurnAction() {}

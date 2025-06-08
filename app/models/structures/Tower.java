@@ -21,7 +21,15 @@ public class Tower extends Structure {
     }
 
     @Override
-    public void upgrade() {}
+    public void upgrade() {
+        if (!canUpgrade()) {
+            throw new IllegalStateException("Tower is already at max level");
+        }
+
+        setLevel(getLevel() + 1);
+        setDurability(DURABILITY_BY_LEVEL[getLevel() - 1]);
+        this.attackPower = ATTACK_POWER_BY_LEVEL[getLevel() - 1];
+    }
 
     @Override
     public void performTurnAction() {}
@@ -33,6 +41,8 @@ public class Tower extends Structure {
     public int getUpgradeCost() {
         return BUILDING_COST_BY_LEVEL[getLevel() - 1];
     }
-    
-    public static int getBuildingCost() {}
+
+    public static int getBuildingCost(int towersCount) {
+        return 10 + (towersCount * 10);
+    }
 }

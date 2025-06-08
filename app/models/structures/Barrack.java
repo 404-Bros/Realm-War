@@ -21,7 +21,15 @@ public class Barrack extends Structure {
     }
 
     @Override
-    public void upgrade() {}
+    public void upgrade() {
+        if (!canUpgrade()) {
+            throw new IllegalStateException("Barrack is already at max level");
+        }
+
+        setLevel(getLevel() + 1);
+        setDurability(DURABILITY_BY_LEVEL[getLevel() - 1]);
+        this.unitSpace = UNIT_SPACE_BY_LEVEL[getLevel() - 1];
+    }
 
     @Override
     public void performTurnAction() {}
@@ -33,6 +41,8 @@ public class Barrack extends Structure {
     public int getUpgradeCost() {
         return BUILDING_COST_BY_LEVEL[getLevel() - 1];
     }
-    
-    public static int getBuildingCost() {}
+
+    public static int getBuildingCost(int barracksCount) {
+        return 5 + (barracksCount * 5);
+    }
 }

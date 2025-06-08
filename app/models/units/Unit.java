@@ -1,5 +1,7 @@
 package models.units;
 
+import models.Position;
+
 public abstract class Unit {
     private int hitPoints;
     private int maxHitPoints;
@@ -10,9 +12,10 @@ public abstract class Unit {
     private int rationCost;
     private int unitSpace;
     private int kingdomId;
+    private Position position;
 
     public Unit(int hitPoints, int movementRange, int attackPower, int attackRange, 
-                int paymentCost, int rationCost, int unitSpace, int kingdomId) {
+                int paymentCost, int rationCost, int unitSpace, int kingdomId, Position position) {
         this.hitPoints = hitPoints;
         this.maxHitPoints = hitPoints;
         this.movementRange = movementRange;
@@ -22,6 +25,7 @@ public abstract class Unit {
         this.rationCost = rationCost;
         this.unitSpace = unitSpace;
         this.kingdomId = kingdomId;
+        this.position = position;
     }
 
     public abstract boolean canMerge(Unit other);
@@ -37,4 +41,5 @@ public abstract class Unit {
     public int getRationCost() { return rationCost; }
     public int getUnitSpace() { return unitSpace; }
     public int getKingdomId() { return kingdomId; }
+    public Position getPosition() { return position; }
 }
