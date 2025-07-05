@@ -11,8 +11,9 @@ public abstract class Structure {
     private Position position;
     private Block baseBlock;
     private int kingdomId;
+    private int maxCount;
 
-    public Structure(int maxLevel, int initialDurability, int maintenanceCost, Position position, Block baseBlock, int kingdomId) {
+    public Structure(int maxLevel,int maxCount, int initialDurability, int maintenanceCost, Position position, Block baseBlock, int kingdomId) {
         this.level = 1;
         this.maxLevel = maxLevel;
         this.durability = initialDurability;
@@ -20,6 +21,7 @@ public abstract class Structure {
         this.position = position;
         this.baseBlock = baseBlock;
         this.kingdomId = kingdomId;
+        this.maxCount = maxCount;
     }
 
     public abstract boolean canUpgrade();
@@ -35,4 +37,5 @@ public abstract class Structure {
     public Position getPosition() { return position; }
     public Block getBaseBlock() { return baseBlock; }
     public int getKingdomId() { return kingdomId; }
+    public int getMaxCount() { return maxCount; }
 }

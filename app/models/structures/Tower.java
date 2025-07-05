@@ -11,7 +11,7 @@ public class Tower extends Structure {
     private int attackPower;
 
     public Tower(Position position, Block baseBlock, int kingdomId) {
-        super(3, DURABILITY_BY_LEVEL[0], 10, position, baseBlock, kingdomId);
+        super(3,4, DURABILITY_BY_LEVEL[0], 10, position, baseBlock, kingdomId);
         this.attackPower = ATTACK_POWER_BY_LEVEL[0];
     }
 

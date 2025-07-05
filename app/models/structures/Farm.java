@@ -11,7 +11,7 @@ public class Farm extends Structure {
     private int foodProduction;
 
     public Farm(Position position, Block baseBlock, int kingdomId) {
-        super(3, DURABILITY_BY_LEVEL[0], 5, position, baseBlock, kingdomId);
+        super(3,5, DURABILITY_BY_LEVEL[0], 5, position, baseBlock, kingdomId);
         this.foodProduction = FOOD_PRODUCTION_BY_LEVEL[0];
     }
 
@@ -43,6 +43,6 @@ public class Farm extends Structure {
     }
     
     public static int getBuildingCost(int farmsCount) {
-        return 5 + (farmsCount * 5);
+        return 3 + (farmsCount * 2);
     }
 }

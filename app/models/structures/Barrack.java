@@ -11,7 +11,7 @@ public class Barrack extends Structure {
     private int unitSpace;
 
     public Barrack(Position position, Block baseBlock, int kingdomId) {
-        super(3, DURABILITY_BY_LEVEL[0], 5, position, baseBlock, kingdomId);
+        super(3,4, DURABILITY_BY_LEVEL[0], 5, position, baseBlock, kingdomId);
         this.unitSpace = UNIT_SPACE_BY_LEVEL[0];
     }
 
