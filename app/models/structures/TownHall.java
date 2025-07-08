@@ -9,7 +9,7 @@ public class TownHall extends Structure {
     private static final int UNIT_SPACE = 5;
 
     public TownHall(Position position, Block baseBlock, int kingdomId) {
-        super(1, 50, 0, position, baseBlock, kingdomId);
+        super(1,1, 50, 0, position, baseBlock, kingdomId);
     }
 
     @Override
