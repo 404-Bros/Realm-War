@@ -19,7 +19,7 @@ public class GameState {
     public GameState(int mapWidth, int mapHeight, int playerCount) {
         this.kingdoms = new ArrayList<>();
         this.gameMap = new Block[mapWidth][mapHeight];
-        this.currentPlayerTurn = 0;
+        this.currentPlayerTurn = 1;
         this.turnNumber = 1;
 
         initializeMap(mapWidth, mapHeight);
