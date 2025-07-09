@@ -21,18 +21,19 @@ public class GamePanel extends JPanel {
     private List<BlockButton> blockButtons=new ArrayList<BlockButton>();
     private static final int BLOCK_SIZE = 50;
 
-    public GamePanel() {
+    public GamePanel(GameState gameState) {
+        this.gameState = gameState;
         ResourceLoader rl = new ResourceLoader();
         icons=rl.geticons();
         ///////////////////////////////////
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(gameState.getCol()*BLOCK_SIZE, gameState.getRow()*BLOCK_SIZE));
 
 
         setBackground(new Color(76, 68, 57, 255));
         setLayout(new GridLayout(12,16,0,0));
 
 
-        this.gameState = new GameState(12, 16, 2);
+
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         creatBlockButtons();
         initializePanel();

@@ -15,11 +15,15 @@ public class GameState {
     private Block[][] gameMap;
     private int turnNumber;
     private boolean running;
+    private int row;
+    private int col;
 
     public GameState(int mapWidth, int mapHeight, int playerCount) {
+        this.row=mapWidth;
+        this.col=mapHeight;
         this.kingdoms = new ArrayList<>();
         this.gameMap = new Block[mapWidth][mapHeight];
-        this.currentPlayerTurn = 1;
+        this.currentPlayerTurn = 0;
         this.turnNumber = 1;
 
         initializeMap(mapWidth, mapHeight);
@@ -101,6 +105,14 @@ public class GameState {
 
     public boolean isRunning() {
         return running;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 
     public void setRunning(boolean running) {

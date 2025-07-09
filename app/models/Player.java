@@ -2,26 +2,22 @@ package models;
 
 public class Player {
     private String name;
-    private int score;
+    private Kingdom kingdom;
 
-    public Player(String name, int score) {
+    public Player(String name, Kingdom kingdom) {
         this.name = name;
-        this.score = score;
+        this.kingdom = kingdom;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Kingdom getKingdom() {
+        return kingdom;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
+    public void setKingdom(Kingdom kingdom) {
+        this.kingdom = kingdom;
     }
 }
