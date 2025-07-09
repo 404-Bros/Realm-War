@@ -1,7 +1,9 @@
 package views;
 
+import controllers.GameController;
 import models.GameState;
 import models.Kingdom;
+import models.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +18,15 @@ public class InfoPanel extends JPanel {
     private JLabel turnLabel;
     private JLabel timeLabel;
     private int timeLeft=30;
+    private String player1Name;
+    private String player2Name;
+    private GameState gameState;
     
-    public InfoPanel() {
+    public InfoPanel(GameState gameState) {
+        setBackground(new Color(225, 212, 193));
+
+        this.gameState = gameState;
+
         setPreferredSize(new Dimension(200, 600));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
@@ -50,10 +59,17 @@ public class InfoPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
     
-    public void updateInfo(GameState gameState) {
+    public void updateInfo() {
         Kingdom currentKingdom = gameState.getCurrentKingdom();
         
         playerLabel.setText("Player: " + gameState.getCurrentPlayerTurn());
+        if (gameState.getCurrentPlayerTurn()==0){
+            playerLabel.setText("Player: " + player1Name);
+        }
+        else {
+            playerLabel.setText("Player: " + player2Name);
+        }
+
         goldLabel.setText("Gold: " + currentKingdom.getGold());
         foodLabel.setText("Food: " + currentKingdom.getFood());
         unitSpaceLabel.setText("Unit Space: " + currentKingdom.getUsedUnitSpace() + 
@@ -72,5 +88,13 @@ public class InfoPanel extends JPanel {
         });
 
         timer.start();
+    }
+
+    public void setPlayer1Name(String player1Name) {
+        this.player1Name = player1Name;
+    }
+
+    public void setPlayer2Name(String player2Name) {
+        this.player2Name = player2Name;
     }
 }

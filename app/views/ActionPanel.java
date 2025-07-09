@@ -3,6 +3,7 @@ package views;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class ActionPanel extends JPanel {
     private JButton endTurnButton;
@@ -14,6 +15,7 @@ public class ActionPanel extends JPanel {
     public ActionPanel() {
         setPreferredSize(new Dimension(800, 100));
         setLayout(null);
+        setBackground(new Color(225, 212, 193));
 
         //GridBagConstraints gbc = new GridBagConstraints();
         //gbc.insets = new Insets(5, 5, 5, 5);
@@ -111,4 +113,20 @@ public class ActionPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Attack mode enabled.");
         });
     }
+    public void addBuildButtonAL(ActionListener al){
+        buildButton.addActionListener(al);
+    }
+    public void addRecruitButtonAL(ActionListener al){
+        recruitButton.addActionListener(al);
+    }
+    public void addMoveButtonAL(ActionListener al){
+        moveButton.addActionListener(al);
+    }
+    public void addEndTurnButtonAL(ActionListener al){
+        endTurnButton.addActionListener(al);
+    }
+    public void addAttackButtonAL(ActionListener al){
+        attackButton.addActionListener(al);
+    }
+
 }
