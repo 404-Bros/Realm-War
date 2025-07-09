@@ -13,7 +13,10 @@ public class ActionPanel extends JPanel {
 
     public ActionPanel() {
         setPreferredSize(new Dimension(800, 100));
-        setLayout(new FlowLayout());
+        setLayout(null);
+
+        //GridBagConstraints gbc = new GridBagConstraints();
+        //gbc.insets = new Insets(5, 5, 5, 5);
 
         endTurnButton = new JButton("End Turn");
         endTurnButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -24,7 +27,7 @@ public class ActionPanel extends JPanel {
         endTurnButton.setPreferredSize(new Dimension(100, 40));
         endTurnButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         endTurnButton.setIcon(new ImageIcon(getClass().getResource("../resources/endTurnIcon.png")));
-
+        endTurnButton.setBounds(555,10,100,40);
         /// ////////////////////
         buildButton = new JButton("Build");
         buildButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -35,7 +38,7 @@ public class ActionPanel extends JPanel {
         buildButton.setPreferredSize(new Dimension(100, 40));
         buildButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         buildButton.setIcon(new ImageIcon(getClass().getResource("../resources/buildIcon.png")));
-
+        buildButton.setBounds(135,10,100,40);
         /// //////////////////////
         recruitButton = new JButton("Recruit");
         recruitButton.setFocusable(false);
@@ -46,6 +49,7 @@ public class ActionPanel extends JPanel {
         recruitButton.setPreferredSize(new Dimension(120, 40));
         recruitButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         recruitButton.setIcon(new ImageIcon(getClass().getResource("../resources/recruitIcon.png")));
+        recruitButton.setBounds(235,10,120,40);
         /// //////////
         moveButton = new JButton("Move");
         moveButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -56,6 +60,7 @@ public class ActionPanel extends JPanel {
         moveButton.setPreferredSize(new Dimension(100, 40));
         moveButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         moveButton.setIcon(new ImageIcon(getClass().getResource("../resources/moveIcon.png")));
+        moveButton.setBounds(355,10,100,40);
         /// /////////////////////
         attackButton = new JButton("Attack");
         attackButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -66,12 +71,19 @@ public class ActionPanel extends JPanel {
         attackButton.setPreferredSize(new Dimension(100, 40));
         attackButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         attackButton.setIcon(new ImageIcon(getClass().getResource("../resources/attackIcon.png")));
+        attackButton.setBounds(455,10,100,40);
+
 
         /// /////
+        //gbc.gridx = 0;
         add(buildButton);
+        //gbc.gridx = 1;
         add(recruitButton);
+        //gbc.gridx = 2;
         add(moveButton);
+        //gbc.gridx = 3;
         add(attackButton);
+        //gbc.gridx = 4;
         add(endTurnButton);
 
 
