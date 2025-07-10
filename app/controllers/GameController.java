@@ -3,15 +3,20 @@ package controllers;
 import models.GameState;
 import models.Player;
 import views.GameFrame;
+import views.PauseFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.color.ICC_ColorSpace;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GameController {
     private GameState gameState;
     private GameFrame gameFrame;
     private static Player player1;
     private static Player player2;
+    private PauseFrame pauseFrame = new PauseFrame();
 
 
     public GameController(GameState gameState, GameFrame gameFrame){
@@ -22,6 +27,7 @@ public class GameController {
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
 
+        // New Game Button Action Listener
         gameFrame.getMenuPanel().addNewGameButtonAL(e -> {
             gameFrame.remove(gameFrame.getMenuPanel());
             gameFrame.add(gameFrame.getGetPlayerNamePanel());
@@ -29,6 +35,8 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
         });
+
+        // Back Button Action Listener
         gameFrame.getGetPlayerNamePanel().addBackButtonActionListener(e -> {
             gameFrame.remove(gameFrame.getGetPlayerNamePanel());
             gameFrame.add(gameFrame.getMenuPanel());
@@ -36,10 +44,11 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
         });
+
+        // start Button Action Listener
         gameFrame.getGetPlayerNamePanel().addStartButtonActionListener(e -> {
             String player1name;
             String player2name;
-
 
             player1name=gameFrame.getGetPlayerNamePanel().getPlayer1Name();
             player2name=gameFrame.getGetPlayerNamePanel().getPlayer2Name();
@@ -54,22 +63,37 @@ public class GameController {
                 }
             }
 
-            gameFrame.getInfoPanel().setPlayer1Name(player1name);
-            gameFrame.getInfoPanel().setPlayer2Name(player2name);
-            gameFrame.getInfoPanel().updateInfo();
+            gameFrame.getMainInfoPanel().getInfoPanel().setPlayer1Name(player1name);
+            gameFrame.getMainInfoPanel().getInfoPanel().setPlayer2Name(player2name);
+            gameFrame.getMainInfoPanel().getInfoPanel().updateInfo();
 
             player1 = new Player(player1name,gameState.getKingdoms().get(0));
             player2 = new Player(player2name,gameState.getKingdoms().get(1));
 
             gameFrame.remove(gameFrame.getGetPlayerNamePanel());
             gameFrame.add(gameFrame.getGamePanel(), BorderLayout.CENTER);
-            gameFrame.add(gameFrame.getInfoPanel(), BorderLayout.EAST);
+            gameFrame.add(gameFrame.getMainInfoPanel(), BorderLayout.EAST);
             gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
             gameFrame.pack();
             gameFrame.revalidate();
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
         });
+
+        // pause Button Action Listener
+        gameFrame.getMainInfoPanel().addpauseButtonAL(e -> {
+            gameFrame.getMainInfoPanel().getInfoPanel().getTimer().stop();
+            pauseFrame.setLocationRelativeTo(gameFrame);
+            pauseFrame.setVisible(true);
+        });
+
+        // resume Button Action Listener
+        pauseFrame.addResumeButtonAL(e -> {
+            pauseFrame.dispose();
+            gameFrame.getMainInfoPanel().getInfoPanel().getTimer().start();
+        });
+
+
 
     }
 

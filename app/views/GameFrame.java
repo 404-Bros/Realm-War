@@ -6,11 +6,11 @@ import models.GameState;
 
 public class GameFrame extends JFrame {
     private GamePanel gamePanel;
-    private InfoPanel infoPanel;
     private ActionPanel actionPanel;
     private GameState gameState;
     private MenuPanel menuPanel;
     private GetPlayerNamePanel getPlayerNamePanel;
+    private MainInfoPanel mainInfoPanel;
 
     public GameFrame(GameState gameState) {
         setIconImage(new ImageIcon(getClass().getResource("../resources/gameIcon.jpg")).getImage());
@@ -24,24 +24,15 @@ public class GameFrame extends JFrame {
         gamePanel = new GamePanel(gameState);
 
 
-        infoPanel = new InfoPanel(gameState);
+        mainInfoPanel = new MainInfoPanel(gameState);
         actionPanel = new ActionPanel();
 
-//        add(gamePanel, BorderLayout.CENTER);
-//        add(infoPanel, BorderLayout.EAST);
-//        add(actionPanel, BorderLayout.SOUTH);
-//        add(menuPanel);
-//        pack();
         setLocationRelativeTo(null);
         setResizable(false);
     }
 
     public GamePanel getGamePanel() {
         return gamePanel;
-    }
-
-    public InfoPanel getInfoPanel() {
-        return infoPanel;
     }
 
     public ActionPanel getActionPanel() {
@@ -60,8 +51,12 @@ public class GameFrame extends JFrame {
         return getPlayerNamePanel;
     }
 
+    public MainInfoPanel getMainInfoPanel() {
+        return mainInfoPanel;
+    }
+
     public void updateGameState() {
         gamePanel.repaint();
-        infoPanel.updateInfo();
+        mainInfoPanel.getInfoPanel().updateInfo();
     }
 }
