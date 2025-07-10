@@ -21,13 +21,14 @@ public class InfoPanel extends JPanel {
     private String player1Name;
     private String player2Name;
     private GameState gameState;
+    private Timer timer;
     
     public InfoPanel(GameState gameState) {
         setBackground(new Color(225, 212, 193));
 
         this.gameState = gameState;
 
-        setPreferredSize(new Dimension(200, 600));
+        setPreferredSize(new Dimension(200, 568));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
         playerLabel = new JLabel("Player: ");
@@ -56,7 +57,7 @@ public class InfoPanel extends JPanel {
         add(turnLabel);
         
         add(Box.createVerticalGlue());
-        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
     }
     
     public void updateInfo() {
@@ -75,7 +76,8 @@ public class InfoPanel extends JPanel {
         unitSpaceLabel.setText("Unit Space: " + currentKingdom.getUsedUnitSpace() + 
                               "/" + currentKingdom.getTotalUnitSpace());
         turnLabel.setText("Turn: " + gameState.getTurnNumber());
-        Timer timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 timeLeft--;
                 timeLabel.setText("Time Left: " + timeLeft + "s");
@@ -96,5 +98,20 @@ public class InfoPanel extends JPanel {
 
     public void setPlayer2Name(String player2Name) {
         this.player2Name = player2Name;
+    }
+    public void addTimerAL(ActionListener al) {
+        timer.addActionListener(al);
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 }

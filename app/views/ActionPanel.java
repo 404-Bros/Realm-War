@@ -17,15 +17,11 @@ public class ActionPanel extends JPanel {
         setLayout(null);
         setBackground(new Color(225, 212, 193));
 
-        //GridBagConstraints gbc = new GridBagConstraints();
-        //gbc.insets = new Insets(5, 5, 5, 5);
-
         endTurnButton = new JButton("End Turn");
         endTurnButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         endTurnButton.setFocusable(false);
         endTurnButton.setBackground(new Color(0xCA8D37));
         endTurnButton.setForeground(Color.WHITE);
-        //endTurnButton.setOpaque(true);
         endTurnButton.setPreferredSize(new Dimension(100, 40));
         endTurnButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         endTurnButton.setIcon(new ImageIcon(getClass().getResource("../resources/endTurnIcon.png")));
@@ -36,7 +32,6 @@ public class ActionPanel extends JPanel {
         buildButton.setFocusable(false);
         buildButton.setBackground(new Color(0xCA8D37));
         buildButton.setForeground(Color.WHITE);
-        //buildButton.setOpaque(true);
         buildButton.setPreferredSize(new Dimension(100, 40));
         buildButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         buildButton.setIcon(new ImageIcon(getClass().getResource("../resources/buildIcon.png")));
@@ -77,15 +72,10 @@ public class ActionPanel extends JPanel {
 
 
         /// /////
-        //gbc.gridx = 0;
         add(buildButton);
-        //gbc.gridx = 1;
         add(recruitButton);
-        //gbc.gridx = 2;
         add(moveButton);
-        //gbc.gridx = 3;
         add(attackButton);
-        //gbc.gridx = 4;
         add(endTurnButton);
 
 
