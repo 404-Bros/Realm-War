@@ -8,11 +8,13 @@ import java.awt.event.ActionListener;
 public class GetPlayerNamePanel extends JPanel {
     private JTextField player1Field;
     private JTextField player2Field;
+    private JLabel player1Label;
+    private JLabel player2Label;
     private JButton startButton;
     private JButton backButton;
 
     public GetPlayerNamePanel() {
-        setBackground(new Color(234, 218, 183));
+        setBackground(new Color(0xEDEAE6));
         setPreferredSize(new Dimension(400, 400));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -20,18 +22,20 @@ public class GetPlayerNamePanel extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        player1Label=new JLabel("Player 1 Name:");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel("Player 1 Name:"), gbc);
+        add(player1Label, gbc);
 
         player1Field = new JTextField(15);
         gbc.gridx = 1;
         gbc.gridy = 0;
         add(player1Field, gbc);
 
+        player2Label=new JLabel("Player 2 Name:");
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Player 2 Name:"), gbc);
+        add(player2Label, gbc);
 
         player2Field = new JTextField(15);
         gbc.gridx = 1;
@@ -88,7 +92,15 @@ public class GetPlayerNamePanel extends JPanel {
         backButton.addActionListener(l);
     }
 
-//    public static void main(String[] args) {
+    public JLabel getPlayer1Label() {
+        return player1Label;
+    }
+
+    public JLabel getPlayer2Label() {
+        return player2Label;
+    }
+
+    //    public static void main(String[] args) {
 //        JFrame frame = new JFrame("Enter Player Names");
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setSize(400, 400);

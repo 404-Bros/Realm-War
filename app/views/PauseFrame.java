@@ -13,7 +13,8 @@ public class PauseFrame extends JDialog {
     public PauseFrame() {
         setModal(true);
         setTitle("Pause");
-        getContentPane().setBackground(new Color(225, 212, 193));
+        setIconImage(new ImageIcon(getClass().getResource("../resources/gameIcon.jpg")).getImage());
+        getContentPane().setBackground(new Color(0xEDEAE6));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

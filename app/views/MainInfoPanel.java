@@ -3,6 +3,7 @@ package views;
 import models.GameState;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -12,7 +13,7 @@ public class MainInfoPanel extends JPanel {
     private GameState gameState;
     public MainInfoPanel(GameState gameState) {
         setLayout(null);
-        setBackground(new Color(225, 212, 193));
+        setBackground(new Color(0xEDEAE6));
 
         this.gameState = gameState;
         infoPanel = new InfoPanel(gameState);
@@ -24,6 +25,7 @@ public class MainInfoPanel extends JPanel {
         pauseButton.setBackground(new Color(0xCA8D37));
         pauseButton.setForeground(Color.WHITE);
         pauseButton.setPreferredSize(new Dimension(30, 30));
+        pauseButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         pauseButton.setFocusable(false);
         pauseButton.setIcon(new ImageIcon(getClass().getResource("../resources/pause.png")));
         pauseButton.setBounds(168, 2, 30, 30);
@@ -41,13 +43,13 @@ public class MainInfoPanel extends JPanel {
         pauseButton.addActionListener(actionListener);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("InfoPanel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GameState gameState1= new GameState(15,16,2);
-        MainInfoPanel mainInfoPanel = new MainInfoPanel(gameState1);
-        frame.add(mainInfoPanel);
-        frame.pack();
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame("InfoPanel");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        GameState gameState1= new GameState(15,16,2);
+//        MainInfoPanel mainInfoPanel = new MainInfoPanel(gameState1);
+//        frame.add(mainInfoPanel);
+//        frame.pack();
+//        frame.setVisible(true);
+//    }
 }

@@ -15,7 +15,7 @@ public class ActionPanel extends JPanel {
     public ActionPanel() {
         setPreferredSize(new Dimension(800, 100));
         setLayout(null);
-        setBackground(new Color(225, 212, 193));
+        setBackground(new Color(0xEDEAE6));
 
         endTurnButton = new JButton("End Turn");
         endTurnButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));

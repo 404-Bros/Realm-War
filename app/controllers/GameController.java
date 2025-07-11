@@ -36,6 +36,54 @@ public class GameController {
             gameFrame.repaint();
         });
 
+        // Dark Mode AL
+        gameFrame.getMenuPanel().addDarkModeCheckBoxAL(e -> {
+            JCheckBox checkBox = (JCheckBox) e.getSource();
+            if (checkBox.isSelected()) {
+                gameFrame.getMenuPanel().getCenterPanel().setBackground(new Color(0x1A2B44));
+                gameFrame.getMenuPanel().getWelcomePanel().setBackground(new Color(0x1A2B44));
+
+                gameFrame.getGetPlayerNamePanel().setBackground(new Color(0x1A2B44));
+                gameFrame.getGetPlayerNamePanel().getPlayer1Label().setForeground(Color.white);
+                gameFrame.getGetPlayerNamePanel().getPlayer2Label().setForeground(Color.white);
+
+                gameFrame.getActionPanel().setBackground(new Color(0x1A2B44));
+                gameFrame.getMainInfoPanel().setBackground(new Color(0x1A2B44));
+                gameFrame.getMainInfoPanel().getInfoPanel().setBackground(new Color(0x1A2B44));
+                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setForeground(Color.white);
+                gameFrame.getMainInfoPanel().getInfoPanel().getFoodLabel().setForeground(Color.white);
+                gameFrame.getMainInfoPanel().getInfoPanel().getGoldLabel().setForeground(Color.white);
+                gameFrame.getMainInfoPanel().getInfoPanel().getTimeLabel().setForeground(Color.white);
+                gameFrame.getMainInfoPanel().getInfoPanel().getUnitSpaceLabel().setForeground(Color.white);
+                gameFrame.getMainInfoPanel().getInfoPanel().getTurnLabel().setForeground(Color.white);
+                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person-white.png")));
+
+                pauseFrame.setBackground(new Color(0x1A2B44));
+            }
+            else{
+                gameFrame.getMenuPanel().getCenterPanel().setBackground(new Color(0xEDEAE6));
+                gameFrame.getMenuPanel().getWelcomePanel().setBackground(new Color(0xEDEAE6));
+
+                gameFrame.getGetPlayerNamePanel().setBackground(new Color(0xEDEAE6));
+                gameFrame.getGetPlayerNamePanel().getPlayer1Label().setForeground(Color.BLACK);
+                gameFrame.getGetPlayerNamePanel().getPlayer2Label().setForeground(Color.BLACK);
+
+                gameFrame.getActionPanel().setBackground(new Color(0xEDEAE6));
+                gameFrame.getMainInfoPanel().setBackground(new Color(0xEDEAE6));
+                gameFrame.getMainInfoPanel().getInfoPanel().setBackground(new Color(0xEDEAE6));
+                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setForeground(Color.BLACK);
+                gameFrame.getMainInfoPanel().getInfoPanel().getFoodLabel().setForeground(Color.BLACK);
+                gameFrame.getMainInfoPanel().getInfoPanel().getGoldLabel().setForeground(Color.BLACK);
+                gameFrame.getMainInfoPanel().getInfoPanel().getTimeLabel().setForeground(Color.BLACK);
+                gameFrame.getMainInfoPanel().getInfoPanel().getUnitSpaceLabel().setForeground(Color.BLACK);
+                gameFrame.getMainInfoPanel().getInfoPanel().getTurnLabel().setForeground(Color.BLACK);
+                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person.png")));
+
+                pauseFrame.setBackground(new Color(0xEDEAE6));
+
+            }
+        });
+
         // Back Button Action Listener
         gameFrame.getGetPlayerNamePanel().addBackButtonActionListener(e -> {
             gameFrame.remove(gameFrame.getGetPlayerNamePanel());
@@ -92,8 +140,6 @@ public class GameController {
             pauseFrame.dispose();
             gameFrame.getMainInfoPanel().getInfoPanel().getTimer().start();
         });
-
-
 
     }
 
