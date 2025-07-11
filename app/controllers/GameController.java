@@ -42,6 +42,8 @@ public class GameController {
             if (checkBox.isSelected()) {
                 gameFrame.getMenuPanel().getCenterPanel().setBackground(new Color(0x1A2B44));
                 gameFrame.getMenuPanel().getWelcomePanel().setBackground(new Color(0x1A2B44));
+                gameFrame.getMenuPanel().getWelcomePanel().setBorder(BorderFactory.createLineBorder(new Color(255,255,255)));
+                gameFrame.getMenuPanel().getCenterPanel().setBorder(BorderFactory.createLineBorder(new Color(255,255,255)));
 
                 gameFrame.getGetPlayerNamePanel().setBackground(new Color(0x1A2B44));
                 gameFrame.getGetPlayerNamePanel().getPlayer1Label().setForeground(Color.white);

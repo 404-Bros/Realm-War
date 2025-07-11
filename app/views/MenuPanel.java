@@ -117,4 +117,5 @@ public class MenuPanel extends JPanel{
     public JLabel getWelcomeLabel() {
         return welcomeLabel;
     }
+
 }
