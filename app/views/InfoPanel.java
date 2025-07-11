@@ -24,7 +24,7 @@ public class InfoPanel extends JPanel {
     private Timer timer;
     
     public InfoPanel(GameState gameState) {
-        setBackground(new Color(225, 212, 193));
+        setBackground(new Color(0xEDEAE6));
 
         this.gameState = gameState;
 
@@ -113,5 +113,30 @@ public class InfoPanel extends JPanel {
 
     public Timer getTimer() {
         return timer;
+    }
+
+
+    public JLabel getGoldLabel() {
+        return goldLabel;
+    }
+
+    public JLabel getFoodLabel() {
+        return foodLabel;
+    }
+
+    public JLabel getUnitSpaceLabel() {
+        return unitSpaceLabel;
+    }
+
+    public JLabel getTurnLabel() {
+        return turnLabel;
+    }
+
+    public JLabel getTimeLabel() {
+        return timeLabel;
+    }
+
+    public JLabel getPlayerLabel() {
+        return playerLabel;
     }
 }

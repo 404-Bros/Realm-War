@@ -11,14 +11,15 @@ public class MenuPanel extends JPanel{
     private JPanel centerPanel;
     private JPanel welcomePanel;
     private JLabel welcomeLabel;
+    private JCheckBox darkModeCheckBox;
     public MenuPanel(){
         setLayout(new BorderLayout());
-        setBackground(new Color(255, 255, 255));
+        setBackground(new Color(0xEDEAE6));
 
         setPreferredSize(new Dimension(400,400));
 
         welcomePanel = new JPanel();
-        welcomePanel.setBackground(new Color(234, 218, 183));
+        welcomePanel.setBackground(new Color(0xEDEAE6));
         welcomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 
@@ -37,7 +38,7 @@ public class MenuPanel extends JPanel{
 
 
         centerPanel = new JPanel();
-        centerPanel.setBackground(new Color(234, 218, 183));
+        centerPanel.setBackground(new Color(0xEDEAE6));
         centerPanel.setLayout(new GridBagLayout());
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -69,6 +70,17 @@ public class MenuPanel extends JPanel{
         loadGameButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         centerPanel.add(loadGameButton, gbc);
 
+        /// /////////////////////////////
+
+        darkModeCheckBox = new JCheckBox("Dark Mode");
+        darkModeCheckBox.setBackground(new Color(0xCA8D37));
+        darkModeCheckBox.setFocusable(false);
+        darkModeCheckBox.setForeground(Color.WHITE);
+        gbc.gridx=1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        centerPanel.add(darkModeCheckBox, gbc);
+
         add(centerPanel, BorderLayout.CENTER);
 
     }
@@ -77,5 +89,32 @@ public class MenuPanel extends JPanel{
     }
     public void addLoadGameButtonAL(ActionListener al){
         loadGameButton.addActionListener(al);
+    }
+    public void addDarkModeCheckBoxAL(ActionListener al){
+        darkModeCheckBox.addActionListener(al);
+    }
+
+    public JButton getNewGameButton() {
+        return newGameButton;
+    }
+
+    public JButton getLoadGameButton() {
+        return loadGameButton;
+    }
+
+    public JCheckBox getDarkModeCheckBox() {
+        return darkModeCheckBox;
+    }
+
+    public JPanel getCenterPanel() {
+        return centerPanel;
+    }
+
+    public JPanel getWelcomePanel() {
+        return welcomePanel;
+    }
+
+    public JLabel getWelcomeLabel() {
+        return welcomeLabel;
     }
 }
