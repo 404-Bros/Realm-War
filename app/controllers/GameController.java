@@ -2,9 +2,7 @@ package controllers;
 
 import models.GameState;
 import models.Player;
-import views.BlockButton;
-import views.GameFrame;
-import views.PauseFrame;
+import views.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +17,13 @@ public class GameController {
     private PauseFrame pauseFrame = new PauseFrame();
     private Thread infoThread;
     private boolean isDarkMode = false;
+    private GamePanel gamePanel;
+    private MainInfoPanel mainInfoPanel;
 
 
-    public GameController(GameState gameState, GameFrame gameFrame){
-        this.gameState = gameState;
-        this.gameFrame = gameFrame;
+    public GameController(){
+
+        this.gameFrame = new GameFrame();
         gameFrame.add(gameFrame.getMenuPanel());
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
@@ -31,78 +31,13 @@ public class GameController {
 
 
 
-        gameFrame.getGamePanel().addButtonMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//                BlockButton blockButton = (BlockButton) e.getSource();
-//                blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
-//                blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
-//
-//                gameFrame.getMainInfoPanel().setBlockPanel(blockButton.getBlockPanel());
-//                gameFrame.pack();
-//                gameFrame.revalidate();
-//                gameFrame.repaint();
-//
-//            }
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//                BlockButton blockButton = (BlockButton) e.getSource();
-//                blockButton.setBorder(blockButton.getOriginalBorder());
-//                gameFrame.getMainInfoPanel().removeBlockPanel(blockButton.getBlockPanel());
-//                gameFrame.pack();
-//                gameFrame.revalidate();
-//                gameFrame.repaint();
-//            }
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    BlockButton blockButton = (BlockButton) e.getSource();
-                    blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
 
-                    if (infoThread != null && infoThread.isAlive()) {
-                        infoThread.interrupt();
-                    }
-
-                    infoThread = new Thread(() -> {
-                        try {
-                            Thread.sleep(500);
-                            SwingUtilities.invokeLater(()->{
-                                blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
-                                gameFrame.getMainInfoPanel().setBlockPanel(blockButton.getBlockPanel());
-                                gameFrame.pack();
-                                gameFrame.revalidate();
-                                gameFrame.repaint();
-                            });
-                        } catch (InterruptedException ex) {
-
-                        }
-                    });
-                    infoThread.start();
-
-                }
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    BlockButton blockButton = (BlockButton) e.getSource();
-                    blockButton.setBorder(blockButton.getOriginalBorder());
-
-                    if (infoThread != null && infoThread.isAlive()) {
-                        infoThread.interrupt();
-                    }
-
-                    SwingUtilities.invokeLater(() ->{
-                        gameFrame.getMainInfoPanel().removeBlockPanel(blockButton.getBlockPanel());
-                        gameFrame.pack();
-                        gameFrame.revalidate();
-                        gameFrame.repaint();
-                    });
-
-                }
-
-        });
 
 
 
         // New Game Button Action Listener
         gameFrame.getMenuPanel().addNewGameButtonAL(e -> {
+            GameState gameState=new GameState(12,16,2);
             gameFrame.remove(gameFrame.getMenuPanel());
             gameFrame.add(gameFrame.getGetPlayerNamePanel());
             gameFrame.pack();
@@ -126,34 +61,6 @@ public class GameController {
                 gameFrame.getGetPlayerNamePanel().getPlayer2Label().setForeground(Color.white);
 
                 gameFrame.getActionPanel().setBackground(new Color(0x1A2B44));
-                gameFrame.getMainInfoPanel().setBackground(new Color(0x1A2B44));
-                gameFrame.getMainInfoPanel().getInfoPanel().setBackground(new Color(0x1A2B44));
-                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setForeground(Color.white);
-                gameFrame.getMainInfoPanel().getInfoPanel().getFoodLabel().setForeground(Color.white);
-                gameFrame.getMainInfoPanel().getInfoPanel().getGoldLabel().setForeground(Color.white);
-                gameFrame.getMainInfoPanel().getInfoPanel().getTimeLabel().setForeground(Color.white);
-                gameFrame.getMainInfoPanel().getInfoPanel().getUnitSpaceLabel().setForeground(Color.white);
-                gameFrame.getMainInfoPanel().getInfoPanel().getTurnLabel().setForeground(Color.white);
-                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person-white.png")));
-
-
-//                gameFrame.getMainInfoPanel().getBlockPanel().getBlockTypeLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getDurabilityLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getStructureLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getResourceLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getMaintenanceCostLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getStructureLevelLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getTowerAttackPower().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitAttackPower().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitAttackRangeLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitePaymentCostLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitHPLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitMovementRangeLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitRotationLabel().setForeground(Color.white);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitSpaceLabel().setForeground(Color.white);
-
-
 
                 pauseFrame.setBackground(new Color(0x1A2B44));
             }
@@ -168,32 +75,6 @@ public class GameController {
                 gameFrame.getGetPlayerNamePanel().getPlayer2Label().setForeground(Color.BLACK);
 
                 gameFrame.getActionPanel().setBackground(new Color(0xEDEAE6));
-                gameFrame.getMainInfoPanel().setBackground(new Color(0xEDEAE6));
-                gameFrame.getMainInfoPanel().getInfoPanel().setBackground(new Color(0xEDEAE6));
-                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setForeground(Color.BLACK);
-                gameFrame.getMainInfoPanel().getInfoPanel().getFoodLabel().setForeground(Color.BLACK);
-                gameFrame.getMainInfoPanel().getInfoPanel().getGoldLabel().setForeground(Color.BLACK);
-                gameFrame.getMainInfoPanel().getInfoPanel().getTimeLabel().setForeground(Color.BLACK);
-                gameFrame.getMainInfoPanel().getInfoPanel().getUnitSpaceLabel().setForeground(Color.BLACK);
-                gameFrame.getMainInfoPanel().getInfoPanel().getTurnLabel().setForeground(Color.BLACK);
-                gameFrame.getMainInfoPanel().getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person.png")));
-
-//                gameFrame.getMainInfoPanel().getBlockPanel().getBlockTypeLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getDurabilityLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getStructureLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getResourceLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getMaintenanceCostLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getStructureLevelLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getTowerAttackPower().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitAttackPower().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitAttackRangeLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitePaymentCostLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitHPLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitMovementRangeLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitRotationLabel().setForeground(Color.BLACK);
-//                gameFrame.getMainInfoPanel().getBlockPanel().getUnitSpaceLabel().setForeground(Color.BLACK);
-
 
                 pauseFrame.setBackground(new Color(0xEDEAE6));
 
@@ -227,16 +108,28 @@ public class GameController {
                 }
             }
 
-            gameFrame.getMainInfoPanel().getInfoPanel().setPlayer1Name(player1name);
-            gameFrame.getMainInfoPanel().getInfoPanel().setPlayer2Name(player2name);
-            gameFrame.getMainInfoPanel().getInfoPanel().updateInfo();
+            GameState gameState=new GameState(12,16,2);
+            gamePanel = new GamePanel(gameState);
+            mainInfoPanel = new MainInfoPanel(gameState);
+
+            setDarkMode();
+            addPauseButtonAL();
+            setMLtoGamePanel();
+
+            mainInfoPanel.getInfoPanel().setPlayer1Name(player1name);
+            mainInfoPanel.getInfoPanel().setPlayer2Name(player2name);
+            mainInfoPanel.getInfoPanel().updateInfo();
 
             player1 = new Player(player1name,gameState.getKingdoms().get(0));
             player2 = new Player(player2name,gameState.getKingdoms().get(1));
 
+
+            gameFrame.setGamePanel(gamePanel);
+            gameFrame.setMainInfoPanel(mainInfoPanel);
+
             gameFrame.remove(gameFrame.getGetPlayerNamePanel());
-            gameFrame.add(gameFrame.getGamePanel(), BorderLayout.CENTER);
-            gameFrame.add(gameFrame.getMainInfoPanel(), BorderLayout.EAST);
+            gameFrame.add(gamePanel, BorderLayout.CENTER);
+            gameFrame.add(mainInfoPanel, BorderLayout.EAST);
             gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
             gameFrame.pack();
             gameFrame.revalidate();
@@ -244,23 +137,144 @@ public class GameController {
             gameFrame.setLocationRelativeTo(null);
         });
 
-        // pause Button Action Listener
-        gameFrame.getMainInfoPanel().addpauseButtonAL(e -> {
-            gameFrame.getMainInfoPanel().getInfoPanel().getTimer().stop();
-            pauseFrame.setLocationRelativeTo(gameFrame);
-            pauseFrame.setVisible(true);
-        });
-
-        // resume Button Action Listener
-        pauseFrame.addResumeButtonAL(e -> {
-            pauseFrame.dispose();
-            gameFrame.getMainInfoPanel().getInfoPanel().getTimer().start();
-        });
-
         // End Turn Button AL
         gameFrame.getActionPanel().addEndTurnButtonAL(e -> {
 
         });
     }
+//    public void startNewGame() {
+//        gameFrame.getContentPane().removeAll();
+//        gameFrame.add(gameFrame.getGamePanel(), BorderLayout.CENTER);
+//        gameFrame.add(gameFrame.getMainInfoPanel(), BorderLayout.EAST);
+//        gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
+//        gameFrame.pack();
+//        gameFrame.revalidate();
+//        gameFrame.repaint();
+//    }
+    private void setMLtoGamePanel(){
+        gamePanel.addButtonMouseListener(new MouseAdapter() {
+            //            @Override
+//            public void mouseEntered(MouseEvent e) {
+//                BlockButton blockButton = (BlockButton) e.getSource();
+//                blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+//                blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
+//
+//                gameFrame.getMainInfoPanel().setBlockPanel(blockButton.getBlockPanel());
+//                gameFrame.pack();
+//                gameFrame.revalidate();
+//                gameFrame.repaint();
+//
+//            }
+//            @Override
+//            public void mouseExited(MouseEvent e) {
+//                BlockButton blockButton = (BlockButton) e.getSource();
+//                blockButton.setBorder(blockButton.getOriginalBorder());
+//                gameFrame.getMainInfoPanel().removeBlockPanel(blockButton.getBlockPanel());
+//                gameFrame.pack();
+//                gameFrame.revalidate();
+//                gameFrame.repaint();
+//            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                BlockButton blockButton = (BlockButton) e.getSource();
+                blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+
+                if (infoThread != null && infoThread.isAlive()) {
+                    infoThread.interrupt();
+                }
+
+                infoThread = new Thread(() -> {
+                    try {
+                        Thread.sleep(500);
+                        SwingUtilities.invokeLater(()->{
+                            blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
+                            gameFrame.getMainInfoPanel().setBlockPanel(blockButton.getBlockPanel());
+                            gameFrame.pack();
+                            gameFrame.revalidate();
+                            gameFrame.repaint();
+                        });
+                    } catch (InterruptedException ex) {
+
+                    }
+                });
+                infoThread.start();
+
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                BlockButton blockButton = (BlockButton) e.getSource();
+                blockButton.setBorder(blockButton.getOriginalBorder());
+
+                if (infoThread != null && infoThread.isAlive()) {
+                    infoThread.interrupt();
+                }
+
+                SwingUtilities.invokeLater(() ->{
+                    gameFrame.getMainInfoPanel().removeBlockPanel(blockButton.getBlockPanel());
+                    gameFrame.pack();
+                    gameFrame.revalidate();
+                    gameFrame.repaint();
+                });
+
+            }
+
+        });
+    }
+
+    private void setDarkMode(){
+        if (isDarkMode) {
+
+            mainInfoPanel.setBackground(new Color(0x1A2B44));
+            mainInfoPanel.getInfoPanel().setBackground(new Color(0x1A2B44));
+            mainInfoPanel.getInfoPanel().getPlayerLabel().setForeground(Color.white);
+            mainInfoPanel.getInfoPanel().getFoodLabel().setForeground(Color.white);
+            mainInfoPanel.getInfoPanel().getGoldLabel().setForeground(Color.white);
+            mainInfoPanel.getInfoPanel().getTimeLabel().setForeground(Color.white);
+            mainInfoPanel.getInfoPanel().getUnitSpaceLabel().setForeground(Color.white);
+            mainInfoPanel.getInfoPanel().getTurnLabel().setForeground(Color.white);
+            mainInfoPanel.getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person-white.png")));
+
+        }
+        else {
+            mainInfoPanel.setBackground(new Color(0xEDEAE6));
+            mainInfoPanel.getInfoPanel().setBackground(new Color(0xEDEAE6));
+            mainInfoPanel.getInfoPanel().getPlayerLabel().setForeground(Color.BLACK);
+            mainInfoPanel.getInfoPanel().getFoodLabel().setForeground(Color.BLACK);
+            mainInfoPanel.getInfoPanel().getGoldLabel().setForeground(Color.BLACK);
+            mainInfoPanel.getInfoPanel().getTimeLabel().setForeground(Color.BLACK);
+            mainInfoPanel.getInfoPanel().getUnitSpaceLabel().setForeground(Color.BLACK);
+            mainInfoPanel.getInfoPanel().getTurnLabel().setForeground(Color.BLACK);
+            mainInfoPanel.getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person.png")));
+        }
+    }
+    private void addPauseButtonAL(){
+        mainInfoPanel.addpauseButtonAL(e -> {
+            mainInfoPanel.getInfoPanel().getTimer().stop();
+            pauseFrame.setLocationRelativeTo(gameFrame);
+            pauseFrame.setVisible(true);
+        });
+        // resume Button Action Listener
+        pauseFrame.addResumeButtonAL(e -> {
+            pauseFrame.dispose();
+            mainInfoPanel.getInfoPanel().getTimer().start();
+        });
+
+        pauseFrame.addSaveAndBackButtonAL(e -> {
+
+            pauseFrame.dispose();
+
+            gameFrame.remove(gameFrame.getMainInfoPanel());
+            gameFrame.remove(gameFrame.getActionPanel());
+            gameFrame.remove(gameFrame.getGamePanel());
+
+            gameFrame.add(gameFrame.getMenuPanel());
+            gameFrame.pack();
+            gameFrame.setLocationRelativeTo(null);
+            gameFrame.revalidate();
+            gameFrame.repaint();
+        });
+    }
+
+
 
 }

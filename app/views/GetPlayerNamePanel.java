@@ -82,11 +82,15 @@ public class GetPlayerNamePanel extends JPanel {
     }
 
     public String getPlayer1Name() {
-        return player1Field.getText().trim();
+        String name=player1Field.getText().trim();
+        player1Field.setText("");
+        return name;
     }
 
     public String getPlayer2Name() {
-        return player2Field.getText().trim();
+        String name=player2Field.getText().trim();
+        player2Field.setText("");
+        return name;
     }
 
     public JButton getStartButton() {
