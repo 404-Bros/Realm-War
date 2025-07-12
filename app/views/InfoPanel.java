@@ -28,7 +28,8 @@ public class InfoPanel extends JPanel {
 
         this.gameState = gameState;
 
-        setPreferredSize(new Dimension(200, 568));
+        //setPreferredSize(new Dimension(200, 568));
+        setPreferredSize(new Dimension(200, 150));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
         playerLabel = new JLabel("Player: ");
