@@ -4,7 +4,7 @@ import models.Position;
 
 public class Knight extends Unit {
     public Knight(int kingdomId, Position position) {
-        super(120, 3, 25, 1, 12, 6, 4, kingdomId, position);
+        super(120, 3, 25, 2, 12, 6, 4, kingdomId, position);
     }
 
     @Override

@@ -18,12 +18,15 @@ public class BlockButton extends JButton {
     private ImageIcon icon;
     private Position position;
     private Border originalBorder;
+    private BlockPanel blockPanel;
 
     public BlockButton(ImageIcon icon, Block block) {
         this.block = block;
         this.structure = block.getStructure();
         this.icon = icon;
         this.position = block.getPosition();
+        blockPanel = new BlockPanel();
+        blockPanel.setBounds(0,190,200,410);
 
         if(block.isAbsorbed()){
             if (block.getKingdomId()==1){
@@ -39,17 +42,7 @@ public class BlockButton extends JButton {
 
         originalBorder = getBorder();
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setBorder(originalBorder);
-            }
-        });
 
     }
     public BlockButton(ImageIcon icon, Block block, Border border) {
@@ -57,7 +50,8 @@ public class BlockButton extends JButton {
         this.structure = block.getStructure();
         this.icon = icon;
         this.position = block.getPosition();
-
+        blockPanel = new BlockPanel();
+        blockPanel.setBounds(0,190,200,410);
 
         setBorder(border);
         setPreferredSize(new Dimension(50, 50));
@@ -73,17 +67,7 @@ public class BlockButton extends JButton {
 
         originalBorder = getBorder();
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setBorder(originalBorder);
-            }
-        });
     }
     public void setBorder(){
         if (block.getKingdomId()==1){
@@ -132,5 +116,13 @@ public class BlockButton extends JButton {
 
     public void setIcon(ImageIcon icon) {
         this.icon = icon;
+    }
+
+    public Border getOriginalBorder() {
+        return originalBorder;
+    }
+
+    public BlockPanel getBlockPanel() {
+        return blockPanel;
     }
 }

@@ -3,6 +3,7 @@ package views;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GetPlayerNamePanel extends JPanel {
@@ -43,6 +44,17 @@ public class GetPlayerNamePanel extends JPanel {
         add(player2Field, gbc);
 
         backButton = new JButton("Back");
+
+        player1Field.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                player2Field.requestFocusInWindow();
+            }
+        });
+        player2Field.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                startButton.doClick();
+            }
+        });
 
         backButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         backButton.setFocusable(false);

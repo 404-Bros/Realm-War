@@ -14,7 +14,7 @@ public class EmptyBlock extends Block {
 
     @Override
     public int getResourceYield(String resourceType) { //mean : daryaft manabe
-        if (!isAbsorbed())
+        if (!isAbsorbed() || hasStructure())
             return 0;
 
         int resourceYield;

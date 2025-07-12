@@ -10,6 +10,8 @@ import utils.ResourceLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +88,11 @@ public class GamePanel extends JPanel {
             add(blockButton);
         }
     }
-
+    public void addButtonMouseListener(MouseListener mouseListener) {
+        for (BlockButton blockButton : blockButtons) {
+            blockButton.addMouseListener(mouseListener);
+        }
+    }
     public GameState getGameState() {
         return gameState;
     }
