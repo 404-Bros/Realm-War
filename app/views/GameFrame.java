@@ -12,7 +12,7 @@ public class GameFrame extends JFrame {
     private GetPlayerNamePanel getPlayerNamePanel;
     private MainInfoPanel mainInfoPanel;
 
-    public GameFrame(GameState gameState) {
+    public GameFrame() {
         setIconImage(new ImageIcon(getClass().getResource("../resources/gameIcon.jpg")).getImage());
         this.gameState = gameState;
         setTitle("Realm War");
@@ -21,10 +21,6 @@ public class GameFrame extends JFrame {
 
         menuPanel = new MenuPanel();
         getPlayerNamePanel = new GetPlayerNamePanel();
-        gamePanel = new GamePanel(gameState);
-
-
-        mainInfoPanel = new MainInfoPanel(gameState);
         actionPanel = new ActionPanel();
 
         setLocationRelativeTo(null);
@@ -53,6 +49,14 @@ public class GameFrame extends JFrame {
 
     public MainInfoPanel getMainInfoPanel() {
         return mainInfoPanel;
+    }
+
+    public void setGamePanel(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
+    }
+
+    public void setMainInfoPanel(MainInfoPanel mainInfoPanel) {
+        this.mainInfoPanel = mainInfoPanel;
     }
 
     public void updateGameState() {
