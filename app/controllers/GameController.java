@@ -108,7 +108,7 @@ public class GameController {
                 }
             }
 
-            GameState gameState=new GameState(12,16,2);
+            gameState=new GameState(12,16,2);
             gamePanel = new GamePanel(gameState);
             mainInfoPanel = new MainInfoPanel(gameState);
 
