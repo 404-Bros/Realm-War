@@ -19,7 +19,10 @@ public class GameController {
     private boolean isDarkMode = false;
     private GamePanel gamePanel;
     private MainInfoPanel mainInfoPanel;
-
+    private Thread timerThread;
+    private int timeLeft = 31;
+    private boolean paused = false;
+    private boolean isTurnEnded = false;
 
     public GameController(){
 
@@ -37,7 +40,6 @@ public class GameController {
 
         // New Game Button Action Listener
         gameFrame.getMenuPanel().addNewGameButtonAL(e -> {
-            GameState gameState=new GameState(12,16,2);
             gameFrame.remove(gameFrame.getMenuPanel());
             gameFrame.add(gameFrame.getGetPlayerNamePanel());
             gameFrame.pack();
@@ -108,9 +110,13 @@ public class GameController {
                 }
             }
 
-            GameState gameState=new GameState(12,16,2);
+            gameState=new GameState(12,16,2);
             gamePanel = new GamePanel(gameState);
             mainInfoPanel = new MainInfoPanel(gameState);
+
+
+            player1 = new Player(player1name,gameState.getKingdoms().get(0));
+            player2 = new Player(player2name,gameState.getKingdoms().get(1));
 
             setDarkMode();
             addPauseButtonAL();
@@ -118,11 +124,10 @@ public class GameController {
 
             mainInfoPanel.getInfoPanel().setPlayer1Name(player1name);
             mainInfoPanel.getInfoPanel().setPlayer2Name(player2name);
+
+            gameState.getCurrentKingdom().startTurn();
+            createTimerThread();
             mainInfoPanel.getInfoPanel().updateInfo();
-
-            player1 = new Player(player1name,gameState.getKingdoms().get(0));
-            player2 = new Player(player2name,gameState.getKingdoms().get(1));
-
 
             gameFrame.setGamePanel(gamePanel);
             gameFrame.setMainInfoPanel(mainInfoPanel);
@@ -135,22 +140,47 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
+            timerThread.start();
         });
 
         // End Turn Button AL
         gameFrame.getActionPanel().addEndTurnButtonAL(e -> {
+            paused=true;
+            isTurnEnded=true;
+            JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
 
+            gameState.nextTurn();
+            timeLeft=31;
+            isTurnEnded=false;
+            paused=false;
+            mainInfoPanel.getInfoPanel().updateInfo();
         });
     }
-//    public void startNewGame() {
-//        gameFrame.getContentPane().removeAll();
-//        gameFrame.add(gameFrame.getGamePanel(), BorderLayout.CENTER);
-//        gameFrame.add(gameFrame.getMainInfoPanel(), BorderLayout.EAST);
-//        gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
-//        gameFrame.pack();
-//        gameFrame.revalidate();
-//        gameFrame.repaint();
-//    }
+    public void startNewGame() {
+        gameState=new GameState(12,16,2);
+        gamePanel = new GamePanel(gameState);
+        mainInfoPanel = new MainInfoPanel(gameState);
+        gameFrame.remove(gameFrame.getMenuPanel());
+        addPauseButtonAL();
+        setMLtoGamePanel();
+        player1 = new Player("player1name",gameState.getKingdoms().get(0));
+        player2 = new Player("player2name",gameState.getKingdoms().get(1));
+        mainInfoPanel.getInfoPanel().setPlayer1Name("player1name");
+        mainInfoPanel.getInfoPanel().setPlayer2Name("player2name");
+
+        gameState.getCurrentKingdom().startTurn();
+        createTimerThread();
+        mainInfoPanel.getInfoPanel().updateInfo();
+
+        gameFrame.add(gamePanel, BorderLayout.CENTER);
+        gameFrame.add(mainInfoPanel, BorderLayout.EAST);
+        gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
+        gameFrame.pack();
+        gameFrame.revalidate();
+        gameFrame.repaint();
+        gameFrame.setLocationRelativeTo(null);
+        timerThread.start();
+    }
     private void setMLtoGamePanel(){
         gamePanel.addButtonMouseListener(new MouseAdapter() {
             //            @Override
@@ -188,7 +218,7 @@ public class GameController {
                         Thread.sleep(500);
                         SwingUtilities.invokeLater(()->{
                             blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
-                            gameFrame.getMainInfoPanel().setBlockPanel(blockButton.getBlockPanel());
+                            mainInfoPanel.setBlockPanel(blockButton.getBlockPanel());
                             gameFrame.pack();
                             gameFrame.revalidate();
                             gameFrame.repaint();
@@ -198,7 +228,6 @@ public class GameController {
                     }
                 });
                 infoThread.start();
-
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -210,7 +239,7 @@ public class GameController {
                 }
 
                 SwingUtilities.invokeLater(() ->{
-                    gameFrame.getMainInfoPanel().removeBlockPanel(blockButton.getBlockPanel());
+                    mainInfoPanel.removeBlockPanel(blockButton.getBlockPanel());
                     gameFrame.pack();
                     gameFrame.revalidate();
                     gameFrame.repaint();
@@ -249,14 +278,14 @@ public class GameController {
     }
     private void addPauseButtonAL(){
         mainInfoPanel.addpauseButtonAL(e -> {
-            mainInfoPanel.getInfoPanel().getTimer().stop();
+            paused = true;
             pauseFrame.setLocationRelativeTo(gameFrame);
             pauseFrame.setVisible(true);
         });
         // resume Button Action Listener
         pauseFrame.addResumeButtonAL(e -> {
             pauseFrame.dispose();
-            mainInfoPanel.getInfoPanel().getTimer().start();
+            paused = false;
         });
 
         pauseFrame.addSaveAndBackButtonAL(e -> {
@@ -274,7 +303,39 @@ public class GameController {
             gameFrame.repaint();
         });
     }
+    private void createTimerThread(){
+        timerThread = new Thread(() -> {
+            while (true){
+                timeLeft=31;
+                isTurnEnded = false;
+                while (timeLeft > 0 && !isTurnEnded) {
+                    try {
+                        if (!paused) {
+                            SwingUtilities.invokeLater(() -> {
+                                mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time: " + timeLeft);
+                                mainInfoPanel.getInfoPanel().revalidate();
+                                mainInfoPanel.getInfoPanel().repaint();
+                            });
+                            timeLeft--;
+                            Thread.sleep(1000);
+                        } else {
+                            Thread.sleep(100);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
+                if (!isTurnEnded) {
+                    JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                    SwingUtilities.invokeLater(() -> {
+                        gameState.nextTurn();
+                        mainInfoPanel.getInfoPanel().updateInfo();
+                    });
+                }
+            }
+        });
+    }
 
 
 }
