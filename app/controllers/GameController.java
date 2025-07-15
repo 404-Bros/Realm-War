@@ -2,12 +2,19 @@ package controllers;
 
 import models.GameState;
 import models.Player;
+import models.structures.Barrack;
+import models.structures.Farm;
+import models.structures.Market;
+import models.structures.Tower;
 import views.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.event.*;
+import java.util.Objects;
 
 public class GameController {
     private GameState gameState;
@@ -23,7 +30,10 @@ public class GameController {
     private int timeLeft = 31;
     private boolean paused = false;
     private boolean isTurnEnded = false;
-
+    private StructureSelectionDialog structureSelectionDialog;
+    private UnitSelectionDialog unitSelectionDialog;
+    private BlockButton selectedButton;
+    private BlockButton lastClickedButton;
     public GameController(){
 
         this.gameFrame = new GameFrame();
@@ -31,12 +41,6 @@ public class GameController {
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
-
-
-
-
-
-
 
         // New Game Button Action Listener
         gameFrame.getMenuPanel().addNewGameButtonAL(e -> {
@@ -121,6 +125,7 @@ public class GameController {
             setDarkMode();
             addPauseButtonAL();
             setMLtoGamePanel();
+            setGamePanelButtonsAl();
 
             mainInfoPanel.getInfoPanel().setPlayer1Name(player1name);
             mainInfoPanel.getInfoPanel().setPlayer2Name(player2name);
@@ -148,21 +153,47 @@ public class GameController {
             paused=true;
             isTurnEnded=true;
             JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
-
+            if (lastClickedButton != null) {
+                lastClickedButton.setBorder();
+                lastClickedButton = null;
+            }
+            selectedButton=null;
             gameState.nextTurn();
             timeLeft=31;
             isTurnEnded=false;
             paused=false;
             mainInfoPanel.getInfoPanel().updateInfo();
         });
+
+        // Build Button AL
+        gameFrame.getActionPanel().addBuildButtonAL(e -> {
+            structureSelectionDialog = new StructureSelectionDialog(gameFrame);
+            addStructureComboBoxAL();
+            structureSelectionDialog.setVisible(true);
+            
+
+        });
+
+        //Recruit Button Al
+        gameFrame.getActionPanel().addRecruitButtonAL(e -> {
+            unitSelectionDialog = new UnitSelectionDialog(gameFrame);
+            unitSelectionDialog.setVisible(true);
+        });
+
+
+
+
     }
     public void startNewGame() {
         gameState=new GameState(12,16,2);
         gamePanel = new GamePanel(gameState);
         mainInfoPanel = new MainInfoPanel(gameState);
         gameFrame.remove(gameFrame.getMenuPanel());
+        //structureSelectionDialog = new StructureSelectionDialog(gameFrame);
         addPauseButtonAL();
         setMLtoGamePanel();
+        setGamePanelButtonsAl();
+        //addStructureComboBoxAL();
         player1 = new Player("player1name",gameState.getKingdoms().get(0));
         player2 = new Player("player2name",gameState.getKingdoms().get(1));
         mainInfoPanel.getInfoPanel().setPlayer1Name("player1name");
@@ -183,31 +214,10 @@ public class GameController {
     }
     private void setMLtoGamePanel(){
         gamePanel.addButtonMouseListener(new MouseAdapter() {
-            //            @Override
-//            public void mouseEntered(MouseEvent e) {
-//                BlockButton blockButton = (BlockButton) e.getSource();
-//                blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
-//                blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
-//
-//                gameFrame.getMainInfoPanel().setBlockPanel(blockButton.getBlockPanel());
-//                gameFrame.pack();
-//                gameFrame.revalidate();
-//                gameFrame.repaint();
-//
-//            }
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//                BlockButton blockButton = (BlockButton) e.getSource();
-//                blockButton.setBorder(blockButton.getOriginalBorder());
-//                gameFrame.getMainInfoPanel().removeBlockPanel(blockButton.getBlockPanel());
-//                gameFrame.pack();
-//                gameFrame.revalidate();
-//                gameFrame.repaint();
-//            }
             @Override
             public void mouseEntered(MouseEvent e) {
                 BlockButton blockButton = (BlockButton) e.getSource();
-                blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+                //blockButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
 
                 if (infoThread != null && infoThread.isAlive()) {
                     infoThread.interrupt();
@@ -232,7 +242,7 @@ public class GameController {
             @Override
             public void mouseExited(MouseEvent e) {
                 BlockButton blockButton = (BlockButton) e.getSource();
-                blockButton.setBorder(blockButton.getOriginalBorder());
+                //blockButton.setBorder(blockButton.getOriginalBorder());
 
                 if (infoThread != null && infoThread.isAlive()) {
                     infoThread.interrupt();
@@ -249,7 +259,33 @@ public class GameController {
 
         });
     }
+    private void setGamePanelButtonsAl(){
+        gamePanel.addButtonAL(e -> {
+            selectedButton = (BlockButton) e.getSource();
 
+            Border defaultBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+            Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 3);
+            Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, defaultBorder);
+            // اگر دوباره روی دکمه کلیک شد
+            if (lastClickedButton == selectedButton) {
+                selectedButton.setBorder();
+                lastClickedButton = null;
+                selectedButton=null;
+            } else {
+                // بازگردانی بوردر دکمه قبلی
+                if (lastClickedButton != null) {
+                    lastClickedButton.setBorder();
+                }
+
+                // دکمه فعلی رو سیاه کن
+                selectedButton.setBorder(compoundBorder);
+                lastClickedButton = selectedButton;
+            }
+
+        });
+
+
+    }
     private void setDarkMode(){
         if (isDarkMode) {
 
@@ -312,7 +348,7 @@ public class GameController {
                     try {
                         if (!paused) {
                             SwingUtilities.invokeLater(() -> {
-                                mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time: " + timeLeft);
+                                mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: " + timeLeft);
                                 mainInfoPanel.getInfoPanel().revalidate();
                                 mainInfoPanel.getInfoPanel().repaint();
                             });
@@ -329,9 +365,45 @@ public class GameController {
                 if (!isTurnEnded) {
                     JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
                     SwingUtilities.invokeLater(() -> {
+                        if (lastClickedButton != null) {
+                            lastClickedButton.setBorder();
+                            lastClickedButton = null;
+                        }
+                        selectedButton=null;
                         gameState.nextTurn();
                         mainInfoPanel.getInfoPanel().updateInfo();
                     });
+                }
+            }
+        });
+    }
+    private void addStructureComboBoxAL(){
+        JComboBox<String> structureComboBox =structureSelectionDialog.getStructureComboBox();
+        structureComboBox.addActionListener(e -> {
+            if (structureComboBox.getSelectedItem().equals("Market")) {
+                structureSelectionDialog.getDutyLabel().setText("Gold Production: "+ Market.geGoldProductionByLevel(0));
+                structureSelectionDialog.getCostLabel().setText("Cost: "+Market.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+            }
+            else {
+                if (structureComboBox.getSelectedItem().equals("Farm")){
+                    structureSelectionDialog.getDutyLabel().setText("Food Production: "+ Farm.getFoodProductionByLevel(0));
+                    structureSelectionDialog.getCostLabel().setText("Cost: "+Farm.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+                }
+                else {
+                    if (structureComboBox.getSelectedItem().equals("Barrack")){
+                        structureSelectionDialog.getDutyLabel().setText("Unit Space: "+ Barrack.getUnitSpaceByLevel(0));
+                        structureSelectionDialog.getCostLabel().setText("Cost: "+Barrack.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+                    }
+                    else{
+                        if (structureComboBox.getSelectedItem().equals("Tower")){
+                            structureSelectionDialog.getDutyLabel().setText("Attack Power: "+ Tower.getAttackPowerByLevel(0));
+                            structureSelectionDialog.getCostLabel().setText("Cost: "+Tower.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+                        }
+                        else {
+                            structureSelectionDialog.getDutyLabel().setText("Duty:");
+                            structureSelectionDialog.getCostLabel().setText("Cost:");
+                        }
+                    }
                 }
             }
         });

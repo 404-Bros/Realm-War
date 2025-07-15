@@ -45,4 +45,8 @@ public class Farm extends Structure {
     public static int getBuildingCost(int farmsCount) {
         return 3 + (farmsCount * 2);
     }
+
+    public static int getFoodProductionByLevel(int level) {
+        return FOOD_PRODUCTION_BY_LEVEL[level];
+    }
 }

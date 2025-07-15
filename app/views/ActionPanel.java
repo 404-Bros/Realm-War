@@ -11,9 +11,11 @@ public class ActionPanel extends JPanel {
     private JButton recruitButton;
     private JButton moveButton;
     private JButton attackButton;
+    private JButton updateStructure;
+    private JButton mergeUnit;
 
     public ActionPanel() {
-        setPreferredSize(new Dimension(800, 100));
+        setPreferredSize(new Dimension(800, 120));
         setLayout(null);
         setBackground(new Color(0xEDEAE6));
 
@@ -25,7 +27,7 @@ public class ActionPanel extends JPanel {
         endTurnButton.setPreferredSize(new Dimension(100, 40));
         endTurnButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         endTurnButton.setIcon(new ImageIcon(getClass().getResource("../resources/endTurnIcon.png")));
-        endTurnButton.setBounds(555,10,100,40);
+        endTurnButton.setBounds(535,10,100,40);
         /// ////////////////////
         buildButton = new JButton("Build");
         buildButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -46,7 +48,7 @@ public class ActionPanel extends JPanel {
         recruitButton.setPreferredSize(new Dimension(120, 40));
         recruitButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         recruitButton.setIcon(new ImageIcon(getClass().getResource("../resources/recruitIcon.png")));
-        recruitButton.setBounds(235,10,120,40);
+        recruitButton.setBounds(235,10,100,40);
         /// //////////
         moveButton = new JButton("Move");
         moveButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -57,7 +59,7 @@ public class ActionPanel extends JPanel {
         moveButton.setPreferredSize(new Dimension(100, 40));
         moveButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         moveButton.setIcon(new ImageIcon(getClass().getResource("../resources/moveIcon.png")));
-        moveButton.setBounds(355,10,100,40);
+        moveButton.setBounds(335,10,100,40);
         /// /////////////////////
         attackButton = new JButton("Attack");
         attackButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -68,7 +70,30 @@ public class ActionPanel extends JPanel {
         attackButton.setPreferredSize(new Dimension(100, 40));
         attackButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         attackButton.setIcon(new ImageIcon(getClass().getResource("../resources/attackIcon.png")));
-        attackButton.setBounds(455,10,100,40);
+        attackButton.setBounds(435,10,100,40);
+
+        /// //////////////
+        updateStructure = new JButton("Update Structure");
+        updateStructure.setFocusable(false);
+        updateStructure.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        updateStructure.setBackground(new Color(0xCA8D37));
+        updateStructure.setForeground(Color.WHITE);
+        updateStructure.setPreferredSize(new Dimension(120, 40));
+        updateStructure.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        updateStructure.setIcon(new ImageIcon(getClass().getResource("../resources/upgrade.png")));
+        updateStructure.setBounds(257,54,145,40);
+        /// /////
+        mergeUnit= new JButton("Merge Unit");
+        mergeUnit.setFocusable(false);
+        mergeUnit.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        mergeUnit.setBackground(new Color(0xCA8D37));
+        mergeUnit.setForeground(Color.WHITE);
+        mergeUnit.setPreferredSize(new Dimension(120, 40));
+        mergeUnit.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        mergeUnit.setIcon(new ImageIcon(getClass().getResource("../resources/Merge.png")));
+        mergeUnit.setBounds(402,54,110,40);
+
+
 
 
         /// /////
@@ -77,31 +102,8 @@ public class ActionPanel extends JPanel {
         add(moveButton);
         add(attackButton);
         add(endTurnButton);
-
-
-        endTurnButton.addActionListener(e -> {
-
-        });
-
-        buildButton.addActionListener(e -> {
-
-            JOptionPane.showMessageDialog(this, "Build menu opened.");
-        });
-
-        recruitButton.addActionListener(e -> {
-
-            JOptionPane.showMessageDialog(this, "Recruit menu opened.");
-        });
-
-        moveButton.addActionListener(e -> {
-
-            JOptionPane.showMessageDialog(this, "Move mode enabled.");
-        });
-
-        attackButton.addActionListener(e -> {
-
-            JOptionPane.showMessageDialog(this, "Attack mode enabled.");
-        });
+        add(updateStructure);
+        add(mergeUnit);
     }
     public void addBuildButtonAL(ActionListener al){
         buildButton.addActionListener(al);
@@ -117,6 +119,12 @@ public class ActionPanel extends JPanel {
     }
     public void addAttackButtonAL(ActionListener al){
         attackButton.addActionListener(al);
+    }
+    public void addUpdateStructureAL(ActionListener al){
+        updateStructure.addActionListener(al);
+    }
+    public void addMergeUnitAL(ActionListener al){
+        mergeUnit.addActionListener(al);
     }
 
 }
