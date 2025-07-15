@@ -50,4 +50,7 @@ public class Tower extends Structure {
     public Block[] getCoveredBlock() {
         return coveredBlock;
     }
+    public static int getAttackPowerByLevel(int level){
+        return ATTACK_POWER_BY_LEVEL[level];
+    }
 }

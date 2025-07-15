@@ -10,18 +10,13 @@ public class Market extends Structure {
 
     private int goldProduction;
 
-    public Market(int goldProduction, int maxLevel, int initialDurability, int maintenanceCost, Position position, Block baseBlock, int kingdomId) {
+    public Market( int maxLevel, Position position, Block baseBlock, int kingdomId) {
         super(maxLevel,5, DURABILITY_BY_LEVEL[0], BUILDING_COST_BY_LEVEL[0], position, baseBlock, kingdomId);
 
     }
 
     public int getGoldProduction() {
         return goldProduction;
-    }
-
-    @Override
-    public int getMaintenanceCost() {
-        return 0;
     }
 
     @Override
@@ -45,5 +40,9 @@ public class Market extends Structure {
 
     public static int getBuildingCost(int marketCount) {
         return 5 + (marketCount * 2);
+    }
+
+    public static int geGoldProductionByLevel(int level) {
+        return GOLD_PRODUCTION_BY_LEVEL[level];
     }
 }

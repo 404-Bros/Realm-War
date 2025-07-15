@@ -68,15 +68,15 @@ public class GamePanel extends JPanel {
                     continue;
                 }
                 if (map[x][y] instanceof EmptyBlock){
-                    blockButtons.add(new BlockButton(icons.get("emptyBlock"), map[x][y],BorderFactory.createLineBorder(new Color(234, 218, 183, 255),7)));
+                    blockButtons.add(new BlockButton(icons.get("emptyBlock"), map[x][y]));
                 }
                 else{
                     if (map[x][y] instanceof VoidBlock){
-                        blockButtons.add(new BlockButton(icons.get("voidBlock"), map[x][y],BorderFactory.createLineBorder(new Color(171, 183, 183, 255),7)));
+                        blockButtons.add(new BlockButton(icons.get("voidBlock"), map[x][y]));
                     }
                     else{
                         if (map[x][y] instanceof ForestBlock){
-                            blockButtons.add(new BlockButton(icons.get("forestBlock"), map[x][y],BorderFactory.createLineBorder(new Color(39, 173, 95, 255),7)));
+                            blockButtons.add(new BlockButton(icons.get("forestBlock"), map[x][y]));
                         }
                     }
                 }
@@ -95,6 +95,11 @@ public class GamePanel extends JPanel {
     }
     public GameState getGameState() {
         return gameState;
+    }
+    public void addButtonAL(ActionListener actionListener) {
+        for (BlockButton blockButton : blockButtons) {
+            blockButton.addActionListener(actionListener);
+        }
     }
 
 }

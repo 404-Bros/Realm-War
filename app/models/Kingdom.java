@@ -132,6 +132,22 @@ public class Kingdom {
         absorbedBlocks.add(block);
     }
 
+    public int getFarmCount() {
+        return farmCount;
+    }
+
+    public int getMarketCount() {
+        return marketCount;
+    }
+
+    public int getTowerCount() {
+        return towerCount;
+    }
+
+    public int getBarrackCount() {
+        return barrackCount;
+    }
+
     public int getId() { return id; }
     public int getGold() { return gold; }
     public void setGold(int gold) { this.gold = gold; }
