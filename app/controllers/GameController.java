@@ -6,6 +6,10 @@ import models.structures.Barrack;
 import models.structures.Farm;
 import models.structures.Market;
 import models.structures.Tower;
+import models.units.Knight;
+import models.units.Peasant;
+import models.units.Spearman;
+import models.units.Swordman;
 import views.*;
 
 import javax.swing.*;
@@ -14,6 +18,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.event.*;
+import java.lang.foreign.PaddingLayout;
 import java.util.Objects;
 
 public class GameController {
@@ -42,6 +47,9 @@ public class GameController {
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
 
+
+        structureSelectionDialog = new StructureSelectionDialog(gameFrame);
+        unitSelectionDialog = new UnitSelectionDialog(gameFrame);
         // New Game Button Action Listener
         gameFrame.getMenuPanel().addNewGameButtonAL(e -> {
             gameFrame.remove(gameFrame.getMenuPanel());
@@ -167,19 +175,201 @@ public class GameController {
 
         // Build Button AL
         gameFrame.getActionPanel().addBuildButtonAL(e -> {
-            structureSelectionDialog = new StructureSelectionDialog(gameFrame);
+
+            if (selectedButton == null) {
+                JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
+                JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().hasStructure()){
+                JOptionPane.showMessageDialog(gameFrame, "This block has a structure!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().hasUnit()){
+                JOptionPane.showMessageDialog(gameFrame, "This block has a unit!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            paused=true;
             addStructureComboBoxAL();
             structureSelectionDialog.setVisible(true);
-            
 
+        });
+
+        // Done Button in structure Selection Dialog AL
+        structureSelectionDialog.getDoneButton().addActionListener(e -> {
+                JComboBox<String> comboBox = structureSelectionDialog.getStructureComboBox();
+                String selectedItem = comboBox.getSelectedItem().toString().trim();
+                switch (selectedItem) {
+                    case "Market":
+                        Market market=new Market(selectedButton.getPosition(),selectedButton.getBlock(),gameState.getCurrentKingdom().getId());
+                        try{
+                            gameState.getCurrentKingdom().canBuildStructure(market);
+                            gamePanel.buildStructure(market,selectedButton);
+                            mainInfoPanel.getInfoPanel().updateInfo();
+                            gameFrame.revalidate();
+                            gameFrame.repaint();
+                        }
+                        catch (IllegalStateException ex){
+                            JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }finally {
+                            break;
+                        }
+                    case "Farm":
+                        Farm farm=new Farm(selectedButton.getPosition(),selectedButton.getBlock(),gameState.getCurrentKingdom().getId());
+                        try{
+                            gameState.getCurrentKingdom().canBuildStructure(farm);
+                            gamePanel.buildStructure(farm,selectedButton);
+                            mainInfoPanel.getInfoPanel().updateInfo();
+                            gameFrame.revalidate();
+                            gameFrame.repaint();
+                        }
+                        catch (IllegalStateException ex){
+                            JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }finally {
+                            break;
+                        }
+                    case "Barrack":
+                        Barrack barrack = new Barrack(selectedButton.getPosition(),selectedButton.getBlock(),gameState.getCurrentKingdom().getId());
+                        try{
+                            gameState.getCurrentKingdom().canBuildStructure(barrack);
+                            gamePanel.buildStructure(barrack,selectedButton);
+                            mainInfoPanel.getInfoPanel().updateInfo();
+                            gameFrame.revalidate();
+                            gameFrame.repaint();
+                        }
+                        catch (IllegalStateException ex){
+                            JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }finally {
+                            break;
+                        }
+                    case "Tower":
+                        if (gameState.canBuildTower(selectedButton.getBlock())){
+                            Tower tower=new Tower(selectedButton.getPosition(),selectedButton.getBlock(),gameState.getCurrentKingdom().getId(),gameState.createTowerCoveredBlock(selectedButton.getBlock()));
+                            try{
+                                gameState.getCurrentKingdom().canBuildStructure(tower);
+                                gamePanel.buildStructure(tower,selectedButton);
+                                mainInfoPanel.getInfoPanel().updateInfo();
+                                gameFrame.revalidate();
+                                gameFrame.repaint();
+                            }
+                            catch (IllegalStateException ex){
+                                JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }finally {
+                                break;
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(gameFrame, "You can't build a Tower iin this block!", "Error", JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
+                    case "None":
+                        JOptionPane.showMessageDialog(gameFrame, "Please select a structure", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
+                }
+                selectedButton=null;
+                lastClickedButton=null;
+                structureSelectionDialog.dispose();
+                paused=false;
+
+        });
+
+        // Cancel Button in structure Selection Dialog AL
+        structureSelectionDialog.getCancelButton().addActionListener(e -> {
+           paused=false;
+           structureSelectionDialog.dispose();
         });
 
         //Recruit Button Al
         gameFrame.getActionPanel().addRecruitButtonAL(e -> {
-            unitSelectionDialog = new UnitSelectionDialog(gameFrame);
+            if (selectedButton == null) {
+                JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
+                JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().hasStructure()){
+                JOptionPane.showMessageDialog(gameFrame, "This block has a structure!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().hasUnit()){
+                JOptionPane.showMessageDialog(gameFrame, "This block has a unit!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            paused=true;
+            addUnitComboBoxAL();
             unitSelectionDialog.setVisible(true);
         });
 
+        // Done Button in Unit Selection Dialog AL
+        unitSelectionDialog.getDoneButton().addActionListener(e -> {
+            JComboBox<String> comboBox = unitSelectionDialog.getUnitComboBox();
+            String selectedItem = comboBox.getSelectedItem().toString().trim();
+            switch (selectedItem){
+                case "Peasant":
+                    Peasant peasant=new Peasant(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
+                    try {
+                        gamePanel.recruitUnit(peasant,selectedButton);
+                        gameFrame.revalidate();
+                        gameFrame.repaint();
+                    }catch (IllegalStateException exception){
+                        JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }finally {
+                        break;
+                    }
+                case "Swordman":
+                    Swordman swordman=new Swordman(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
+                    try {
+                        gamePanel.recruitUnit(swordman,selectedButton);
+                        gameFrame.revalidate();
+                        gameFrame.repaint();
+                    }catch (IllegalStateException exception){
+                        JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }finally {
+                        break;
+                    }
+                case "Spearman":
+                    Spearman spearman=new Spearman(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
+                    try {
+                        gamePanel.recruitUnit(spearman,selectedButton);
+                        gameFrame.revalidate();
+                        gameFrame.repaint();
+                    }catch (IllegalStateException exception){
+                        JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }finally {
+                        break;
+                    }
+                case "Knight":
+                    Knight knight=new Knight(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
+                    try {
+                        gamePanel.recruitUnit(knight,selectedButton);
+                        gameFrame.revalidate();
+                        gameFrame.repaint();
+                    }catch (IllegalStateException exception){
+                        JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }finally {
+                        break;
+                    }
+                case "None":
+                    JOptionPane.showMessageDialog(gameFrame, "Please select a unit", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+            selectedButton=null;
+            lastClickedButton=null;
+            unitSelectionDialog.dispose();
+            paused=false;
+        });
+
+        // Cancel Button in Unit Selection Dialog AL
+        unitSelectionDialog.getCancelButton().addActionListener(e -> {
+           unitSelectionDialog.dispose();
+           paused=false;
+        });
 
 
 
@@ -203,6 +393,7 @@ public class GameController {
         createTimerThread();
         mainInfoPanel.getInfoPanel().updateInfo();
 
+        gameFrame.setMainInfoPanel(mainInfoPanel);
         gameFrame.add(gamePanel, BorderLayout.CENTER);
         gameFrame.add(mainInfoPanel, BorderLayout.EAST);
         gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
@@ -229,9 +420,9 @@ public class GameController {
                         SwingUtilities.invokeLater(()->{
                             blockButton.getBlockPanel().updateBlockInfo(blockButton.getBlock(),isDarkMode);
                             mainInfoPanel.setBlockPanel(blockButton.getBlockPanel());
+                            mainInfoPanel.revalidate();
+                            mainInfoPanel.repaint();
                             gameFrame.pack();
-                            gameFrame.revalidate();
-                            gameFrame.repaint();
                         });
                     } catch (InterruptedException ex) {
 
@@ -250,9 +441,9 @@ public class GameController {
 
                 SwingUtilities.invokeLater(() ->{
                     mainInfoPanel.removeBlockPanel(blockButton.getBlockPanel());
+                    mainInfoPanel.revalidate();
+                    mainInfoPanel.repaint();
                     gameFrame.pack();
-                    gameFrame.revalidate();
-                    gameFrame.repaint();
                 });
 
             }
@@ -266,18 +457,15 @@ public class GameController {
             Border defaultBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
             Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 3);
             Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, defaultBorder);
-            // اگر دوباره روی دکمه کلیک شد
             if (lastClickedButton == selectedButton) {
                 selectedButton.setBorder();
                 lastClickedButton = null;
                 selectedButton=null;
             } else {
-                // بازگردانی بوردر دکمه قبلی
                 if (lastClickedButton != null) {
                     lastClickedButton.setBorder();
                 }
 
-                // دکمه فعلی رو سیاه کن
                 selectedButton.setBorder(compoundBorder);
                 lastClickedButton = selectedButton;
             }
@@ -408,6 +596,44 @@ public class GameController {
             }
         });
     }
+    public void addUnitComboBoxAL(){
+        JComboBox<String> unitComboBox =unitSelectionDialog.getUnitComboBox();
+        unitComboBox.addActionListener(e -> {
+           String selectedUnit=unitComboBox.getSelectedItem().toString().trim();
+           switch (selectedUnit){
+               case "Peasant":
+                   unitSelectionDialog.getUnitHPLabel().setText("HP: "+ Peasant.getStaticHitPoints());
+                   unitSelectionDialog.getUnitAttackPower().setText("Attack Power: "+Peasant.getStaticAttackPower());
+                   unitSelectionDialog.getUnitRationLabel().setText("Rotation: "+Peasant.getStaticRationCost());
+                   unitSelectionDialog.getUnitePaymentCostLabel().setText("Payment Cost: "+Peasant.getStaticPaymentCost());
+                   break;
+               case "Swordman":
+                   unitSelectionDialog.getUnitHPLabel().setText("HP: "+ Swordman.getStaticHitPoints());
+                   unitSelectionDialog.getUnitAttackPower().setText("Attack Power: "+Swordman.getStaticAttackPower());
+                   unitSelectionDialog.getUnitRationLabel().setText("Rotation: "+Swordman.getStaticRationCost());
+                   unitSelectionDialog.getUnitePaymentCostLabel().setText("Payment Cost: "+Swordman.getStaticPaymentCost());
+                   break;
+               case "Spearman":
+                   unitSelectionDialog.getUnitHPLabel().setText("HP: "+ Spearman.getStaticHitPoints());
+                   unitSelectionDialog.getUnitAttackPower().setText("Attack Power: "+Spearman.getStaticAttackPower());
+                   unitSelectionDialog.getUnitRationLabel().setText("Rotation: "+Spearman.getStaticRationCost());
+                   unitSelectionDialog.getUnitePaymentCostLabel().setText("Payment Cost: "+Spearman.getStaticPaymentCost());
+                   break;
+               case "Knight":
+                   unitSelectionDialog.getUnitHPLabel().setText("HP: "+ Knight.getStaticHitPoints());
+                   unitSelectionDialog.getUnitAttackPower().setText("Attack Power: "+Knight.getStaticAttackPower());
+                   unitSelectionDialog.getUnitRationLabel().setText("Rotation: "+Knight.getStaticRationCost());
+                   unitSelectionDialog.getUnitePaymentCostLabel().setText("Payment Cost: "+Knight.getStaticPaymentCost());
+                   break;
+               case "None":
+                   unitSelectionDialog.getUnitHPLabel().setText("HP: ");
+                   unitSelectionDialog.getUnitAttackPower().setText("Attack Power: ");
+                   unitSelectionDialog.getUnitRationLabel().setText("Rotation: ");
+                   unitSelectionDialog.getUnitePaymentCostLabel().setText("Payment Cost: ");
+                   break;
+           }
+        });
 
+    }
 
 }
