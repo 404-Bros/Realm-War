@@ -1,7 +1,9 @@
 package models;
 
 import models.blocks.Block;
+import models.blocks.VoidBlock;
 import models.structures.*;
+import models.units.Peasant;
 import models.units.Unit;
 
 import java.util.ArrayList;
@@ -65,61 +67,72 @@ public class Kingdom {
 
 
         for (Unit unit : units) {
-            this.gold -= unit.getPaymentCost();
             this.food -= unit.getRationCost();
         }
     }
 
-    public boolean canBuildStructure(Structure structure) {
-        if (structure.getKingdomId() != this.id) {
-            return false;
-        }
+    public void canBuildStructure(Structure structure) throws IllegalStateException {
         if (structure instanceof Farm) {
             if (gold<Farm.getBuildingCost(farmCount))
-                return false;
+                throw new IllegalStateException("Not enough gold to build this structure");
             if (farmCount >= structure.getMaxCount())
-                return false;
+                throw new IllegalStateException("cannot build more than " + structure.getMaxCount() + "of this structure");
         }
         else {
             if (structure instanceof Market) {
                 if (gold<Market.getBuildingCost(marketCount))
-                    return false;
+                    throw new IllegalStateException("Not enough gold to build this structure");
                 if (marketCount >= structure.getMaxCount())
-                    return false;
+                    throw new IllegalStateException("cannot build more than " + structure.getMaxCount() + "of this structure");
             } else {
                 if (structure instanceof Tower) {
                     if (gold<Tower.getBuildingCost(towerCount))
-                        return false;
+                        throw new IllegalStateException("Not enough gold to build this structure");
                     if (towerCount >= structure.getMaxCount())
-                        return false;
+                        throw new IllegalStateException("cannot build more than " + structure.getMaxCount() + "of this structure");
                 }
                 else{
                     if (structure instanceof Barrack) {
                         if (gold<Barrack.getBuildingCost(barrackCount))
-                            return false;
+                            throw new IllegalStateException("Not enough gold to build this structure");
                         if (barrackCount >= structure.getMaxCount())
-                            return false;
+                            throw new IllegalStateException("cannot build more than " + structure.getMaxCount() + "of this structure");
                     }
                 }
             }
         }
-        return true;
     }
     
     public void addStructure(Structure structure) {
         structures.add(structure);
-        if (structure instanceof Farm)
+        if (structure instanceof Farm) {
+            gold -= Farm.getBuildingCost(farmCount);
             farmCount++;
-        else if (structure instanceof Market)
-            marketCount++;
-            else if (structure instanceof Tower)
-                towerCount++;
-                else
-                    if (structure instanceof Barrack)
+        }
+        else {
+            if (structure instanceof Market) {
+                gold -= Market.getBuildingCost(marketCount);
+                marketCount++;
+            }
+            else {
+                if (structure instanceof Tower) {
+                    gold -= Tower.getBuildingCost(towerCount);
+                    towerCount++;
+                }
+                else {
+                    if (structure instanceof Barrack) {
+                        gold -= Barrack.getBuildingCost(barrackCount);
+                        totalUnitSpace+=Barrack.getUnitSpaceByLevel(structure.getLevel()-1);
                         barrackCount++;
+                    }
+                }
+            }
+        }
     }
-    
     public void addUnit(Unit unit) {
+        if (gold<unit.getPaymentCost()){
+            throw new IllegalStateException("Not enough gold to recruit");
+        }
         if (usedUnitSpace + unit.getUnitSpace() > totalUnitSpace) {
             throw new IllegalStateException("Not enough unit space");
         }
@@ -148,6 +161,9 @@ public class Kingdom {
         return barrackCount;
     }
 
+
+    
+    
     public int getId() { return id; }
     public int getGold() { return gold; }
     public void setGold(int gold) { this.gold = gold; }

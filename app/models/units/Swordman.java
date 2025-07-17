@@ -3,6 +3,10 @@ package models.units;
 import models.Position;
 
 public class Swordman extends Unit {
+    private static int hitPoints=80;
+    private static int attackPower=15;
+    private static int paymentCost=8;
+    private static int rationCost=4;
     public Swordman(int kingdomId, Position position) {
         super(80, 2, 15, 1, 8, 4, 3, kingdomId, position);
     }
@@ -18,5 +22,23 @@ public class Swordman extends Unit {
             throw new IllegalArgumentException("Cannot merge these units");
         }
         return new Knight(this.getKingdomId(), this.getPosition());
+    }
+    public static int getStaticHitPoints() {
+        return hitPoints;
+    }
+
+
+    public static int getStaticAttackPower() {
+        return attackPower;
+    }
+
+
+    public static int getStaticPaymentCost() {
+        return paymentCost;
+    }
+
+
+    public static int getStaticRationCost() {
+        return rationCost;
     }
 }

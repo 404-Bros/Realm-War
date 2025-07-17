@@ -19,8 +19,8 @@ public class StructureSelectionDialog extends JDialog {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         setPreferredSize(new Dimension(400, 250));
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setBackground(new Color(0xEDEAE6));
         // ساخت لیبل Choose Structure
         chooseLabel = new JLabel("Choose Structure:");
         gbc.gridx = 0;

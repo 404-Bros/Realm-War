@@ -10,8 +10,8 @@ public class Market extends Structure {
 
     private int goldProduction;
 
-    public Market( int maxLevel, Position position, Block baseBlock, int kingdomId) {
-        super(maxLevel,5, DURABILITY_BY_LEVEL[0], BUILDING_COST_BY_LEVEL[0], position, baseBlock, kingdomId);
+    public Market( Position position, Block baseBlock, int kingdomId) {
+        super(3,5, DURABILITY_BY_LEVEL[0], BUILDING_COST_BY_LEVEL[0], position, baseBlock, kingdomId);
 
     }
 

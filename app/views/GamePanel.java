@@ -6,6 +6,11 @@ import models.blocks.Block;
 import models.blocks.EmptyBlock;
 import models.blocks.ForestBlock;
 import models.blocks.VoidBlock;
+import models.structures.*;
+import models.units.Peasant;
+import models.units.Spearman;
+import models.units.Swordman;
+import models.units.Unit;
 import utils.ResourceLoader;
 
 import javax.swing.*;
@@ -101,5 +106,129 @@ public class GamePanel extends JPanel {
             blockButton.addActionListener(actionListener);
         }
     }
+    public void buildStructure(Structure structure,BlockButton blockButton) {
+        blockButton.getBlock().setStructure(structure);
+        gameState.getCurrentKingdom().addStructure(structure);
+        blockButton.setBorder();
+        if (!(blockButton.getBlock() instanceof EmptyBlock)){
+            EmptyBlock emptyBlock = new EmptyBlock(blockButton.getPosition());
+            emptyBlock.setStructure(structure);
+            emptyBlock.setUnit(blockButton.getBlock().getUnit());
+            emptyBlock.setAbsorbed(blockButton.getBlock().isAbsorbed(),blockButton.getBlock().getKingdomId());
+            blockButton.setBlock(emptyBlock);
+        }
+        if (structure instanceof Market){
+            blockButton.setIcon(icons.get("market"));
+        }
+        else {
+            if (structure instanceof Farm){
+                blockButton.setIcon(icons.get("farm"));
+            }
+            else {
+                if (structure instanceof Barrack){
+                    blockButton.setIcon(icons.get("barrack"));
+                }
+                else {
+                    if (structure instanceof Tower){
+                        blockButton.setIcon(icons.get("tower"));
+                    }
+                }
+            }
+        }
 
+    }
+    public void recruitUnit(Unit unit,BlockButton selectedButton) throws IllegalStateException {
+        gameState.getCurrentKingdom().addUnit(unit);
+        selectedButton.getBlock().setUnit(unit);
+        selectedButton.setBorder();
+        if (unit instanceof Peasant){
+            selectedButton.setIcon(getPeasantIcon(selectedButton.getBlock()));
+        }
+        else {
+            if (unit instanceof Swordman){
+                selectedButton.setIcon(getSwordmanIcon(selectedButton.getBlock()));
+            }
+            else {
+                if (unit instanceof Spearman){
+                    selectedButton.setIcon(getSpearmanIcon(selectedButton.getBlock()));
+                }
+                else {
+                    selectedButton.setIcon(getKnightIcon(selectedButton.getBlock()));
+                }
+            }
+        }
+
+    }
+    private ImageIcon getPeasantIcon(Block block) {
+        if (block instanceof EmptyBlock){
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("peasant-p1E");
+            }
+            else {
+                return icons.get("peasant-p2E");
+            }
+        }
+        else {
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("peasant-p1F");
+            }
+            else {
+                return icons.get("peasant-p2F");
+            }
+        }
+    }
+    private ImageIcon getSwordmanIcon(Block block) {
+        if (block instanceof EmptyBlock){
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("swordman-p1E");
+            }
+            else {
+                return icons.get("swordman-p2E");
+            }
+        }
+        else {
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("swordman-p1F");
+            }
+            else {
+                return icons.get("swordman-p2F");
+            }
+        }
+    }
+    private ImageIcon getSpearmanIcon(Block block) {
+        if (block instanceof EmptyBlock){
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("spearman-p1E");
+            }
+            else {
+                return icons.get("spearman-p2E");
+            }
+        }
+        else {
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("spearman-p1F");
+            }
+            else {
+                return icons.get("spearman-p2F");
+            }
+        }
+    }
+    private ImageIcon getKnightIcon(Block block) {
+        if (block instanceof EmptyBlock){
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("knight-p1E");
+            }
+            else {
+                return icons.get("knight-p2E");
+            }
+        }
+        else {
+            if (gameState.getCurrentKingdom().getId()==1){
+                return icons.get("knight-p1F");
+            }
+            else {
+                return icons.get("knight-p2F");
+            }
+        }
+    }
 }

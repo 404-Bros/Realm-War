@@ -14,18 +14,14 @@ import java.awt.event.MouseEvent;
 
 public class BlockButton extends JButton {
     private Block block;
-    private Structure structure;
-    private Unit unit;
     private ImageIcon icon;
     private Position position;
     private Border kingdomBorder;
     private BlockPanel blockPanel;
-    private final boolean[] isCompound = {false};
     private Border kingdomCompoundBorder;
 
     public BlockButton(ImageIcon icon, Block block) {
         this.block = block;
-        this.structure = block.getStructure();
         this.icon = icon;
         this.position = block.getPosition();
         blockPanel = new BlockPanel();
@@ -98,22 +94,6 @@ public class BlockButton extends JButton {
 
     public void setBlock(Block block) {
         this.block = block;
-    }
-
-    public Structure getStructure() {
-        return structure;
-    }
-
-    public void setStructure(Structure structure) {
-        this.structure = structure;
-    }
-
-    public Unit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
     }
 
     @Override
