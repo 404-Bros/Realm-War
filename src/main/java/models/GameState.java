@@ -15,7 +15,6 @@ public class GameState {
     private List<Kingdom> kingdoms;
     private Block[][] gameMap;
     private int turnNumber;
-    private boolean running;
     private int row;
     private int col;
 
@@ -129,7 +128,14 @@ public class GameState {
         kingdoms.get(currentPlayerTurn).startTurn();
     }
 
-
+    public TownHall getEnemyTownHall() {
+        if (currentPlayerTurn == 0) {
+            return kingdoms.get(1).getTownHall();
+        }
+        else {
+            return kingdoms.get(0).getTownHall();
+        }
+    }
     public List<Tower> getEnemyTower(){
         if (currentPlayerTurn == 0) {
             return kingdoms.get(1).getTowers();
@@ -145,10 +151,6 @@ public class GameState {
     public int getTurnNumber() { return turnNumber; }
     public Kingdom getCurrentKingdom() { return kingdoms.get(currentPlayerTurn); }
 
-    public boolean isRunning() {
-        return running;
-    }
-
     public int getRow() {
         return row;
     }
@@ -157,8 +159,6 @@ public class GameState {
         return col;
     }
 
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
+
 
 }

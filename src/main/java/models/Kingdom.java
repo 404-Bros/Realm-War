@@ -5,6 +5,7 @@ import models.blocks.VoidBlock;
 import models.structures.*;
 import models.units.Peasant;
 import models.units.Unit;
+import views.BlockButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class Kingdom {
     private int marketCount;
     private int towerCount;
     private int barrackCount;
+    private List<Unit> mustRemoveUnits;
+    private List<Structure> mustRemoveStructures;
 
     public Kingdom(int id, TownHall townHall) {
         this.id = id;
@@ -31,6 +34,7 @@ public class Kingdom {
         this.structures = new ArrayList<>();
         this.units = new ArrayList<>();
         this.absorbedBlocks = new ArrayList<>();
+
 
         this.towers = new ArrayList<>();
         this.structures.add(townHall);
@@ -44,7 +48,8 @@ public class Kingdom {
     }
 
     public void startTurn() {
-
+        mustRemoveStructures = new ArrayList<>();
+        mustRemoveUnits = new ArrayList<>();
         for (Structure structure : structures) {
             if (structure instanceof TownHall) {
                 this.gold += ((TownHall) structure).getGoldProduction();
@@ -64,24 +69,44 @@ public class Kingdom {
 
 
         for (Structure structure : structures) {
-            this.gold -= structure.getMaintenanceCost();
+            int finalGold = gold - structure.getMaintenanceCost();
+            if (finalGold >= 0) {
+                this.gold -= structure.getMaintenanceCost();
+            }
+            else {
+                mustRemoveStructures.add(structure);
+            }
         }
 
 
         for (Unit unit : units) {
-            this.food -= unit.getRationCost();
+            int finalFood= this.food - unit.getRationCost();
+            if (finalFood >= 0) {
+                this.food -= unit.getRationCost();
+            }
+            else {
+                mustRemoveUnits.add(unit);
+            }
         }
 
-        if (!towers.isEmpty()) {
+        for (Unit unit : units) {
+            unit.setMoveCount(0);
+            unit.setCanAttack(true);
+        }
+
+        if (towers.isEmpty()) {
             for (Tower tower : towers) {
                 for (Block block : tower.getCoveredBlock()){
                     if(block.hasUnit()){
-                        if (block.getUnit().getKingdomId() != this.id) {
+                        if (block.getUnit().getKingdomId() != this.id ) {
                             if (block.getUnit().isAttakedByTower()){
                                 block.getUnit().setAttakedByTower(false);
                             }
                             else {
                                 block.getUnit().setHitPoints(block.getUnit().getHitPoints()-tower.getAttackPower());
+                                if (block.getUnit().getHitPoints()<=0){
+                                    mustRemoveUnits.add(block.getUnit());
+                                }
                             }
                         }
                     }
@@ -170,7 +195,9 @@ public class Kingdom {
     public void removeUnit(Unit unit) {
         units.remove(unit);
     }
-
+    public void removeStructure(Structure structure) {
+        structures.remove(structure);
+    }
 
 
     public void absorbBlock(Block block) {
@@ -197,6 +224,14 @@ public class Kingdom {
 
     public List<Tower> getTowers() {
         return towers;
+    }
+
+    public List<Unit> getMustRemoveUnits() {
+        return mustRemoveUnits;
+    }
+
+    public List<Structure> getMustRemoveStructures() {
+        return mustRemoveStructures;
     }
 
     public int getId() { return id; }

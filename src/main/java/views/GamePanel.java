@@ -42,10 +42,8 @@ public class GamePanel extends JPanel {
 
 
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        creatBlockButtons();
-        initializePanel();
     }
-    private void creatBlockButtons() {
+    public void creatBlockButtons() {
         Block tH1 = null;
         Block tH2=null;
         BlockButton townHall1=null;
@@ -88,7 +86,7 @@ public class GamePanel extends JPanel {
             }
         }
     }
-    private void initializePanel(){
+    public void initializePanel(){
         for (BlockButton blockButton : blockButtons) {
             add(blockButton);
         }
@@ -279,8 +277,16 @@ public class GamePanel extends JPanel {
         selectedButton.setBorder();
     }
 
-    public void removeUnit(BlockButton selectedBlock) {
-
+    public void removeUnit(BlockButton blockButton) {
+        gameState.getCurrentKingdom().removeUnit(blockButton.getBlock().getUnit());
+        blockButton.getBlock().setUnit(null);
+        if (blockButton.getBlock() instanceof EmptyBlock){
+            blockButton.setIcon(icons.get("emptyBlock"));
+        }
+        else {
+            blockButton.setIcon(icons.get("forestBlock"));
+        }
+        blockButton.setBorder();
     }
 
 
@@ -356,5 +362,65 @@ public class GamePanel extends JPanel {
                 return icons.get("knight-p2F");
             }
         }
+    }
+
+    public boolean isValidAttack(Unit unit,Block block) {
+        if (!block.hasUnit() && !block.hasStructure() ){
+            return false;
+        }
+        if (block.getKingdomId()==unit.getKingdomId()){
+            return false;
+        }
+        int unitX = unit.getPosition().getX();
+        int unitY = unit.getPosition().getY();
+        int targetX = block.getPosition().getX();
+        int targetY = block.getPosition().getY();
+        int distance = Math.abs(unitX - targetX) + Math.abs(unitY - targetY);
+        return distance <= unit.getAttackRange();
+
+    }
+
+    public void attackToUnit(Block attackerBlock,BlockButton attackedBlockButton) {
+        Unit attacker= attackerBlock.getUnit();
+        Unit attacked= attackedBlockButton.getBlock().getUnit();
+        if (attackerBlock instanceof EmptyBlock){
+            attacked.setHitPoints((int) (attacked.getHitPoints()-(attacker.getAttackPower()*ForestBlock.getAttackBonus())));
+        }
+        else {
+            attacked.setHitPoints(attacked.getHitPoints()-attacker.getAttackPower());
+        }
+        if (attacked.getHitPoints() <= 0){
+            removeUnit(attackedBlockButton);
+        }
+    }
+    public void attackToStructure(Block attackerBlock,BlockButton attackedBlockButton) {
+        Unit attacker= attackerBlock.getUnit();
+        Structure attacked= attackedBlockButton.getBlock().getStructure();
+        if (attackerBlock instanceof EmptyBlock){
+            attacked.setDurability((int) (attacked.getDurability()-(attacker.getAttackPower()*ForestBlock.getAttackBonus())));
+        }
+        else {
+            attacked.setDurability((attacked.getDurability()-attacker.getAttackPower()));
+        }
+        if (attacked.getDurability() <= 0){
+            if (!(attacked instanceof TownHall)){
+                removeStructure(attackedBlockButton);
+            }
+        }
+    }
+    public void removeStructure(BlockButton blockButton) {
+        getGameState().getCurrentKingdom().removeStructure(blockButton.getBlock().getStructure());
+        blockButton.getBlock().setStructure(null);
+        if (blockButton.getBlock() instanceof EmptyBlock){
+            blockButton.setIcon(icons.get("emptyBlock"));
+        }
+        else {
+            blockButton.setIcon(icons.get("forestBlock"));
+        }
+        blockButton.setBorder();
+    }
+
+    public List<BlockButton> getBlockButtons() {
+        return blockButtons;
     }
 }
