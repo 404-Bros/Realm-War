@@ -139,7 +139,20 @@ public class Kingdom {
         units.add(unit);
         usedUnitSpace += unit.getUnitSpace();
     }
-    
+
+    public void upgradeStructure(Structure structure) throws IllegalStateException {
+         if (gold<structure.getUpgradeCost()){
+             throw new IllegalStateException("Not enough gold to upgrade");
+         }
+         structure.upgrade();
+    }
+
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
+    }
+
+
+
     public void absorbBlock(Block block) {
         block.setAbsorbed(true, this.id);
         absorbedBlocks.add(block);

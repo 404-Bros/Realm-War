@@ -159,6 +159,26 @@ public class GamePanel extends JPanel {
         }
 
     }
+
+    public void mergeUnit(BlockButton lastClickedButton,BlockButton selectedButton) throws IllegalStateException {
+        Unit secondUnit = selectedButton.getBlock().getUnit();
+        Unit firstUnit = lastClickedButton.getBlock().getUnit();
+        Unit finallyUnit=secondUnit.merge(firstUnit);
+        gameState.getCurrentKingdom().removeUnit(selectedButton.getBlock().getUnit());
+        gameState.getCurrentKingdom().removeUnit(lastClickedButton.getBlock().getUnit());
+        selectedButton.getBlock().setUnit(null);
+        lastClickedButton.getBlock().setUnit(null);
+        if (lastClickedButton.getBlock() instanceof EmptyBlock){
+            lastClickedButton.setIcon(icons.get("emptyBlock"));
+            lastClickedButton.setBorder();
+        }
+        else {
+            lastClickedButton.setIcon(icons.get("forestBlock"));
+            lastClickedButton.setBorder();
+        }
+        recruitUnit(finallyUnit,selectedButton);
+    }
+
     private ImageIcon getPeasantIcon(Block block) {
         if (block instanceof EmptyBlock){
             if (gameState.getCurrentKingdom().getId()==1){

@@ -19,6 +19,9 @@ public class Peasant extends Unit {
 
     @Override
     public Unit merge(Unit other) {
+        if (this.getHitPoints() != 30 || other.getHitPoints() !=30) {
+            throw new IllegalStateException("Cannot merge these units");
+        }
         if (!canMerge(other)) {
             throw new IllegalArgumentException("Cannot merge these units");
         }

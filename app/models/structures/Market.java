@@ -30,7 +30,7 @@ public class Market extends Structure {
     @Override
     public void upgrade() {
         if (!canUpgrade()) {
-        throw new IllegalStateException("Farm is already at max level");
+        throw new IllegalStateException("Market is already at max level");
     }
 
         setLevel(getLevel() + 1);
@@ -38,6 +38,10 @@ public class Market extends Structure {
         this.goldProduction = GOLD_PRODUCTION_BY_LEVEL[getLevel() - 1];
     }
 
+    @Override
+    public int getUpgradeCost() {
+        return BUILDING_COST_BY_LEVEL[getLevel() - 1];
+    }
     public static int getBuildingCost(int marketCount) {
         return 5 + (marketCount * 2);
     }
