@@ -1,6 +1,6 @@
-package main.java.models.units;
+package models.units;
 
-import main.java.models.Position;
+import models.Position;
 
 public class Knight extends Unit {
     private static int hitPoints=120;

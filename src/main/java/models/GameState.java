@@ -1,13 +1,13 @@
-package main.java.models;
+package models;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.models.blocks.Block;
-import main.java.models.blocks.VoidBlock;
-import main.java.models.blocks.ForestBlock;
-import main.java.models.blocks.EmptyBlock;
-import main.java.models.structures.Tower;
-import main.java.models.structures.TownHall;
+import models.blocks.Block;
+import models.blocks.VoidBlock;
+import models.blocks.ForestBlock;
+import models.blocks.EmptyBlock;
+import models.structures.Tower;
+import models.structures.TownHall;
 
 
 public class GameState {

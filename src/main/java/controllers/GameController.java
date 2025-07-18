@@ -1,11 +1,11 @@
-package main.java.controllers;
+package controllers;
 
-import main.java.models.GameState;
-import main.java.models.Player;
-import main.java.models.Position;
-import main.java.models.structures.*;
-import main.java.models.units.*;
-import main.java.views.*;
+import models.GameState;
+import models.Player;
+import models.Position;
+import models.structures.*;
+import models.units.*;
+import views.*;
 
 import javax.imageio.plugins.tiff.TIFFImageReadParam;
 import javax.swing.*;
@@ -14,7 +14,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.event.*;
-import java.lang.foreign.PaddingLayout;
 import java.util.Objects;
 
 public class GameController {

@@ -1,6 +1,6 @@
-package main.java.views;
+package views;
 
-import main.java.models.GameState;
+import models.GameState;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -30,7 +30,7 @@ public class MainInfoPanel extends JPanel {
         pauseButton.setPreferredSize(new Dimension(30, 30));
         pauseButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         pauseButton.setFocusable(false);
-        pauseButton.setIcon(new ImageIcon(getClass().getResource("../resources/pause.png")));
+        pauseButton.setIcon(new ImageIcon(getClass().getResource("/pause.png")));
         pauseButton.setBounds(168, 2, 30, 30);
         add(pauseButton);
 

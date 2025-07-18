@@ -1,7 +1,7 @@
-package main.java.models.structures;
+package models.structures;
 
-import main.java.models.Position;
-import main.java.models.blocks.Block;
+import models.Position;
+import models.blocks.Block;
 
 public class Farm extends Structure {
     private static final int[] FOOD_PRODUCTION_BY_LEVEL = {5, 8, 12};

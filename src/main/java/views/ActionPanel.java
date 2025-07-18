@@ -1,4 +1,4 @@
-package main.java.views;
+package views;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -26,7 +26,7 @@ public class ActionPanel extends JPanel {
         endTurnButton.setForeground(Color.WHITE);
         endTurnButton.setPreferredSize(new Dimension(100, 40));
         endTurnButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        endTurnButton.setIcon(new ImageIcon(getClass().getResource("../resources/endTurnIcon.png")));
+        endTurnButton.setIcon(new ImageIcon(getClass().getResource("/endTurnIcon.png")));
         endTurnButton.setBounds(535,10,100,40);
         /// ////////////////////
         buildButton = new JButton("Build");
@@ -36,7 +36,7 @@ public class ActionPanel extends JPanel {
         buildButton.setForeground(Color.WHITE);
         buildButton.setPreferredSize(new Dimension(100, 40));
         buildButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        buildButton.setIcon(new ImageIcon(getClass().getResource("../resources/buildIcon.png")));
+        buildButton.setIcon(new ImageIcon(getClass().getResource("/buildIcon.png")));
         buildButton.setBounds(135,10,100,40);
         /// //////////////////////
         recruitButton = new JButton("Recruit");
@@ -47,7 +47,7 @@ public class ActionPanel extends JPanel {
         //recruitButton.setOpaque(true);
         recruitButton.setPreferredSize(new Dimension(120, 40));
         recruitButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        recruitButton.setIcon(new ImageIcon(getClass().getResource("../resources/recruitIcon.png")));
+        recruitButton.setIcon(new ImageIcon(getClass().getResource("/recruitIcon.png")));
         recruitButton.setBounds(235,10,100,40);
         /// //////////
         moveButton = new JButton("Move");
@@ -58,7 +58,7 @@ public class ActionPanel extends JPanel {
         //moveButton.setOpaque(true);
         moveButton.setPreferredSize(new Dimension(100, 40));
         moveButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        moveButton.setIcon(new ImageIcon(getClass().getResource("../resources/moveIcon.png")));
+        moveButton.setIcon(new ImageIcon(getClass().getResource("/moveIcon.png")));
         moveButton.setBounds(335,10,100,40);
         /// /////////////////////
         attackButton = new JButton("Attack");
@@ -69,7 +69,7 @@ public class ActionPanel extends JPanel {
         //attackButton.setOpaque(true);
         attackButton.setPreferredSize(new Dimension(100, 40));
         attackButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        attackButton.setIcon(new ImageIcon(getClass().getResource("../resources/attackIcon.png")));
+        attackButton.setIcon(new ImageIcon(getClass().getResource("/attackIcon.png")));
         attackButton.setBounds(435,10,100,40);
 
         /// //////////////
@@ -80,7 +80,7 @@ public class ActionPanel extends JPanel {
         updateStructure.setForeground(Color.WHITE);
         updateStructure.setPreferredSize(new Dimension(120, 40));
         updateStructure.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        updateStructure.setIcon(new ImageIcon(getClass().getResource("../resources/upgrade.png")));
+        updateStructure.setIcon(new ImageIcon(getClass().getResource("/upgrade.png")));
         updateStructure.setBounds(257,54,145,40);
         /// /////
         mergeUnit= new JButton("Merge Unit");
@@ -90,7 +90,7 @@ public class ActionPanel extends JPanel {
         mergeUnit.setForeground(Color.WHITE);
         mergeUnit.setPreferredSize(new Dimension(120, 40));
         mergeUnit.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        mergeUnit.setIcon(new ImageIcon(getClass().getResource("../resources/Merge.png")));
+        mergeUnit.setIcon(new ImageIcon(getClass().getResource("/Merge.png")));
         mergeUnit.setBounds(402,54,110,40);
 
 

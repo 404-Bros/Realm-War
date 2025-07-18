@@ -1,9 +1,9 @@
-package main.java.views;
+package views;
 
 import javax.swing.*;
 import java.awt.*;
-import main.java.models.blocks.Block;
-import main.java.models.structures.*;
+import models.blocks.Block;
+import models.structures.*;
 
 public class BlockPanel extends JPanel {
     private JLabel blockTypeLabel;

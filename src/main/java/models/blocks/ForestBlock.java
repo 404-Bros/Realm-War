@@ -1,6 +1,6 @@
-package main.java.models.blocks;
+package models.blocks;
 
-import main.java.models.Position;
+import models.Position;
 
 public class ForestBlock extends Block {
     public ForestBlock(Position position) {
