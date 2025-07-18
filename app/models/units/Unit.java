@@ -13,6 +13,9 @@ public abstract class Unit {
     private int unitSpace;
     private int kingdomId;
     private Position position;
+    private int moveCount;
+    private boolean attakedByTower;
+
 
     public Unit(int hitPoints, int movementRange, int attackPower, int attackRange, 
                 int paymentCost, int rationCost, int unitSpace, int kingdomId, Position position) {
@@ -26,10 +29,16 @@ public abstract class Unit {
         this.unitSpace = unitSpace;
         this.kingdomId = kingdomId;
         this.position = position;
+        this.moveCount = 0;
+        attakedByTower = false;
     }
 
     public abstract boolean canMerge(Unit other);
     public abstract Unit merge(Unit other);
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 
     public int getHitPoints() { return hitPoints; }
     public void setHitPoints(int hitPoints) { this.hitPoints = hitPoints; }
@@ -42,4 +51,23 @@ public abstract class Unit {
     public int getUnitSpace() { return unitSpace; }
     public int getKingdomId() { return kingdomId; }
     public Position getPosition() { return position; }
+    public boolean canMove() {
+        return moveCount < movementRange;
+    }
+
+    public boolean isAttakedByTower() {
+        return attakedByTower;
+    }
+
+    public void setAttakedByTower(boolean attakedByTower) {
+        this.attakedByTower = attakedByTower;
+    }
+
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
+    }
 }

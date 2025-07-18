@@ -6,6 +6,7 @@ import models.blocks.Block;
 import models.blocks.VoidBlock;
 import models.blocks.ForestBlock;
 import models.blocks.EmptyBlock;
+import models.structures.Tower;
 import models.structures.TownHall;
 
 
@@ -128,6 +129,15 @@ public class GameState {
         kingdoms.get(currentPlayerTurn).startTurn();
     }
 
+
+    public List<Tower> getEnemyTower(){
+        if (currentPlayerTurn == 0) {
+            return kingdoms.get(1).getTowers();
+        }
+        else {
+            return kingdoms.get(0).getTowers();
+        }
+    }
     // Getters and setters
     public int getCurrentPlayerTurn() { return currentPlayerTurn; }
     public List<Kingdom> getKingdoms() { return kingdoms; }
