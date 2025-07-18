@@ -3,14 +3,16 @@ package models.structures;
 import models.Position;
 import models.blocks.Block;
 
+import java.util.List;
+
 public class Tower extends Structure {
     private static final int[] ATTACK_POWER_BY_LEVEL = {10, 15, 20};
     private static final int[] BUILDING_COST_BY_LEVEL = {10, 20, 30};
     private static final int[] DURABILITY_BY_LEVEL = {100, 150, 200};
-    private Block[] coveredBlock;
+    private List<Block> coveredBlock;
     private int attackPower;
 
-    public Tower(Position position, Block baseBlock, int kingdomId,Block[] coveredBlock) {
+    public Tower(Position position, Block baseBlock, int kingdomId,List<Block> coveredBlock) {
         super(3,4, DURABILITY_BY_LEVEL[0], 10, position, baseBlock, kingdomId);
         this.attackPower = ATTACK_POWER_BY_LEVEL[0];
         this.coveredBlock = coveredBlock;
@@ -38,7 +40,7 @@ public class Tower extends Structure {
     public int getAttackPower() {
         return attackPower;
     }
-    
+    @Override
     public int getUpgradeCost() {
         return BUILDING_COST_BY_LEVEL[getLevel() - 1];
     }
@@ -47,7 +49,11 @@ public class Tower extends Structure {
         return 10 + (towersCount * 10);
     }
 
-    public Block[] getCoveredBlock() {
+    public List<Block> getCoveredBlock() {
         return coveredBlock;
+    }
+
+    public static int getAttackPowerByLevel(int level){
+        return ATTACK_POWER_BY_LEVEL[level];
     }
 }

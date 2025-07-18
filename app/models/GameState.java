@@ -6,6 +6,7 @@ import models.blocks.Block;
 import models.blocks.VoidBlock;
 import models.blocks.ForestBlock;
 import models.blocks.EmptyBlock;
+import models.structures.Tower;
 import models.structures.TownHall;
 
 
@@ -67,13 +68,44 @@ public class GameState {
             absorbSurroundingBlocks(kingdom, townHallPos);
         }
     }
+    public boolean canBuildTower(Block centerBlock) {
+        Position center = centerBlock.getPosition();
+        for (int k = -1; k <= 1; k++) {
+            for (int t = -1; t <= 1; t++) {
+                int x = center.getX() + k;
+                int y = center.getY() + t;
 
+                if (x >= 0 && x < gameMap.length && y >= 0 && y < gameMap[0].length) {
+                    Block block = gameMap[x][y];
+                    if (block.getKingdomId() != getCurrentKingdom().getId()) {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public List<Block> createTowerCoveredBlock(Block centerBlock) {
+        List<Block> coveredBlock = new ArrayList<Block>();
+        Position center = centerBlock.getPosition();
+        for (int k = -1; k <= 1; k++) {
+            for (int t = -1; t <= 1; t++) {
+                int x = center.getX() + k;
+                int y = center.getY() + t;
+                coveredBlock.add(gameMap[x][y]);
+            }
+        }
+        return coveredBlock;
+    }
     private void absorbSurroundingBlocks(Kingdom kingdom, Position center) {
 
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                int x = center.getX() + dx;
-                int y = center.getY() + dy;
+        for (int k = -1; k <= 1; k++) {
+            for (int t = -1; t <= 1; t++) {
+                int x = center.getX() + k;
+                int y = center.getY() + t;
 
                 if (x >= 0 && x < gameMap.length && y >= 0 && y < gameMap[0].length) {
                     Block block = gameMap[x][y];
@@ -97,6 +129,15 @@ public class GameState {
         kingdoms.get(currentPlayerTurn).startTurn();
     }
 
+
+    public List<Tower> getEnemyTower(){
+        if (currentPlayerTurn == 0) {
+            return kingdoms.get(1).getTowers();
+        }
+        else {
+            return kingdoms.get(0).getTowers();
+        }
+    }
     // Getters and setters
     public int getCurrentPlayerTurn() { return currentPlayerTurn; }
     public List<Kingdom> getKingdoms() { return kingdoms; }

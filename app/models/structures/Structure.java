@@ -27,8 +27,9 @@ public abstract class Structure {
     public abstract boolean canUpgrade();
     public abstract void upgrade();
     public abstract void performTurnAction();
+    public abstract int getUpgradeCost();
 
-    public int getLevel() { return level; }
+        public int getLevel() { return level; }
     protected void setLevel(int level) { this.level = level; }
     public int getMaxLevel() { return maxLevel; }
     public int getDurability() { return durability; }
