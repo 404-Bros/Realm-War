@@ -29,7 +29,9 @@ public class GameFrame extends JFrame {
     @Override
     public void repaint() {
         super.repaint();
-        mainInfoPanel.getInfoPanel().updateInfo();
+        if (mainInfoPanel != null) {
+            mainInfoPanel.getInfoPanel().updateInfo();
+        }
     }
     public GamePanel getGamePanel() {
         return gamePanel;
