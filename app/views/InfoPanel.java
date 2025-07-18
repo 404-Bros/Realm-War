@@ -21,8 +21,7 @@ public class InfoPanel extends JPanel {
     private String player1Name;
     private String player2Name;
     private GameState gameState;
-    private Timer timer;
-    
+
     public InfoPanel(GameState gameState) {
         setBackground(new Color(0xEDEAE6));
 
@@ -77,20 +76,6 @@ public class InfoPanel extends JPanel {
         unitSpaceLabel.setText("Unit Space: " + currentKingdom.getUsedUnitSpace() + 
                               "/" + currentKingdom.getTotalUnitSpace());
         turnLabel.setText("Turn: " + gameState.getTurnNumber());
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                timeLeft--;
-                timeLabel.setText("Time Left: " + timeLeft + "s");
-
-                if (timeLeft <= 0) {
-                    ((Timer) e.getSource()).stop();
-
-                }
-            }
-        });
-
-        timer.start();
     }
 
     public void setPlayer1Name(String player1Name) {
@@ -100,9 +85,7 @@ public class InfoPanel extends JPanel {
     public void setPlayer2Name(String player2Name) {
         this.player2Name = player2Name;
     }
-    public void addTimerAL(ActionListener al) {
-        timer.addActionListener(al);
-    }
+
 
     public int getTimeLeft() {
         return timeLeft;
@@ -112,9 +95,7 @@ public class InfoPanel extends JPanel {
         this.timeLeft = timeLeft;
     }
 
-    public Timer getTimer() {
-        return timer;
-    }
+
 
 
     public JLabel getGoldLabel() {

@@ -6,6 +6,7 @@ import models.structures.Structure;
 import models.units.Unit;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,68 +14,70 @@ import java.awt.event.MouseEvent;
 
 public class BlockButton extends JButton {
     private Block block;
-    private Structure structure;
-    private Unit unit;
     private ImageIcon icon;
     private Position position;
-    private Border originalBorder;
+    private Border kingdomBorder;
     private BlockPanel blockPanel;
+    private Border kingdomCompoundBorder;
 
     public BlockButton(ImageIcon icon, Block block) {
         this.block = block;
-        this.structure = block.getStructure();
         this.icon = icon;
         this.position = block.getPosition();
         blockPanel = new BlockPanel();
         blockPanel.setBounds(0,190,200,410);
 
-        if(block.isAbsorbed()){
-            if (block.getKingdomId()==1){
-                setBorder(BorderFactory.createLineBorder(Color.RED,3));
-            }
-            else
-                setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
-        }
+        Border bevelBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 3);
+        Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, bevelBorder);
+
+
         /// /////////
         setPreferredSize(new Dimension(50, 50));
 
         setContentAreaFilled(false);
 
-        originalBorder = getBorder();
+        setBorder();
+
+
+
+//        addActionListener(e -> {
+//            if (isCompound[0]) {
+//                if(block.isAbsorbed()){
+//                    setBorder(kingdomCompoundBorder);
+//                }
+//                else {
+//                    setBorder(bevelBorder);
+//                }
+//            } else {
+//                setBorder(compoundBorder); // مرکب
+//            }
+//            isCompound[0] = !isCompound[0]; // وضعیت را برعکس کن
+//        });
 
 
 
     }
-    public BlockButton(ImageIcon icon, Block block, Border border) {
-        this.block = block;
-        this.structure = block.getStructure();
-        this.icon = icon;
-        this.position = block.getPosition();
-        blockPanel = new BlockPanel();
-        blockPanel.setBounds(0,190,200,410);
 
-        setBorder(border);
-        setPreferredSize(new Dimension(50, 50));
+    public void setBorder(){
+
+        Border defaultBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
 
         if(block.isAbsorbed()){
             if (block.getKingdomId()==1){
-                setBorder(BorderFactory.createLineBorder(Color.RED,3));
+                kingdomBorder=BorderFactory.createLineBorder(Color.RED,3);
+                kingdomCompoundBorder=BorderFactory.createCompoundBorder(kingdomBorder, defaultBorder);
+                setBorder(kingdomCompoundBorder);
             }
-            else
-                setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
+            else {
+                kingdomBorder = BorderFactory.createLineBorder(Color.BLUE, 3);
+                kingdomCompoundBorder=BorderFactory.createCompoundBorder(kingdomBorder, defaultBorder);
+                setBorder(kingdomCompoundBorder);
+            }
         }
-        setContentAreaFilled(false);
-
-        originalBorder = getBorder();
-
-
-    }
-    public void setBorder(){
-        if (block.getKingdomId()==1){
-            setBorder(BorderFactory.createLineBorder(Color.RED,3));
+        else {
+            setBorder(defaultBorder);
         }
-        else
-            setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
     }
 
     public Position getPosition() {
@@ -93,33 +96,17 @@ public class BlockButton extends JButton {
         this.block = block;
     }
 
-    public Structure getStructure() {
-        return structure;
-    }
-
-    public void setStructure(Structure structure) {
-        this.structure = structure;
-    }
-
-    public Unit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
-    public void setIcon(ImageIcon icon) {
-        this.icon = icon;
+    public Border getKingdomCompoundBorder() {
+        return kingdomCompoundBorder;
     }
 
-    public Border getOriginalBorder() {
-        return originalBorder;
+    public void setIcon(ImageIcon icon) {
+        this.icon = icon;
     }
 
     public BlockPanel getBlockPanel() {

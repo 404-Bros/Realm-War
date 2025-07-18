@@ -26,7 +26,11 @@ public class GameFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
     }
-
+    @Override
+    public void repaint() {
+        super.repaint();
+        mainInfoPanel.getInfoPanel().updateInfo();
+    }
     public GamePanel getGamePanel() {
         return gamePanel;
     }
