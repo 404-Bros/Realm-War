@@ -2,11 +2,9 @@ package controllers;
 
 import models.GameState;
 import models.Player;
+import models.Position;
 import models.structures.*;
-import models.units.Knight;
-import models.units.Peasant;
-import models.units.Spearman;
-import models.units.Swordman;
+import models.units.*;
 import views.*;
 
 import javax.imageio.plugins.tiff.TIFFImageReadParam;
@@ -38,6 +36,8 @@ public class GameController {
     private BlockButton selectedButton;
     private BlockButton lastClickedButton;
     private boolean mergeUnitActived=false;
+    private boolean moveUnitActived=false;
+    private Unit selectedUnit;
     public GameController(){
 
         this.gameFrame = new GameFrame();
@@ -157,6 +157,7 @@ public class GameController {
 
         // End Turn Button AL
         gameFrame.getActionPanel().addEndTurnButtonAL(e -> {
+            moveUnitActived=false;
             paused=true;
             isTurnEnded=true;
             mergeUnitActived=false;
@@ -175,6 +176,10 @@ public class GameController {
 
         // Build Button AL
         gameFrame.getActionPanel().addBuildButtonAL(e -> {
+            if (moveUnitActived){
+                moveUnitActived=false;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
             mergeUnitActived=false;
             if (selectedButton == null) {
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
@@ -285,6 +290,10 @@ public class GameController {
 
         //Recruit Button Al
         gameFrame.getActionPanel().addRecruitButtonAL(e -> {
+            if (moveUnitActived){
+                moveUnitActived=false;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
             mergeUnitActived=false;
             if (selectedButton == null) {
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
@@ -374,6 +383,10 @@ public class GameController {
 
         // Upgrade Structure Button AL
         gameFrame.getActionPanel().addUpdateStructureAL(e -> {
+            if (moveUnitActived){
+                moveUnitActived=false;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
             mergeUnitActived=false;
             if (selectedButton == null) {
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
@@ -397,7 +410,7 @@ public class GameController {
             }
             Structure structure=selectedButton.getBlock().getStructure();
             paused=true;
-            int answer=JOptionPane.showConfirmDialog(gameFrame,"it cost "+structure.getUpgradeCost()+" to upgrade,do you want to upgrade?","Upgrade",JOptionPane.YES_NO_OPTION);
+            int answer=JOptionPane.showConfirmDialog(gameFrame,"it cost "+structure.getUpgradeCost()+" gold to upgrade,do you want to upgrade?","Upgrade",JOptionPane.YES_NO_OPTION);
             if (answer==JOptionPane.YES_OPTION) {
                 try {
                     gameState.getCurrentKingdom().upgradeStructure(structure);
@@ -415,6 +428,10 @@ public class GameController {
 
         // Merge Unit Button AL
         gameFrame.getActionPanel().addMergeUnitAL(e -> {
+            if (moveUnitActived){
+                moveUnitActived=false;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
             if (mergeUnitActived){
                 mergeUnitActived=false;
                 return;
@@ -437,7 +454,23 @@ public class GameController {
             mergeUnitActived=true;
         });
 
+        // Move Unit Button AL
+        gameFrame.getActionPanel().addMoveButtonAL(e -> {
+            if (selectedButton != null) {
+                selectedButton.setBorder();
+            }
+            selectedButton=null;
+            lastClickedButton=null;
+            if (moveUnitActived){
+                moveUnitActived=false;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                moveUnitActived = true;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Actived!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
 
+        });
 
 
     }
@@ -531,6 +564,11 @@ public class GameController {
             } else {
                 if (lastClickedButton != null) {
                     lastClickedButton.setBorder();
+                }
+
+                if (moveUnitActived){
+                    handleMove();
+                    return;
                 }
 
                 if (mergeUnitActived){
@@ -733,6 +771,50 @@ public class GameController {
            }
         });
 
+    }
+    private void handleMove(){
+        if (selectedUnit == null) {
+            try {
+                selectedUnit = gamePanel.findUnitAt(selectedButton);
+                if (!selectedUnit.canMove()){
+                    JOptionPane.showMessageDialog(gameFrame,"Unit Can't Move");
+                    selectedUnit = null;
+                    selectedButton.setBorder();
+                    selectedButton = null;
+                    return;
+                }
+                Border defaultBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+                Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 3);
+                Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, defaultBorder);
+
+                selectedButton.setBorder(compoundBorder);
+                lastClickedButton=selectedButton;
+            }catch (IllegalStateException ex){
+                JOptionPane.showMessageDialog(gameFrame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                selectedButton.setBorder();
+                selectedButton = null;
+            }
+
+        } else {
+            if (gamePanel.isValidMove(selectedUnit, selectedButton)) {
+                gamePanel.moveUnit(lastClickedButton,selectedButton);
+                selectedUnit = null;
+                lastClickedButton.setBorder();
+                selectedButton=null;
+                lastClickedButton=null;
+                gamePanel.revalidate();
+                gamePanel.repaint();
+            }
+            else {
+                JOptionPane.showMessageDialog(gameFrame,"Invalid Move");
+                selectedUnit = null;
+                selectedButton.setBorder();
+                selectedButton=null;
+                lastClickedButton.setBorder();
+                lastClickedButton=null;
+
+            }
+        }
     }
 
 }

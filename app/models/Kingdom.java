@@ -19,6 +19,7 @@ public class Kingdom {
     private List<Structure> structures;
     private List<Unit> units;
     private List<Block> absorbedBlocks;
+    private List<Tower> towers;
     private int farmCount;
     private int marketCount;
     private int towerCount;
@@ -30,7 +31,8 @@ public class Kingdom {
         this.structures = new ArrayList<>();
         this.units = new ArrayList<>();
         this.absorbedBlocks = new ArrayList<>();
-        
+
+        this.towers = new ArrayList<>();
         this.structures.add(townHall);
         this.totalUnitSpace = townHall.getUnitSpace();
         this.gold = 20;
@@ -68,6 +70,23 @@ public class Kingdom {
 
         for (Unit unit : units) {
             this.food -= unit.getRationCost();
+        }
+
+        if (!towers.isEmpty()) {
+            for (Tower tower : towers) {
+                for (Block block : tower.getCoveredBlock()){
+                    if(block.hasUnit()){
+                        if (block.getUnit().getKingdomId() != this.id) {
+                            if (block.getUnit().isAttakedByTower()){
+                                block.getUnit().setAttakedByTower(false);
+                            }
+                            else {
+                                block.getUnit().setHitPoints(block.getUnit().getHitPoints()-tower.getAttackPower());
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -118,6 +137,7 @@ public class Kingdom {
                 if (structure instanceof Tower) {
                     gold -= Tower.getBuildingCost(towerCount);
                     towerCount++;
+                    towers.add( (Tower) structure);
                 }
                 else {
                     if (structure instanceof Barrack) {
@@ -175,8 +195,10 @@ public class Kingdom {
     }
 
 
-    
-    
+    public List<Tower> getTowers() {
+        return towers;
+    }
+
     public int getId() { return id; }
     public int getGold() { return gold; }
     public void setGold(int gold) { this.gold = gold; }

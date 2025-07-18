@@ -179,6 +179,112 @@ public class GamePanel extends JPanel {
         recruitUnit(finallyUnit,selectedButton);
     }
 
+    public Unit findUnitAt(BlockButton selectedBlock) {
+        Unit unit = selectedBlock.getBlock().getUnit();
+        if (unit==null){
+            throw new IllegalStateException("Block does not have a unit!!");
+        }
+        return unit;
+    }
+
+    public boolean isValidMove(Unit selectedUnit,BlockButton selectedButton) {
+        Block selectedBlock = selectedButton.getBlock();
+        if (selectedBlock instanceof VoidBlock){
+            return false;
+        }
+        if (selectedBlock.hasStructure()){
+            return false;
+        }
+        if (selectedBlock.hasUnit()){
+            return false;
+        }
+
+        int courentX = selectedUnit.getPosition().getX();
+        int courentY = selectedUnit.getPosition().getY();
+        int finalX = selectedButton.getPosition().getX();
+        int finalY = selectedButton.getPosition().getY();
+        int distance = Math.abs(finalX - courentX)+Math.abs(finalY - courentY);
+
+        if (distance!=1){
+            return false;
+        }
+
+        if (gameState.getEnemyTower() != null) {
+            for (Tower tower : gameState.getEnemyTower()){
+                for (Block block : tower.getCoveredBlock()){
+                    if (selectedBlock == block){
+                        if (tower.getLevel()==1 && selectedUnit instanceof Peasant){
+                            return false;
+                        }
+                        else {
+                            if (tower.getLevel()==2 && (selectedUnit instanceof Spearman || selectedUnit instanceof Peasant)){
+                                return false;
+                            }
+                            else {
+                                if ((tower.getLevel() == 3) && (selectedUnit instanceof Swordman || selectedUnit instanceof Peasant || selectedUnit instanceof Spearman)){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    public void moveUnit(BlockButton unitCourentButton,BlockButton selectedButton) {
+        Unit selectedUnit =unitCourentButton.getBlock().getUnit();
+        unitCourentButton.getBlock().setUnit(null);
+        if (unitCourentButton.getBlock() instanceof EmptyBlock){
+            unitCourentButton.setIcon(icons.get("emptyBlock"));
+        }
+        else {
+            unitCourentButton.setIcon(icons.get("forestBlock"));
+        }
+        selectedButton.getBlock().setUnit(selectedUnit);
+        selectedUnit.setPosition(selectedButton.getPosition());
+        selectedUnit.setMoveCount(selectedUnit.getMoveCount()+1);
+
+
+        if (selectedUnit instanceof Peasant){
+            selectedButton.setIcon(getPeasantIcon(selectedButton.getBlock()));
+        }
+        else {
+            if (selectedUnit instanceof Swordman){
+                selectedButton.setIcon(getSwordmanIcon(selectedButton.getBlock()));
+            }
+            else {
+                if (selectedUnit instanceof Spearman){
+                    selectedButton.setIcon(getSpearmanIcon(selectedButton.getBlock()));
+                }
+                else {
+                    selectedButton.setIcon(getKnightIcon(selectedButton.getBlock()));
+                }
+            }
+        }
+        if (selectedButton.getBlock().getKingdomId() != selectedUnit.getKingdomId()){
+            gameState.getCurrentKingdom().absorbBlock(selectedButton.getBlock());
+        }
+
+        if (gameState.getEnemyTower() != null) {
+            for (Tower tower : gameState.getEnemyTower()){
+                for (Block block : tower.getCoveredBlock()){
+                    if (selectedButton.getBlock() == block){
+                        selectedUnit.setHitPoints(selectedUnit.getHitPoints()-tower.getAttackPower());
+                        selectedUnit.setAttakedByTower(true);
+                    }
+                }
+            }
+        }
+        selectedButton.setBorder();
+    }
+
+    public void removeUnit(BlockButton selectedBlock) {
+
+    }
+
+
+
     private ImageIcon getPeasantIcon(Block block) {
         if (block instanceof EmptyBlock){
             if (gameState.getCurrentKingdom().getId()==1){
