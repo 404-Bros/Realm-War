@@ -1,17 +1,17 @@
-package main.java.views;
+package views;
 
-import main.java.models.GameState;
-import main.java.models.Kingdom;
-import main.java.models.blocks.Block;
-import main.java.models.blocks.EmptyBlock;
-import main.java.models.blocks.ForestBlock;
-import main.java.models.blocks.VoidBlock;
-import main.java.models.structures.*;
-import main.java.models.units.Peasant;
-import main.java.models.units.Spearman;
-import main.java.models.units.Swordman;
-import main.java.models.units.Unit;
-import main.java.utils.ResourceLoader;
+import models.GameState;
+import models.Kingdom;
+import models.blocks.Block;
+import models.blocks.EmptyBlock;
+import models.blocks.ForestBlock;
+import models.blocks.VoidBlock;
+import models.structures.*;
+import models.units.Peasant;
+import models.units.Spearman;
+import models.units.Swordman;
+import models.units.Unit;
+import utils.ResourceLoader;
 
 import javax.swing.*;
 import java.awt.*;

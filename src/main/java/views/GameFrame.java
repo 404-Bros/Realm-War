@@ -1,8 +1,8 @@
-package main.java.views;
+package views;
 
 import javax.swing.*;
 import java.awt.*;
-import main.java.models.GameState;
+import models.GameState;
 
 public class GameFrame extends JFrame {
     private GamePanel gamePanel;
@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
     private MainInfoPanel mainInfoPanel;
 
     public GameFrame() {
-        setIconImage(new ImageIcon(getClass().getResource("../resources/gameIcon.jpg")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/gameIcon.jpg")).getImage());
         this.gameState = gameState;
         setTitle("Realm War");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

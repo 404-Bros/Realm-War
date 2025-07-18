@@ -1,7 +1,7 @@
-package main.java.models.structures;
+package models.structures;
 
-import main.java.models.Position;
-import main.java.models.blocks.Block;
+import models.Position;
+import models.blocks.Block;
 
 public class TownHall extends Structure {
     private static final int GOLD_PRODUCTION = 5;

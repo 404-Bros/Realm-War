@@ -1,10 +1,10 @@
-package main.java.models;
+package models;
 
-import main.java.models.blocks.Block;
-import main.java.models.blocks.VoidBlock;
-import main.java.models.structures.*;
-import main.java.models.units.Peasant;
-import main.java.models.units.Unit;
+import models.blocks.Block;
+import models.blocks.VoidBlock;
+import models.structures.*;
+import models.units.Peasant;
+import models.units.Unit;
 
 import java.util.ArrayList;
 import java.util.List;

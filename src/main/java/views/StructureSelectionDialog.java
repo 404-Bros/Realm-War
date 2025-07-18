@@ -1,6 +1,6 @@
-package main.java.views;
+package views;
 
-import main.java.models.structures.Market;
+import models.structures.Market;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

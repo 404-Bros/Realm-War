@@ -1,9 +1,9 @@
-package main.java.views;
+package views;
 
-import main.java.controllers.GameController;
-import main.java.models.GameState;
-import main.java.models.Kingdom;
-import main.java.models.Player;
+import controllers.GameController;
+import models.GameState;
+import models.Kingdom;
+import models.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,22 +32,22 @@ public class InfoPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
         playerLabel = new JLabel("Player: ");
-        playerLabel.setIcon(new ImageIcon(getClass().getResource("../resources/person.png")));
+        playerLabel.setIcon(new ImageIcon(getClass().getResource("/person.png")));
         /// //////////
         goldLabel = new JLabel("Gold: ");
-        goldLabel.setIcon(new ImageIcon(getClass().getResource("../resources/Gold.png")));
+        goldLabel.setIcon(new ImageIcon(getClass().getResource("/Gold.png")));
 
         foodLabel = new JLabel("Food: ");
-        foodLabel.setIcon(new ImageIcon(getClass().getResource("../resources/Chicken.png")));
+        foodLabel.setIcon(new ImageIcon(getClass().getResource("/Chicken.png")));
 
         unitSpaceLabel = new JLabel("Unit Space: ");
-        unitSpaceLabel.setIcon(new ImageIcon(getClass().getResource("../resources/tent.png")));
+        unitSpaceLabel.setIcon(new ImageIcon(getClass().getResource("/tent.png")));
 
         turnLabel = new JLabel("Turn: ");
-        turnLabel.setIcon(new ImageIcon(getClass().getResource("../resources/Turn.png")));
+        turnLabel.setIcon(new ImageIcon(getClass().getResource("/Turn.png")));
 
         timeLabel = new JLabel("Time Left: 30s");
-        timeLabel.setIcon(new ImageIcon(getClass().getResource("../resources/Time.png")));
+        timeLabel.setIcon(new ImageIcon(getClass().getResource("/Time.png")));
 
         add(timeLabel);
         add(playerLabel);

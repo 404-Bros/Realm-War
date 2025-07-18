@@ -1,8 +1,8 @@
-package main.java.models.blocks;
+package models.blocks;
 
-import main.java.models.Position;
-import main.java.models.structures.Structure;
-import main.java.models.units.Unit;
+import models.Position;
+import models.structures.Structure;
+import models.units.Unit;
 
 public abstract class Block {
     private Position position;

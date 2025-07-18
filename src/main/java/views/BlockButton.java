@@ -1,9 +1,9 @@
-package main.java.views;
+package views;
 
-import main.java.models.Position;
-import main.java.models.blocks.Block;
-import main.java.models.structures.Structure;
-import main.java.models.units.Unit;
+import models.Position;
+import models.blocks.Block;
+import models.structures.Structure;
+import models.units.Unit;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

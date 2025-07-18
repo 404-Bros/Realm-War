@@ -1,4 +1,4 @@
-package main.java.views;
+package views;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -13,7 +13,7 @@ public class PauseFrame extends JDialog {
     public PauseFrame() {
         setModal(true);
         setTitle("Pause");
-        setIconImage(new ImageIcon(getClass().getResource("../resources/gameIcon.jpg")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/gameIcon.jpg")).getImage());
         getContentPane().setBackground(new Color(0xEDEAE6));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
