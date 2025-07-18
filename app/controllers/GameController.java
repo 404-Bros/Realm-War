@@ -2,16 +2,14 @@ package controllers;
 
 import models.GameState;
 import models.Player;
-import models.structures.Barrack;
-import models.structures.Farm;
-import models.structures.Market;
-import models.structures.Tower;
+import models.structures.*;
 import models.units.Knight;
 import models.units.Peasant;
 import models.units.Spearman;
 import models.units.Swordman;
 import views.*;
 
+import javax.imageio.plugins.tiff.TIFFImageReadParam;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -32,13 +30,14 @@ public class GameController {
     private GamePanel gamePanel;
     private MainInfoPanel mainInfoPanel;
     private Thread timerThread;
-    private int timeLeft = 31;
+    private int timeLeft = 300;
     private boolean paused = false;
     private boolean isTurnEnded = false;
     private StructureSelectionDialog structureSelectionDialog;
     private UnitSelectionDialog unitSelectionDialog;
     private BlockButton selectedButton;
     private BlockButton lastClickedButton;
+    private boolean mergeUnitActived=false;
     public GameController(){
 
         this.gameFrame = new GameFrame();
@@ -160,6 +159,7 @@ public class GameController {
         gameFrame.getActionPanel().addEndTurnButtonAL(e -> {
             paused=true;
             isTurnEnded=true;
+            mergeUnitActived=false;
             JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
             if (lastClickedButton != null) {
                 lastClickedButton.setBorder();
@@ -175,7 +175,7 @@ public class GameController {
 
         // Build Button AL
         gameFrame.getActionPanel().addBuildButtonAL(e -> {
-
+            mergeUnitActived=false;
             if (selectedButton == null) {
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -285,6 +285,7 @@ public class GameController {
 
         //Recruit Button Al
         gameFrame.getActionPanel().addRecruitButtonAL(e -> {
+            mergeUnitActived=false;
             if (selectedButton == null) {
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -370,6 +371,72 @@ public class GameController {
            unitSelectionDialog.dispose();
            paused=false;
         });
+
+        // Upgrade Structure Button AL
+        gameFrame.getActionPanel().addUpdateStructureAL(e -> {
+            mergeUnitActived=false;
+            if (selectedButton == null) {
+                JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
+                JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().hasUnit()){
+                JOptionPane.showMessageDialog(gameFrame, "This block has a unit!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!selectedButton.getBlock().hasStructure()){
+                JOptionPane.showMessageDialog(gameFrame, "Please select a structure", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().getStructure() instanceof TownHall){
+                JOptionPane.showMessageDialog(gameFrame, "TownHall cannot be upgraded","Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Structure structure=selectedButton.getBlock().getStructure();
+            paused=true;
+            int answer=JOptionPane.showConfirmDialog(gameFrame,"it cost "+structure.getUpgradeCost()+" to upgrade,do you want to upgrade?","Upgrade",JOptionPane.YES_NO_OPTION);
+            if (answer==JOptionPane.YES_OPTION) {
+                try {
+                    gameState.getCurrentKingdom().upgradeStructure(structure);
+                    JOptionPane.showMessageDialog(gameFrame, "Upgrade successful!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    mainInfoPanel.getInfoPanel().updateInfo();
+                }catch (IllegalStateException exception){
+                    JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    paused=false;
+                }
+            }
+            paused=false;
+            selectedButton=null;
+            lastClickedButton=null;
+        });
+
+        // Merge Unit Button AL
+        gameFrame.getActionPanel().addMergeUnitAL(e -> {
+            if (mergeUnitActived){
+                mergeUnitActived=false;
+                return;
+            }
+            if (selectedButton == null) {
+                JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
+                JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!selectedButton.getBlock().hasUnit()){
+                JOptionPane.showMessageDialog(gameFrame, "Pleas select an unit", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            lastClickedButton=selectedButton;
+            selectedButton=null;
+            JOptionPane.showMessageDialog(gameFrame, "select an unit that you want merge with it", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            mergeUnitActived=true;
+        });
+
 
 
 
@@ -466,8 +533,39 @@ public class GameController {
                     lastClickedButton.setBorder();
                 }
 
+                if (mergeUnitActived){
+                    if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
+                        JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
+                        selectedButton=null;
+                        //mergeUnitActived=false;
+                        return;
+                    }
+                    if (!selectedButton.getBlock().hasUnit()){
+                        JOptionPane.showMessageDialog(gameFrame, "Pleas select an unit", "Error", JOptionPane.ERROR_MESSAGE);
+                        selectedButton=null;
+                        //mergeUnitActived=false;
+                        return;
+                    }
+
+                    try {
+                        gamePanel.mergeUnit(lastClickedButton, selectedButton);
+                        lastClickedButton=null;
+                        gamePanel.revalidate();
+                        gamePanel.repaint();
+                        gameFrame.pack();
+                        mergeUnitActived=false;
+
+                    }catch (IllegalStateException exception){
+                        JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        mergeUnitActived=false;
+                        return;
+                    }
+                }
+
+
                 selectedButton.setBorder(compoundBorder);
                 lastClickedButton = selectedButton;
+
             }
 
         });
@@ -530,7 +628,7 @@ public class GameController {
     private void createTimerThread(){
         timerThread = new Thread(() -> {
             while (true){
-                timeLeft=31;
+                timeLeft=300;
                 isTurnEnded = false;
                 while (timeLeft > 0 && !isTurnEnded) {
                     try {
@@ -552,6 +650,7 @@ public class GameController {
 
                 if (!isTurnEnded) {
                     JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                    mergeUnitActived=false;
                     SwingUtilities.invokeLater(() -> {
                         if (lastClickedButton != null) {
                             lastClickedButton.setBorder();

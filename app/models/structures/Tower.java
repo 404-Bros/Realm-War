@@ -40,7 +40,7 @@ public class Tower extends Structure {
     public int getAttackPower() {
         return attackPower;
     }
-    
+    @Override
     public int getUpgradeCost() {
         return BUILDING_COST_BY_LEVEL[getLevel() - 1];
     }

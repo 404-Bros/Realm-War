@@ -3,7 +3,7 @@ package models.units;
 import models.Position;
 
 public class Spearman extends Unit {
-    private static int hitPoints=30;
+    private static int hitPoints=50;
     private static int attackPower=10;
     private static int paymentCost=4;
     private static int rationCost=2;
@@ -19,6 +19,9 @@ public class Spearman extends Unit {
 
     @Override
     public Unit merge(Unit other) {
+        if (this.getHitPoints() != 50 || other.getHitPoints() !=50) {
+            throw new IllegalStateException("Cannot merge these units");
+        }
         if (!canMerge(other)) {
             throw new IllegalArgumentException("Cannot merge these units");
         }

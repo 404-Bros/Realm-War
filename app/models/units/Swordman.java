@@ -18,6 +18,9 @@ public class Swordman extends Unit {
 
     @Override
     public Unit merge(Unit other) {
+        if (this.getHitPoints() != 80 || other.getHitPoints() !=80) {
+            throw new IllegalStateException("Cannot merge these units");
+        }
         if (!canMerge(other)) {
             throw new IllegalArgumentException("Cannot merge these units");
         }

@@ -5,10 +5,10 @@ import models.Position;
 public class Knight extends Unit {
     private static int hitPoints=120;
     private static int attackPower=25;
-    private static int paymentCost=12;
+    private static int paymentCost=16;
     private static int rationCost=6;
     public Knight(int kingdomId, Position position) {
-        super(120, 3, 25, 2, 12, 6, 4, kingdomId, position);
+        super(120, 3, 25, 2, 16, 6, 4, kingdomId, position);
     }
 
     @Override
