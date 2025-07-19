@@ -3,9 +3,15 @@ package models.structures;
 import models.Position;
 import models.blocks.Block;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Market extends Structure {
+    @JsonIgnore
     private static final int[] GOLD_PRODUCTION_BY_LEVEL = {5, 8, 12};
+    @JsonIgnore
     private static final int[] BUILDING_COST_BY_LEVEL = {5, 10, 15};
+    @JsonIgnore
     private static final int[] DURABILITY_BY_LEVEL = {50, 75, 100};
 
     private int goldProduction;
@@ -48,5 +54,11 @@ public class Market extends Structure {
 
     public static int geGoldProductionByLevel(int level) {
         return GOLD_PRODUCTION_BY_LEVEL[level];
+    }
+
+    @Override
+    public void setBaseBlock(Block baseBlock) {
+        // TODO Auto-generated method stub
+        super.setBaseBlock(baseBlock);
     }
 }

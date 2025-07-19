@@ -11,6 +11,13 @@ import javax.imageio.plugins.tiff.TIFFImageReadParam;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import database.DatabaseHandler;
+import database.GameData;
+
 import java.awt.*;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.event.*;
@@ -122,6 +129,8 @@ public class GameController {
 
             gameState=new GameState(12,16,2);
             gamePanel = new GamePanel(gameState);
+            gamePanel.creatBlockButtons();
+            gamePanel.initializePanel();
             mainInfoPanel = new MainInfoPanel(gameState);
 
 
@@ -471,6 +480,82 @@ public class GameController {
 
         });
 
+        gameFrame.getMenuPanel().addLoadGameButtonAL(e -> {
+            gameFrame.remove(gameFrame.getMenuPanel());
+            gameFrame.add(gameFrame.getLoadGamePanel());
+            gameFrame.getLoadGamePanel().setGameSavesComboBox();
+            gameFrame.pack();
+            gameFrame.revalidate();
+            gameFrame.repaint();
+        });
+
+        gameFrame.getLoadGamePanel().addBackButtonActionListener(e -> {
+            gameFrame.remove(gameFrame.getLoadGamePanel());
+            gameFrame.add(gameFrame.getMenuPanel());
+            gameFrame.pack();
+            gameFrame.revalidate();
+            gameFrame.repaint();
+        });
+
+        gameFrame.getLoadGamePanel().addDeleteButtonActionListener(e -> {
+            String selected = (String) gameFrame.getLoadGamePanel().getSavesComboBox().getSelectedItem();
+            String saveName = selected.split(":")[0].trim();
+            DatabaseHandler.deleteBySaveName(saveName);
+            gameFrame.getLoadGamePanel().setGameSavesComboBox();
+            gameFrame.pack();
+            gameFrame.revalidate();
+            gameFrame.repaint();
+        });
+
+        gameFrame.getLoadGamePanel().addLoadButtonActionListener(e -> {
+            String selected = (String) gameFrame.getLoadGamePanel().getSavesComboBox().getSelectedItem();
+            String saveName = selected.split(":")[0].trim();
+
+//            try {
+//                DatabaseHandler.loadGame(saveName);
+//            } catch (JsonMappingException e1) {
+//                e1.printStackTrace();
+//            } catch (JsonProcessingException e1) {
+//                e1.printStackTrace();
+//            }
+            DatabaseHandler.loadGame(saveName, this);
+
+
+            gamePanel = new GamePanel(gameState);
+            mainInfoPanel = new MainInfoPanel(gameState);
+            setDarkMode();
+            addPauseButtonAL();
+            
+            
+            gameState.getCurrentKingdom().startTurn();
+            createTimerThread();
+            mainInfoPanel.getInfoPanel().updateInfo();
+
+            gamePanel.loadGamePanel(gameState);
+            gameFrame.setGamePanel(gamePanel);
+            gameFrame.setMainInfoPanel(mainInfoPanel);
+            setMLtoGamePanel();
+            setGamePanelButtonsAl();
+
+            mainInfoPanel.getInfoPanel().setPlayer1Name(player1.getName());
+            mainInfoPanel.getInfoPanel().setPlayer2Name(player2.getName());
+
+            gameFrame.remove(gameFrame.getLoadGamePanel());
+            gameFrame.add(gamePanel, BorderLayout.CENTER);
+            gameFrame.add(mainInfoPanel, BorderLayout.EAST);
+            gameFrame.add(gameFrame.getActionPanel(), BorderLayout.SOUTH);
+            gameFrame.pack();
+            gameFrame.revalidate();
+            gameFrame.repaint();
+            gameFrame.setLocationRelativeTo(null);
+        });
+
+        pauseFrame.addSaveAndBackButtonAL(e -> {
+            GameData.saveJoption(gameFrame, this);
+        });
+
+        DatabaseHandler.createTable();
+
 
     }
     public void startNewGame() {
@@ -620,7 +705,7 @@ public class GameController {
             mainInfoPanel.getInfoPanel().getTimeLabel().setForeground(Color.white);
             mainInfoPanel.getInfoPanel().getUnitSpaceLabel().setForeground(Color.white);
             mainInfoPanel.getInfoPanel().getTurnLabel().setForeground(Color.white);
-            mainInfoPanel.getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person-white.png")));
+            mainInfoPanel.getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("/person-white.png")));
 
         }
         else {
@@ -632,7 +717,7 @@ public class GameController {
             mainInfoPanel.getInfoPanel().getTimeLabel().setForeground(Color.BLACK);
             mainInfoPanel.getInfoPanel().getUnitSpaceLabel().setForeground(Color.BLACK);
             mainInfoPanel.getInfoPanel().getTurnLabel().setForeground(Color.BLACK);
-            mainInfoPanel.getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("../resources/person.png")));
+            mainInfoPanel.getInfoPanel().getPlayerLabel().setIcon(new ImageIcon(getClass().getResource("/person.png")));
         }
     }
     private void addPauseButtonAL(){
@@ -647,25 +732,11 @@ public class GameController {
             paused = false;
         });
 
-        pauseFrame.addSaveAndBackButtonAL(e -> {
-
-            pauseFrame.dispose();
-
-            gameFrame.remove(gameFrame.getMainInfoPanel());
-            gameFrame.remove(gameFrame.getActionPanel());
-            gameFrame.remove(gameFrame.getGamePanel());
-
-            gameFrame.add(gameFrame.getMenuPanel());
-            gameFrame.pack();
-            gameFrame.setLocationRelativeTo(null);
-            gameFrame.revalidate();
-            gameFrame.repaint();
-        });
     }
     private void createTimerThread(){
         timerThread = new Thread(() -> {
             while (true){
-                timeLeft=300;
+                
                 isTurnEnded = false;
                 while (timeLeft > 0 && !isTurnEnded) {
                     try {
@@ -698,6 +769,7 @@ public class GameController {
                         mainInfoPanel.getInfoPanel().updateInfo();
                     });
                 }
+                timeLeft=31;
             }
         });
     }
@@ -814,6 +886,41 @@ public class GameController {
 
             }
         }
+    }
+
+    public PauseFrame getPauseFrame() {
+        return pauseFrame;
+    }
+    public GameState getGameState() {
+        return gameState;
+    }
+    public static Player getPlayer1() {
+        return player1;
+    }
+    public static Player getPlayer2() {
+        return player2;
+    }
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+    public static void setPlayer1(Player player1) {
+        GameController.player1 = player1;
+    }
+    public static void setPlayer2(Player player2) {
+        GameController.player2 = player2;
+    }
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+    public GameFrame getGameFrame() {
+        return gameFrame;
     }
 
 }

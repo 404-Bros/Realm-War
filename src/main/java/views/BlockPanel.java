@@ -55,6 +55,9 @@ public class BlockPanel extends JPanel {
 
     public void updateBlockInfo(Block block,boolean isDarkMode) {
 
+        JLabel blockPosition= new JLabel("Position: "+block.getPosition().getX()+","+block.getPosition().getY());
+        add(blockPosition);
+
 
         //JLabel blockPosition= new JLabel("Position: "+block.getPosition().getX()+","+block.getPosition().getY());
         //add(blockPosition);

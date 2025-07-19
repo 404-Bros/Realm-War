@@ -1,9 +1,14 @@
 package models.blocks;
 
-import models.Position;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import models.Position;
+import models.structures.Structure;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ForestBlock extends Block {
-    public ForestBlock(Position position) {
+    public ForestBlock(@JsonProperty("position") Position position) {
         super(position);
     }
 

@@ -42,16 +42,19 @@ public class GamePanel extends JPanel {
 
 
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        creatBlockButtons();
-        initializePanel();
+//        creatBlockButtons();
+//        initializePanel();
     }
-    private void creatBlockButtons() {
+    public void creatBlockButtons() {
         Block tH1 = null;
         Block tH2=null;
         BlockButton townHall1=null;
         BlockButton townHall2=null;
+        Block[][] map = gameState.getGameMap();
         for (Kingdom kingdom : gameState.getKingdoms()) {
-             Block townHallBlock= kingdom.getTownHall().getBaseBlock();
+            int thX = kingdom.getTownHall().getPosition().getX();
+            int thY = kingdom.getTownHall().getPosition().getY();
+            Block townHallBlock = map[thX][thY];
              if (kingdom.getId()==1) {
                  townHall1 = new BlockButton(icons.get("townHall-p1"), townHallBlock);
                  tH1=townHallBlock;
@@ -61,7 +64,6 @@ public class GamePanel extends JPanel {
                  tH2=townHallBlock;
              }
         }
-        Block[][] map = gameState.getGameMap();
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[x].length; y++) {
                 if (map[x][y]==tH1){
@@ -88,7 +90,7 @@ public class GamePanel extends JPanel {
             }
         }
     }
-    private void initializePanel(){
+    public void initializePanel(){
         for (BlockButton blockButton : blockButtons) {
             add(blockButton);
         }
@@ -357,4 +359,89 @@ public class GamePanel extends JPanel {
             }
         }
     }
+
+    public void loadGamePanel(GameState gameState) {
+        this.gameState = gameState;
+        Block[][] map = gameState.getGameMap();
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                blockButtons.add(new BlockButton(setIcon(map[x][y]), map[x][y]));
+            }
+        }
+        creatBlockButtons();
+        initializePanel();
+        
+    }
+    private ImageIcon setIcon(Block block) {
+        if (block.hasUnit()){
+
+            if (block.getUnit() instanceof Peasant){
+                return getPeasantIcon(block);
+            }
+            else {
+                if (block.getUnit() instanceof Swordman){
+                    return getSwordmanIcon(block);
+                }
+                else {
+                    if (block.getUnit() instanceof Spearman){
+                        return getSpearmanIcon(block);
+                    }
+                    else {
+                        return getKnightIcon(block);
+                    }
+                }
+            }
+        }
+        else {
+            if (block.hasStructure()){
+
+                if (block.getStructure() instanceof Market){
+                    return icons.get("market");
+                }
+                else {
+                    if (block.getStructure() instanceof Farm){
+                        return icons.get("farm");
+                    }
+                    else {
+                        if (block.getStructure() instanceof Barrack){
+                            return icons.get("barrack");
+                        }
+                        else {
+                            if (block.getStructure() instanceof Tower){
+                                return icons.get("tower");
+                            }
+                            else {
+                                if (block.getStructure() instanceof TownHall){
+                                    if (block.getKingdomId()==1){
+                                        return icons.get("townHall-p1");
+                                    }
+                                    else {
+                                        return icons.get("townHall-p2");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                if (block instanceof EmptyBlock){
+                    return icons.get("emptyBlock");
+                }
+                else {
+                    if (block instanceof ForestBlock){
+                        return icons.get("forestBlock");
+                    }
+                    else {
+                        if (block instanceof VoidBlock){
+                            return icons.get("voidBlock");
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }   
+
+
 }

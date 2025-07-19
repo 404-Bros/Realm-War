@@ -11,6 +11,7 @@ public class GameFrame extends JFrame {
     private MenuPanel menuPanel;
     private GetPlayerNamePanel getPlayerNamePanel;
     private MainInfoPanel mainInfoPanel;
+    private LoadGamePanel loadGamePanel;
 
     public GameFrame() {
         setIconImage(new ImageIcon(getClass().getResource("/gameIcon.jpg")).getImage());
@@ -22,6 +23,7 @@ public class GameFrame extends JFrame {
         menuPanel = new MenuPanel();
         getPlayerNamePanel = new GetPlayerNamePanel();
         actionPanel = new ActionPanel();
+        loadGamePanel = new LoadGamePanel();
 
         setLocationRelativeTo(null);
         setResizable(false);
@@ -29,7 +31,9 @@ public class GameFrame extends JFrame {
     @Override
     public void repaint() {
         super.repaint();
-        mainInfoPanel.getInfoPanel().updateInfo();
+        if (mainInfoPanel != null) {
+            mainInfoPanel.getInfoPanel().updateInfo();
+        }
     }
     public GamePanel getGamePanel() {
         return gamePanel;
@@ -66,5 +70,9 @@ public class GameFrame extends JFrame {
     public void updateGameState() {
         gamePanel.repaint();
         mainInfoPanel.getInfoPanel().updateInfo();
+    }
+    
+    public LoadGamePanel getLoadGamePanel() {
+        return loadGamePanel;
     }
 }
