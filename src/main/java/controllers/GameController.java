@@ -592,9 +592,10 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
-            paused=false;
+
             mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: "+timeLeft);
             JOptionPane.showMessageDialog(gameFrame, "Click on OK whenever you're ready!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            paused=false;
             timerThread.start();
         });
 
