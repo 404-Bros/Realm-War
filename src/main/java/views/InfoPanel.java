@@ -46,7 +46,7 @@ public class InfoPanel extends JPanel {
         turnLabel = new JLabel("Turn: ");
         turnLabel.setIcon(new ImageIcon(getClass().getResource("/Turn.png")));
 
-        timeLabel = new JLabel("Time Left: 30s");
+        timeLabel = new JLabel("Time Left: ");
         timeLabel.setIcon(new ImageIcon(getClass().getResource("/Time.png")));
 
         add(timeLabel);

@@ -155,6 +155,8 @@ public class GameController {
             gameFrame.setGamePanel(gamePanel);
             gameFrame.setMainInfoPanel(mainInfoPanel);
 
+            mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: 30");
+
             gameFrame.remove(gameFrame.getGetPlayerNamePanel());
             gameFrame.add(gamePanel, BorderLayout.CENTER);
             gameFrame.add(mainInfoPanel, BorderLayout.EAST);
@@ -591,6 +593,7 @@ public class GameController {
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
             paused=false;
+            mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: "+timeLeft);
             JOptionPane.showMessageDialog(gameFrame, "Click on OK whenever you're ready!", "Info", JOptionPane.INFORMATION_MESSAGE);
             timerThread.start();
         });
