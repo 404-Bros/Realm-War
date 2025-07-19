@@ -521,7 +521,7 @@ public class GameController {
 
         });
 
-<<<<<<< HEAD
+
         gameFrame.getMenuPanel().addLoadGameButtonAL(e -> {
             gameFrame.remove(gameFrame.getMenuPanel());
             gameFrame.add(gameFrame.getLoadGamePanel());
@@ -590,6 +590,9 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
+            paused=false;
+            JOptionPane.showMessageDialog(gameFrame, "Click on OK whenever you're ready!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            timerThread.start();
         });
 
         pauseFrame.addSaveAndBackButtonAL(e -> {
@@ -598,7 +601,7 @@ public class GameController {
 
         DatabaseHandler.createTable();
 
-=======
+
         // Attack Button Al
         gameFrame.getActionPanel().addAttackButtonAL(e -> {
             if (selectedButton != null) {
@@ -624,7 +627,7 @@ public class GameController {
                 JOptionPane.showMessageDialog(gameFrame,"Attack Mode Actived!", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
         });
->>>>>>> 909b2af050df690293ea427bbb73d6f978540a51
+
 
     }
     public void startNewGame() {
@@ -817,10 +820,6 @@ public class GameController {
     private void createTimerThread(){
         timerThread = new Thread(() -> {
             while (true){
-<<<<<<< HEAD
-                
-=======
->>>>>>> 909b2af050df690293ea427bbb73d6f978540a51
                 isTurnEnded = false;
                 while (timeLeft > 0 && !isTurnEnded) {
                     try {
@@ -1014,16 +1013,7 @@ public class GameController {
                     gamePanel.attackToStructure(lastClickedButton.getBlock(),selectedButton);
                     if (selectedButton.getBlock().getStructure() instanceof TownHall){
                         if (gameState.getEnemyTownHall().getDurability()<=0){
-                            JOptionPane.showMessageDialog(gameFrame,"Great !! You Won!","Info",JOptionPane.INFORMATION_MESSAGE);
-                            gameFrame.remove(gamePanel);
-                            gameFrame.remove(mainInfoPanel);
-                            gameFrame.remove(gameFrame.getActionPanel());
-
-                            gameFrame.add(gameFrame.getMenuPanel());
-                            gameFrame.pack();
-                            gameFrame.revalidate();
-                            gameFrame.repaint();
-                            gameFrame.setLocationRelativeTo(null);
+                            handleEndGame();
                             return;
                         }
                     }
@@ -1073,6 +1063,18 @@ public class GameController {
         }
     }
 
+    private void handleEndGame(){
+        JOptionPane.showMessageDialog(gameFrame,"Great !! You Won!","Info",JOptionPane.INFORMATION_MESSAGE);
+        gameFrame.remove(gamePanel);
+        gameFrame.remove(mainInfoPanel);
+        gameFrame.remove(gameFrame.getActionPanel());
+
+        gameFrame.add(gameFrame.getMenuPanel());
+        gameFrame.pack();
+        gameFrame.revalidate();
+        gameFrame.repaint();
+        gameFrame.setLocationRelativeTo(null);
+    }
 
     public PauseFrame getPauseFrame() {
         return pauseFrame;
