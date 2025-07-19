@@ -19,6 +19,7 @@ public class GameState {
     private int row;
     private int col;
 
+
     public GameState(int mapWidth, int mapHeight, int playerCount) {
         this.row=mapWidth;
         this.col=mapHeight;
@@ -58,9 +59,7 @@ public class GameState {
 
         for (int i = 0; i < playerCount; i++) {
             Position townHallPos = new Position(startingPositions[i][0], startingPositions[i][1]);
-            Block baseBlock = gameMap[townHallPos.getX()][townHallPos.getY()];
-            TownHall townHall = new TownHall(townHallPos, baseBlock, i + 1);
-            baseBlock.setStructure(townHall);
+            TownHall townHall = new TownHall(townHallPos, i + 1);
             Kingdom kingdom = new Kingdom(i + 1, townHall);
             kingdoms.add(kingdom);
 

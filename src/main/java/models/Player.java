@@ -4,6 +4,7 @@ public class Player {
     private String name;
     private Kingdom kingdom;
 
+
     public Player(String name, Kingdom kingdom) {
         this.name = name;
         this.kingdom = kingdom;
