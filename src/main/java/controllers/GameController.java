@@ -773,6 +773,10 @@ public class GameController {
                             lastClickedButton = null;
                         }
                         selectedButton=null;
+                        moveUnitActived=false;
+                        attackModeActived=false;
+                        selectedUnit=null;
+                        mergeUnitActived=false;
                         gameState.nextTurn();
                         checkingStrAndUnit();
                         mainInfoPanel.getInfoPanel().updateInfo();
