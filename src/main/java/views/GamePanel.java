@@ -42,11 +42,6 @@ public class GamePanel extends JPanel {
 
 
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-<<<<<<< HEAD
-//        creatBlockButtons();
-//        initializePanel();
-=======
->>>>>>> 909b2af050df690293ea427bbb73d6f978540a51
     }
     public void creatBlockButtons() {
         Block tH1 = null;
@@ -58,6 +53,7 @@ public class GamePanel extends JPanel {
             int thX = kingdom.getTownHall().getPosition().getX();
             int thY = kingdom.getTownHall().getPosition().getY();
             Block townHallBlock = map[thX][thY];
+            townHallBlock.setStructure(kingdom.getTownHall());
              if (kingdom.getId()==1) {
                  townHall1 = new BlockButton(icons.get("townHall-p1"), townHallBlock);
                  tH1=townHallBlock;
@@ -371,7 +367,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-<<<<<<< HEAD
+
     public void loadGamePanel(GameState gameState) {
         this.gameState = gameState;
         Block[][] map = gameState.getGameMap();
@@ -380,7 +376,7 @@ public class GamePanel extends JPanel {
                 blockButtons.add(new BlockButton(setIcon(map[x][y]), map[x][y]));
             }
         }
-        creatBlockButtons();
+
         initializePanel();
         
     }
@@ -456,7 +452,7 @@ public class GamePanel extends JPanel {
     }   
 
 
-=======
+
     public boolean isValidAttack(Unit unit,Block block) {
         if (!block.hasUnit() && !block.hasStructure() ){
             return false;
@@ -516,5 +512,5 @@ public class GamePanel extends JPanel {
     public List<BlockButton> getBlockButtons() {
         return blockButtons;
     }
->>>>>>> 909b2af050df690293ea427bbb73d6f978540a51
+
 }
