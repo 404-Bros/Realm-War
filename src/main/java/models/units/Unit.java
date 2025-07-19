@@ -15,6 +15,7 @@ public abstract class Unit {
     private Position position;
     private int moveCount;
     private boolean attakedByTower;
+    private boolean canAttack;
 
 
     public Unit(int hitPoints, int movementRange, int attackPower, int attackRange, 
@@ -31,6 +32,7 @@ public abstract class Unit {
         this.position = position;
         this.moveCount = 0;
         attakedByTower = false;
+        canAttack=true;
     }
 
     public abstract boolean canMerge(Unit other);
@@ -53,6 +55,14 @@ public abstract class Unit {
     public Position getPosition() { return position; }
     public boolean canMove() {
         return moveCount < movementRange;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 
     public boolean isAttakedByTower() {

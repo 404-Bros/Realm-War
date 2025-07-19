@@ -3,6 +3,7 @@ package controllers;
 import models.GameState;
 import models.Player;
 import models.Position;
+import models.blocks.Block;
 import models.structures.*;
 import models.units.*;
 import views.*;
@@ -21,6 +22,7 @@ import database.GameData;
 import java.awt.*;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.event.*;
+import java.util.List;
 import java.util.Objects;
 
 public class GameController {
@@ -34,7 +36,7 @@ public class GameController {
     private GamePanel gamePanel;
     private MainInfoPanel mainInfoPanel;
     private Thread timerThread;
-    private int timeLeft = 300;
+    private int timeLeft = 31;
     private boolean paused = false;
     private boolean isTurnEnded = false;
     private StructureSelectionDialog structureSelectionDialog;
@@ -44,6 +46,7 @@ public class GameController {
     private boolean mergeUnitActived=false;
     private boolean moveUnitActived=false;
     private Unit selectedUnit;
+    private boolean attackModeActived=false;
     public GameController(){
 
         this.gameFrame = new GameFrame();
@@ -166,6 +169,8 @@ public class GameController {
         // End Turn Button AL
         gameFrame.getActionPanel().addEndTurnButtonAL(e -> {
             moveUnitActived=false;
+            attackModeActived=false;
+            selectedUnit=null;
             paused=true;
             isTurnEnded=true;
             mergeUnitActived=false;
@@ -179,14 +184,23 @@ public class GameController {
             timeLeft=31;
             isTurnEnded=false;
             paused=false;
+            checkingStrAndUnit();
             mainInfoPanel.getInfoPanel().updateInfo();
+            gamePanel.revalidate();
+            gamePanel.repaint();
         });
 
         // Build Button AL
         gameFrame.getActionPanel().addBuildButtonAL(e -> {
             if (moveUnitActived){
                 moveUnitActived=false;
+                selectedUnit=null;
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (attackModeActived){
+                attackModeActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
             mergeUnitActived=false;
             if (selectedButton == null) {
@@ -300,7 +314,13 @@ public class GameController {
         gameFrame.getActionPanel().addRecruitButtonAL(e -> {
             if (moveUnitActived){
                 moveUnitActived=false;
+                selectedUnit=null;
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (attackModeActived){
+                attackModeActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
             mergeUnitActived=false;
             if (selectedButton == null) {
@@ -393,7 +413,13 @@ public class GameController {
         gameFrame.getActionPanel().addUpdateStructureAL(e -> {
             if (moveUnitActived){
                 moveUnitActived=false;
+                selectedUnit=null;
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (attackModeActived){
+                attackModeActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
             mergeUnitActived=false;
             if (selectedButton == null) {
@@ -438,7 +464,13 @@ public class GameController {
         gameFrame.getActionPanel().addMergeUnitAL(e -> {
             if (moveUnitActived){
                 moveUnitActived=false;
+                selectedUnit=null;
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (attackModeActived){
+                attackModeActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
             if (mergeUnitActived){
                 mergeUnitActived=false;
@@ -467,10 +499,19 @@ public class GameController {
             if (selectedButton != null) {
                 selectedButton.setBorder();
             }
+            if (mergeUnitActived){
+                mergeUnitActived=false;
+            }
+            if (attackModeActived){
+                attackModeActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
             selectedButton=null;
             lastClickedButton=null;
             if (moveUnitActived){
                 moveUnitActived=false;
+                selectedUnit=null;
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
             else {
@@ -480,6 +521,7 @@ public class GameController {
 
         });
 
+<<<<<<< HEAD
         gameFrame.getMenuPanel().addLoadGameButtonAL(e -> {
             gameFrame.remove(gameFrame.getMenuPanel());
             gameFrame.add(gameFrame.getLoadGamePanel());
@@ -556,6 +598,33 @@ public class GameController {
 
         DatabaseHandler.createTable();
 
+=======
+        // Attack Button Al
+        gameFrame.getActionPanel().addAttackButtonAL(e -> {
+            if (selectedButton != null) {
+                selectedButton.setBorder();
+            }
+            if (mergeUnitActived){
+                mergeUnitActived=false;
+            }
+            selectedButton=null;
+            lastClickedButton=null;
+            if (moveUnitActived){
+                moveUnitActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (attackModeActived){
+                attackModeActived=false;
+                selectedUnit=null;
+                JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                attackModeActived=true;
+                JOptionPane.showMessageDialog(gameFrame,"Attack Mode Actived!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+>>>>>>> 909b2af050df690293ea427bbb73d6f978540a51
 
     }
     public void startNewGame() {
@@ -650,6 +719,12 @@ public class GameController {
                     lastClickedButton.setBorder();
                 }
 
+                if (attackModeActived){
+                    handleAttack();
+                    return;
+                }
+
+
                 if (moveUnitActived){
                     handleMove();
                     return;
@@ -722,6 +797,12 @@ public class GameController {
     }
     private void addPauseButtonAL(){
         mainInfoPanel.addpauseButtonAL(e -> {
+            selectedUnit=null;
+            selectedButton=null;
+            lastClickedButton=null;
+            moveUnitActived=false;
+            mergeUnitActived=false;
+            attackModeActived=false;
             paused = true;
             pauseFrame.setLocationRelativeTo(gameFrame);
             pauseFrame.setVisible(true);
@@ -736,7 +817,10 @@ public class GameController {
     private void createTimerThread(){
         timerThread = new Thread(() -> {
             while (true){
+<<<<<<< HEAD
                 
+=======
+>>>>>>> 909b2af050df690293ea427bbb73d6f978540a51
                 isTurnEnded = false;
                 while (timeLeft > 0 && !isTurnEnded) {
                     try {
@@ -765,8 +849,15 @@ public class GameController {
                             lastClickedButton = null;
                         }
                         selectedButton=null;
+                        moveUnitActived=false;
+                        attackModeActived=false;
+                        selectedUnit=null;
+                        mergeUnitActived=false;
                         gameState.nextTurn();
+                        checkingStrAndUnit();
                         mainInfoPanel.getInfoPanel().updateInfo();
+                        gamePanel.repaint();
+                        gameFrame.revalidate();
                     });
                 }
                 timeLeft=31;
@@ -881,12 +972,107 @@ public class GameController {
                 selectedUnit = null;
                 selectedButton.setBorder();
                 selectedButton=null;
-                lastClickedButton.setBorder();
-                lastClickedButton=null;
+                if (lastClickedButton!=null) {
+                    lastClickedButton.setBorder();
+                    lastClickedButton=null;
+                }
 
             }
         }
     }
+    private void handleAttack(){
+        if (selectedUnit == null) {
+            try {
+                selectedUnit = gamePanel.findUnitAt(selectedButton);
+                if (!selectedUnit.isCanAttack()){
+                    JOptionPane.showMessageDialog(gameFrame,"Unit Can't Attack","Error",JOptionPane.ERROR_MESSAGE);
+                    selectedUnit = null;
+                    selectedButton.setBorder();
+                    selectedButton = null;
+                    return;
+                }
+
+
+                Border defaultBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+                Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 3);
+                Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, defaultBorder);
+
+                selectedButton.setBorder(compoundBorder);
+                lastClickedButton=selectedButton;
+            }catch (IllegalStateException ex){
+                JOptionPane.showMessageDialog(gameFrame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                selectedButton.setBorder();
+                selectedButton = null;
+            }
+        }
+        else {
+            if (gamePanel.isValidAttack(selectedUnit,selectedButton.getBlock())){
+                if (selectedButton.getBlock().hasUnit()){
+                    gamePanel.attackToUnit(lastClickedButton.getBlock(),selectedButton);
+                }
+                else {
+                    gamePanel.attackToStructure(lastClickedButton.getBlock(),selectedButton);
+                    if (selectedButton.getBlock().getStructure() instanceof TownHall){
+                        if (gameState.getEnemyTownHall().getDurability()<=0){
+                            JOptionPane.showMessageDialog(gameFrame,"Great !! You Won!","Info",JOptionPane.INFORMATION_MESSAGE);
+                            gameFrame.remove(gamePanel);
+                            gameFrame.remove(mainInfoPanel);
+                            gameFrame.remove(gameFrame.getActionPanel());
+
+                            gameFrame.add(gameFrame.getMenuPanel());
+                            gameFrame.pack();
+                            gameFrame.revalidate();
+                            gameFrame.repaint();
+                            gameFrame.setLocationRelativeTo(null);
+                            return;
+                        }
+                    }
+                }
+                JOptionPane.showMessageDialog(gameFrame,"Attacked successfully","Info",JOptionPane.INFORMATION_MESSAGE);
+                selectedUnit.setCanAttack(false);
+                selectedUnit = null;
+                lastClickedButton.setBorder();
+                selectedButton=null;
+                lastClickedButton=null;
+                gamePanel.revalidate();
+                gamePanel.repaint();
+            }
+            else {
+                JOptionPane.showMessageDialog(gameFrame,"Invalid Attack");
+                selectedUnit = null;
+                selectedButton.setBorder();
+                selectedButton=null;
+                if (lastClickedButton!=null) {
+                    lastClickedButton.setBorder();
+                    lastClickedButton=null;
+                }
+            }
+        }
+    }
+    private void checkingStrAndUnit(){
+        List<Structure> structures = gameState.getCurrentKingdom().getMustRemoveStructures();
+        List<Unit> units = gameState.getCurrentKingdom().getMustRemoveUnits();
+
+        if (!structures.isEmpty()){
+            for (Structure structure : structures) {
+                for (BlockButton blockButton : gamePanel.getBlockButtons()) {
+                    if (blockButton.getBlock().getStructure().equals(structure)) {
+                        gamePanel.removeStructure(blockButton);
+                    }
+                }
+            }
+        }
+        if (!units.isEmpty()){
+            for (Unit unit : units) {
+                for (BlockButton blockButton : gamePanel.getBlockButtons()) {
+                    if (blockButton.getBlock().getUnit().equals(unit)) {
+                        gamePanel.removeUnit(blockButton);
+                    }
+                }
+            }
+        }
+    }
+
 
     public PauseFrame getPauseFrame() {
         return pauseFrame;

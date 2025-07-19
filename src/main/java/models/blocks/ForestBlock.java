@@ -36,5 +36,7 @@ public class ForestBlock extends Block {
         return resourceYield;
 
     }
-
+    public static double getAttackBonus() {
+        return 1.2;
+    }
 }
