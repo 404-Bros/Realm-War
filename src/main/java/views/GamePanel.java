@@ -14,6 +14,9 @@ import models.units.Unit;
 import utils.ResourceLoader;
 
 import javax.swing.*;
+
+import log.LogHandler;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -27,6 +30,7 @@ public class GamePanel extends JPanel {
     private Map<String, ImageIcon> icons = new HashMap<String, ImageIcon>();
     private List<BlockButton> blockButtons=new ArrayList<BlockButton>();
     private static final int BLOCK_SIZE = 50;
+    private LogHandler logHandler;
 
     public GamePanel(GameState gameState) {
         this.gameState = gameState;
@@ -178,6 +182,11 @@ public class GamePanel extends JPanel {
             lastClickedButton.setBorder();
         }
         recruitUnit(finallyUnit,selectedButton);
+        logHandler.logDependsOnPlayer(secondUnit.getClass().getSimpleName() +
+         " at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() +
+         " merged with " + firstUnit.getClass().getSimpleName() + " unit at x=" + lastClickedButton.getPosition().getX() + ", y=" + lastClickedButton.getPosition().getY() +
+         " to form a new " + finallyUnit.getClass().getSimpleName() + " unit at x=" + lastClickedButton.getPosition().getX() +
+          ", y=" + lastClickedButton.getPosition().getY());
     }
 
     public Unit findUnitAt(BlockButton selectedBlock) {
@@ -248,17 +257,25 @@ public class GamePanel extends JPanel {
 
 
         if (selectedUnit instanceof Peasant){
+            logHandler.logDependsOnPlayer("Peasant unit at x=" + unitCourentButton.getPosition().getX() + ", y=" + unitCourentButton.getPosition().getY() +
+                    " moved from x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
             selectedButton.setIcon(getPeasantIcon(selectedButton.getBlock()));
         }
         else {
             if (selectedUnit instanceof Swordman){
+                logHandler.logDependsOnPlayer("Swordman unit at x=" + unitCourentButton.getPosition().getX() + ", y=" + unitCourentButton.getPosition().getY() +
+                        " moved from x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
                 selectedButton.setIcon(getSwordmanIcon(selectedButton.getBlock()));
             }
             else {
                 if (selectedUnit instanceof Spearman){
+                    logHandler.logDependsOnPlayer("Spearman unit at x=" + unitCourentButton.getPosition().getX() + ", y=" + unitCourentButton.getPosition().getY() +
+                            " moved from x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
                     selectedButton.setIcon(getSpearmanIcon(selectedButton.getBlock()));
                 }
                 else {
+                    logHandler.logDependsOnPlayer("Knight unit at x=" + unitCourentButton.getPosition().getX() + ", y=" + unitCourentButton.getPosition().getY() +
+                            " moved from x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
                     selectedButton.setIcon(getKnightIcon(selectedButton.getBlock()));
                 }
             }
@@ -271,6 +288,8 @@ public class GamePanel extends JPanel {
             for (Tower tower : gameState.getEnemyTower()){
                 for (Block block : tower.getCoveredBlock()){
                     if (selectedButton.getBlock() == block){
+                        logHandler.logDependsOnPlayer(selectedUnit.getClass().getSimpleName() + " at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() +
+                                " attacked by tower at x=" + tower.getPosition().getX() + ", y=" + tower.getPosition().getY());
                         selectedUnit.setHitPoints(selectedUnit.getHitPoints()-tower.getAttackPower());
                         selectedUnit.setAttakedByTower(true);
                     }
@@ -281,6 +300,7 @@ public class GamePanel extends JPanel {
     }
 
     public void removeUnit(BlockButton blockButton) {
+        logHandler.logDependsOnPlayer(blockButton.getBlock().getUnit().getClass().getSimpleName() + " unit at x=" + blockButton.getPosition().getX() + ", y=" + blockButton.getPosition().getY() + " removed");
         gameState.getCurrentKingdom().removeUnit(blockButton.getBlock().getUnit());
         blockButton.getBlock().setUnit(null);
         if (blockButton.getBlock() instanceof EmptyBlock){
@@ -473,9 +493,13 @@ public class GamePanel extends JPanel {
         Unit attacker= attackerBlock.getUnit();
         Unit attacked= attackedBlockButton.getBlock().getUnit();
         if (attackerBlock instanceof EmptyBlock){
+            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at x=" + attackerBlock.getPosition().getX() + ", y=" + attackerBlock.getPosition().getY() +
+                    " attacked " + attacked.getClass().getSimpleName() + " unit at x=" + attackedBlockButton.getPosition().getX() + ", y=" + attackedBlockButton.getPosition().getY());
             attacked.setHitPoints((int) (attacked.getHitPoints()-(attacker.getAttackPower()*ForestBlock.getAttackBonus())));
         }
         else {
+            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at x=" + attackerBlock.getPosition().getX() + ", y=" + attackerBlock.getPosition().getY() +
+                    " attacked " + attacked.getClass().getSimpleName() + " unit at x=" + attackedBlockButton.getPosition().getX() + ", y=" + attackedBlockButton.getPosition().getY());
             attacked.setHitPoints(attacked.getHitPoints()-attacker.getAttackPower());
         }
         if (attacked.getHitPoints() <= 0){
@@ -486,9 +510,13 @@ public class GamePanel extends JPanel {
         Unit attacker= attackerBlock.getUnit();
         Structure attacked= attackedBlockButton.getBlock().getStructure();
         if (attackerBlock instanceof EmptyBlock){
+            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at x=" + attackerBlock.getPosition().getX() + ", y=" + attackerBlock.getPosition().getY() +
+                    " attacked " + attacked.getClass().getSimpleName() + " structure at x=" + attackedBlockButton.getPosition().getX() + ", y=" + attackedBlockButton.getPosition().getY());
             attacked.setDurability((int) (attacked.getDurability()-(attacker.getAttackPower()*ForestBlock.getAttackBonus())));
         }
         else {
+            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at x=" + attackerBlock.getPosition().getX() + ", y=" + attackerBlock.getPosition().getY() +
+                    " attacked " + attacked.getClass().getSimpleName() + " structure at x=" + attackedBlockButton.getPosition().getX() + ", y=" + attackedBlockButton.getPosition().getY());
             attacked.setDurability((attacked.getDurability()-attacker.getAttackPower()));
         }
         if (attacked.getDurability() <= 0){
@@ -498,6 +526,7 @@ public class GamePanel extends JPanel {
         }
     }
     public void removeStructure(BlockButton blockButton) {
+        logHandler.logDependsOnPlayer(blockButton.getBlock().getStructure().getClass().getSimpleName() + " structure at x=" + blockButton.getPosition().getX() + ", y=" + blockButton.getPosition().getY() + " removed");
         getGameState().getCurrentKingdom().removeStructure(blockButton.getBlock().getStructure());
         blockButton.getBlock().setStructure(null);
         if (blockButton.getBlock() instanceof EmptyBlock){
@@ -511,6 +540,10 @@ public class GamePanel extends JPanel {
 
     public List<BlockButton> getBlockButtons() {
         return blockButtons;
+    }
+
+    public void setLogHandler(LogHandler logHandler) {
+        this.logHandler = logHandler;
     }
 
 }

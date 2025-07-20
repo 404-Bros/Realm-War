@@ -121,4 +121,9 @@ public class InfoPanel extends JPanel {
     public JLabel getPlayerLabel() {
         return playerLabel;
     }
+
+    public GameState getGameState() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getGameState'");
+    }
 }

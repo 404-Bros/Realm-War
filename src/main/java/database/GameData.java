@@ -7,22 +7,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import controllers.GameController;
+import log.LogHandler;
 import models.GameState;
 import models.Player;
 import utils.GsonFactory;
 import views.GameFrame;
 
 public class GameData {
-    private static GameState gameState;
-    private static Player player1;
-    private static Player player2;
-    private static int timer;
+    private GameState gameState;
+    private Player player1;
+    private Player player2;
+    private int timer;
+
+    private LogHandler logHandler;
 
 
 
 
 
-    public static void saveGame(String saveName) throws JsonProcessingException{
+    public void saveGame(String saveName) throws JsonProcessingException{
 //        ObjectMapper mapper = new ObjectMapper();
 //        String gameStateJson = mapper.writeValueAsString(gameState);
 //        String player1Json = mapper.writeValueAsString(player1);
@@ -32,9 +35,11 @@ public class GameData {
         String player1Json = gson.toJson(player1);
         String player2Json = gson.toJson(player2);
         DatabaseHandler.insertValues(saveName, gameStateJson, player1Json, player2Json, timer);
+        logHandler.log("Game saved with name: " + saveName);
+
     }
 
-    public static boolean isOkSaveName(String saveName){
+    public boolean isOkSaveName(String saveName){
         for(String save : DatabaseHandler.getSaveNames()){
             if(save.equals(saveName)){
                 return false;
@@ -43,7 +48,7 @@ public class GameData {
         return true;
     }
 
-    public static void saveJoption(GameFrame gameFrame, GameController gameController){
+    public void saveJoption(GameFrame gameFrame, GameController gameController){
             gameState = gameController.getGameState();
             player1 = gameController.getPlayer1();
             player2 = gameController.getPlayer2();
@@ -104,14 +109,14 @@ public class GameData {
     public void setTimer(int timer) {
         this.timer = timer;
     }
-   public static void setGameState(GameState gameState) {
-       GameData.gameState = gameState;
+   public  void setGameState(GameState gameState) {
+       this.gameState = gameState;
    }
-    public static void setPlayer1(Player player1) {
-        GameData.player1 = player1;
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
     }
-    public static void setPlayer2(Player player2) {
-        GameData.player2 = player2;
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
     }
     public int getTimer() {
         return timer;
@@ -119,10 +124,13 @@ public class GameData {
     public GameState getGameState() {
         return gameState;
     }
-    public static Player getPlayer1() {
+    public Player getPlayer1() {
         return player1;
     }
-    public static Player getPlayer2() {
+    public Player getPlayer2() {
         return player2;
+    }
+    public void setLogHandler(LogHandler logHandler) {
+        this.logHandler = logHandler;
     }
 }
