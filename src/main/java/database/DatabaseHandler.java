@@ -26,7 +26,7 @@ import views.MainInfoPanel;
 public class DatabaseHandler {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "f465";
+    private static final String PASSWORD = "@Moidgh85";
 
     public static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS game_saves (" + 

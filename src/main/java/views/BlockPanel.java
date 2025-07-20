@@ -54,15 +54,7 @@ public class BlockPanel extends JPanel {
     }
 
     public void updateBlockInfo(Block block,boolean isDarkMode) {
-
-        JLabel blockPosition= new JLabel("Position: "+block.getPosition().getX()+","+block.getPosition().getY());
-        add(blockPosition);
-
-
-        //JLabel blockPosition= new JLabel("Position: "+block.getPosition().getX()+","+block.getPosition().getY());
-        //add(blockPosition);
         blockTypeLabel.setText("Block Type: " + block.getClass().getSimpleName());
-
 
         if (isDarkMode){
             blockTypeLabel.setForeground(Color.white);
@@ -72,7 +64,6 @@ public class BlockPanel extends JPanel {
             structureLabel.setForeground(Color.white);
             setBackground(new Color(0x1A2B44));
         }
-
 
 
         if (block.hasStructure()) {
@@ -88,9 +79,6 @@ public class BlockPanel extends JPanel {
                     resourceLabel.setText("Resources: "+((Farm) block.getStructure()).getFoodProduction()+"Food");
                 }
             }
-
-
-
 
 
             if (structureLevelLabel == null) {
@@ -121,8 +109,6 @@ public class BlockPanel extends JPanel {
                 }
                 add(towerAttackPower);
             }
-
-
 
         }
         else {
