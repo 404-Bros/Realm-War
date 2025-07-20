@@ -101,9 +101,9 @@ public class GameData {
 
             gameFrame.add(gameFrame.getMenuPanel());
             gameFrame.pack();
-            gameFrame.setLocationRelativeTo(null);
             gameFrame.revalidate();
             gameFrame.repaint();
+            gameFrame.setLocationRelativeTo(null);
     }
 
     public void setTimer(int timer) {
