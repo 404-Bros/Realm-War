@@ -264,7 +264,7 @@ public class GameController {
             }
             paused=true;
             addStructureComboBoxAL();
-            logDependsOnPlayer("Build Button clicked and structure selection dialog opened");
+            logDependsOnPlayer("Build Button clicked, oppening structure selection");
             structureSelectionDialog.setVisible(true);
 
         });
@@ -282,7 +282,7 @@ public class GameController {
                     try{
                         gameState.getCurrentKingdom().canBuildStructure(market);
                         gamePanel.buildStructure(market,selectedButton);
-                        logDependsOnPlayer(selectedItem + " built at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
@@ -300,7 +300,7 @@ public class GameController {
                     try{
                         gameState.getCurrentKingdom().canBuildStructure(farm);
                         gamePanel.buildStructure(farm,selectedButton);
-                        logDependsOnPlayer(selectedItem + " built at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
@@ -318,7 +318,7 @@ public class GameController {
                     try{
                         gameState.getCurrentKingdom().canBuildStructure(barrack);
                         gamePanel.buildStructure(barrack,selectedButton);
-                        logDependsOnPlayer(selectedItem + " built at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
@@ -337,7 +337,7 @@ public class GameController {
                         try{
                             gameState.getCurrentKingdom().canBuildStructure(tower);
                             gamePanel.buildStructure(tower,selectedButton);
-                            logDependsOnPlayer(selectedItem + " built at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                            logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                             mainInfoPanel.getInfoPanel().updateInfo();
                             gameFrame.revalidate();
                             gameFrame.repaint();
@@ -352,7 +352,7 @@ public class GameController {
                         }
                     }
                     else {
-                        logDependsOnPlayer(selectedItem + " build failed at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " build failed at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         paused=true;
                         JOptionPane.showMessageDialog(gameFrame, "You can't build a Tower in this block!", "Error", JOptionPane.ERROR_MESSAGE);
                         paused=false;
@@ -446,7 +446,7 @@ public class GameController {
                     Peasant peasant=new Peasant(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
                     try {
                         gamePanel.recruitUnit(peasant,selectedButton);
-                        logDependsOnPlayer(selectedItem + " recruited at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -461,7 +461,7 @@ public class GameController {
                     Swordman swordman=new Swordman(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
                     try {
                         gamePanel.recruitUnit(swordman,selectedButton);
-                        logDependsOnPlayer(selectedItem + " recruited at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -476,7 +476,7 @@ public class GameController {
                     Spearman spearman=new Spearman(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
                     try {
                         gamePanel.recruitUnit(spearman,selectedButton);
-                        logDependsOnPlayer(selectedItem + " recruited at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -491,7 +491,7 @@ public class GameController {
                     Knight knight=new Knight(gameState.getCurrentKingdom().getId(),selectedButton.getPosition());
                     try {
                         gamePanel.recruitUnit(knight,selectedButton);
-                        logDependsOnPlayer(selectedItem + " recruited at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+                        logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -584,11 +584,11 @@ public class GameController {
             if (answer==JOptionPane.YES_OPTION) {
                 try {
                     gameState.getCurrentKingdom().upgradeStructure(structure);
-                    logDependsOnPlayer("Upgraded " + structure.getClass().getSimpleName() + " at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() + "with " + structure.getUpgradeCost() + " golds");
+                    logDependsOnPlayer("Upgraded " + structure.getClass().getSimpleName() + " at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " with " + structure.getUpgradeCost() + " golds");
                     JOptionPane.showMessageDialog(gameFrame, "Upgrade successful!", "Info", JOptionPane.INFORMATION_MESSAGE);
                     mainInfoPanel.getInfoPanel().updateInfo();
                 }catch (IllegalStateException exception){
-                    logDependsOnPlayer("not enough money...");
+                    logDependsOnPlayer("not enough money for upgrade " + structure.getClass().getSimpleName());
                     JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     paused=false;
                 }
@@ -644,7 +644,7 @@ public class GameController {
                 paused=false;
                 return;
             }
-            logDependsOnPlayer("Merge Unit Button clicked at Block at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY());
+            logDependsOnPlayer("Merge Unit Button clicked at Block at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
             lastClickedButton=selectedButton;
             selectedButton=null;
             paused=true;
@@ -1014,6 +1014,7 @@ public class GameController {
                     structureSelectionDialog.dispose();
                     unitSelectionDialog.dispose();
                     JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                    logDependsOnPlayer("timer reached 0, turn ended");
                     mergeUnitActived=false;
                     SwingUtilities.invokeLater(() -> {
                         if (lastClickedButton != null) {
@@ -1114,7 +1115,7 @@ public class GameController {
             try {
                 selectedUnit = gamePanel.findUnitAt(selectedButton);
                 if (!selectedUnit.canMove()){
-                    logDependsOnPlayer("unit at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() + " can't move");
+                    logDependsOnPlayer("unit at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " can't move");
                     paused=true;
                     JOptionPane.showMessageDialog(gameFrame,"Unit Can't Move");
                     paused=false;
@@ -1151,7 +1152,7 @@ public class GameController {
                 paused=true;
                 JOptionPane.showMessageDialog(gameFrame,"Invalid Move");
                 paused=false;
-                logDependsOnPlayer("Invalid " + selectedUnit.getClass().getSimpleName() + " Move from x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() + " to x=" + lastClickedButton.getPosition().getX() + ", y=" + lastClickedButton.getPosition().getY());
+                logDependsOnPlayer("Invalid " + selectedUnit.getClass().getSimpleName() + " Move from X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " to X=" + lastClickedButton.getPosition().getX() + ", Y=" + lastClickedButton.getPosition().getY());
                 selectedUnit = null;
                 selectedButton.setBorder();
                 selectedButton=null;
@@ -1168,7 +1169,7 @@ public class GameController {
             try {
                 selectedUnit = gamePanel.findUnitAt(selectedButton);
                 if (!selectedUnit.isCanAttack()){
-                    logDependsOnPlayer("unit at x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() + " can't attack");
+                    logDependsOnPlayer("unit at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " can't attack");
                     paused=true;
                     JOptionPane.showMessageDialog(gameFrame,"Unit Can't Attack","Error",JOptionPane.ERROR_MESSAGE);
                     paused=false;
@@ -1219,7 +1220,7 @@ public class GameController {
                 gamePanel.repaint();
             }
             else {
-                logDependsOnPlayer("Invalid " + selectedUnit.getClass().getSimpleName() + " Attack from x=" + selectedButton.getPosition().getX() + ", y=" + selectedButton.getPosition().getY() + " to x=" + lastClickedButton.getPosition().getX() + ", y=" + lastClickedButton.getPosition().getY());
+                logDependsOnPlayer("Invalid " + selectedUnit.getClass().getSimpleName() + " Attack from X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " to X=" + lastClickedButton.getPosition().getX() + ", Y=" + lastClickedButton.getPosition().getY());
                 paused=true;
                 JOptionPane.showMessageDialog(gameFrame,"Invalid Attack");
                 paused=false;
