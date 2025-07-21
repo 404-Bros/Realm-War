@@ -169,6 +169,9 @@ public class GamePanel extends JPanel {
         Unit secondUnit = selectedButton.getBlock().getUnit();
         Unit firstUnit = lastClickedButton.getBlock().getUnit();
         Unit finallyUnit=secondUnit.merge(firstUnit);
+        if (gameState.getCurrentKingdom().getTotalUnitSpace()<finallyUnit.getUnitSpace()+gameState.getCurrentKingdom().getUsedUnitSpace()){
+            throw new IllegalStateException("Not enough unit space!");
+        }
         gameState.getCurrentKingdom().removeUnit(selectedButton.getBlock().getUnit());
         gameState.getCurrentKingdom().removeUnit(lastClickedButton.getBlock().getUnit());
         selectedButton.getBlock().setUnit(null);
@@ -474,6 +477,9 @@ public class GamePanel extends JPanel {
 
 
     public boolean isValidAttack(Unit unit,Block block) {
+        if (unit.getKingdomId() != gameState.getCurrentKingdom().getId()){
+            return false;
+        }
         if (!block.hasUnit() && !block.hasStructure() ){
             return false;
         }

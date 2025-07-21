@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Market extends Structure {
     @JsonIgnore
-    private static final int[] GOLD_PRODUCTION_BY_LEVEL = {5, 8, 12};
+    private static final int[] GOLD_PRODUCTION_BY_LEVEL = {7, 10, 15};
     @JsonIgnore
-    private static final int[] BUILDING_COST_BY_LEVEL = {5, 10, 15};
+    private static final int[] BUILDING_COST_BY_LEVEL = {5, 15, 20};
     @JsonIgnore
     private static final int[] DURABILITY_BY_LEVEL = {50, 75, 100};
 
@@ -18,15 +18,13 @@ public class Market extends Structure {
 
     public Market( Position position, Block baseBlock, int kingdomId) {
         super(3,5, DURABILITY_BY_LEVEL[0], BUILDING_COST_BY_LEVEL[0], position, baseBlock, kingdomId);
-
+        goldProduction=GOLD_PRODUCTION_BY_LEVEL[0];
     }
 
     public int getGoldProduction() {
         return goldProduction;
     }
 
-    @Override
-    public void performTurnAction() {}
 
     @Override
     public boolean canUpgrade() {

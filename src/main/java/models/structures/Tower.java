@@ -40,8 +40,6 @@ public class Tower extends Structure {
         this.attackPower = ATTACK_POWER_BY_LEVEL[getLevel() - 1];
     }
 
-    @Override
-    public void performTurnAction() {}
     
     public int getAttackPower() {
         return attackPower;

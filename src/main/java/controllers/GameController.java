@@ -216,6 +216,8 @@ public class GameController {
 
         // Build Button AL
         gameFrame.getActionPanel().addBuildButtonAL(e -> {
+            JComboBox<String> comboBox = structureSelectionDialog.getStructureComboBox();
+            comboBox.setSelectedIndex(0);
             if (moveUnitActived){
                 moveUnitActived=false;
                 selectedUnit=null;
@@ -283,6 +285,13 @@ public class GameController {
                         gameState.getCurrentKingdom().canBuildStructure(market);
                         gamePanel.buildStructure(market,selectedButton);
                         logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        structureSelectionDialog.dispose();
+                        paused=false;
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
@@ -301,6 +310,13 @@ public class GameController {
                         gameState.getCurrentKingdom().canBuildStructure(farm);
                         gamePanel.buildStructure(farm,selectedButton);
                         logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        structureSelectionDialog.dispose();
+                        paused=false;
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
@@ -319,6 +335,13 @@ public class GameController {
                         gameState.getCurrentKingdom().canBuildStructure(barrack);
                         gamePanel.buildStructure(barrack,selectedButton);
                         logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        structureSelectionDialog.dispose();
+                        paused=false;
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
@@ -338,6 +361,13 @@ public class GameController {
                             gameState.getCurrentKingdom().canBuildStructure(tower);
                             gamePanel.buildStructure(tower,selectedButton);
                             logDependsOnPlayer(selectedItem + " built at position X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                            if (selectedButton != null) {
+                                selectedButton.setBorder();
+                            }
+                            selectedButton=null;
+                            lastClickedButton=null;
+                            structureSelectionDialog.dispose();
+                            paused=false;
                             mainInfoPanel.getInfoPanel().updateInfo();
                             gameFrame.revalidate();
                             gameFrame.repaint();
@@ -364,14 +394,6 @@ public class GameController {
                     paused=false;
                     break;
             }
-            if (selectedButton != null) {
-                selectedButton.setBorder();
-            }
-            selectedButton=null;
-            lastClickedButton=null;
-            structureSelectionDialog.dispose();
-            paused=false;
-
         });
 
         // Cancel Button in structure Selection Dialog AL
@@ -383,6 +405,8 @@ public class GameController {
 
         //Recruit Button Al
         gameFrame.getActionPanel().addRecruitButtonAL(e -> {
+            JComboBox<String> comboBox = unitSelectionDialog.getUnitComboBox();
+            comboBox.setSelectedIndex(0);
             if (moveUnitActived){
                 moveUnitActived=false;
                 selectedUnit=null;
@@ -447,6 +471,13 @@ public class GameController {
                     try {
                         gamePanel.recruitUnit(peasant,selectedButton);
                         logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        unitSelectionDialog.dispose();
+                        paused=false;
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -462,6 +493,13 @@ public class GameController {
                     try {
                         gamePanel.recruitUnit(swordman,selectedButton);
                         logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        unitSelectionDialog.dispose();
+                        paused=false;
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -477,6 +515,13 @@ public class GameController {
                     try {
                         gamePanel.recruitUnit(spearman,selectedButton);
                         logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        unitSelectionDialog.dispose();
+                        paused=false;
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -492,6 +537,13 @@ public class GameController {
                     try {
                         gamePanel.recruitUnit(knight,selectedButton);
                         logDependsOnPlayer(selectedItem + " recruited at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
+                        if (selectedButton != null) {
+                            selectedButton.setBorder();
+                        }
+                        selectedButton=null;
+                        lastClickedButton=null;
+                        unitSelectionDialog.dispose();
+                        paused=false;
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
@@ -506,15 +558,8 @@ public class GameController {
                     paused=true;
                     JOptionPane.showMessageDialog(gameFrame, "Please select a unit", "Error", JOptionPane.ERROR_MESSAGE);
                     paused=false;
-                    return;
             }
-            if (selectedButton != null) {
-                selectedButton.setBorder();
-            }
-            selectedButton=null;
-            lastClickedButton=null;
-            unitSelectionDialog.dispose();
-            paused=false;
+
         });
 
         // Cancel Button in Unit Selection Dialog AL
@@ -967,7 +1012,6 @@ public class GameController {
     }
     private void addPauseButtonAL(){
         mainInfoPanel.addpauseButtonAL(e -> {
-            selectedButton.setBorder();
             selectedUnit=null;
             if (selectedButton != null) {
                 selectedButton.setBorder();
@@ -1241,7 +1285,7 @@ public class GameController {
         if (!structures.isEmpty()){
             for (Structure structure : structures) {
                 for (BlockButton blockButton : gamePanel.getBlockButtons()) {
-                    if (blockButton.getBlock().getStructure().equals(structure)) {
+                    if (blockButton.getBlock().getStructure()==structure) {
                         gamePanel.removeStructure(blockButton);
                     }
                 }
@@ -1250,7 +1294,7 @@ public class GameController {
         if (!units.isEmpty()){
             for (Unit unit : units) {
                 for (BlockButton blockButton : gamePanel.getBlockButtons()) {
-                    if (blockButton.getBlock().getUnit().equals(unit)) {
+                    if (blockButton.getBlock().getUnit()==unit) {
                         gamePanel.removeUnit(blockButton);
                     }
                 }

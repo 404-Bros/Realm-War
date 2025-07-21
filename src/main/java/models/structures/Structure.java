@@ -53,7 +53,6 @@ public abstract class Structure {
 
     public abstract boolean canUpgrade();
     public abstract void upgrade();
-    public abstract void performTurnAction();
     public abstract int getUpgradeCost();
 
         public int getLevel() { return level; }

@@ -37,8 +37,6 @@ public class Barrack extends Structure {
         this.unitSpace = UNIT_SPACE_BY_LEVEL[getLevel() - 1];
     }
 
-    @Override
-    public void performTurnAction() {}
     
     public int getUnitSpace() {
         return unitSpace;
