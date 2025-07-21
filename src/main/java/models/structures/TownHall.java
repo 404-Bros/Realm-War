@@ -32,9 +32,6 @@ public class TownHall extends Structure {
     }
 
     @Override
-    public void performTurnAction() {}
-
-    @Override
     public int getUpgradeCost() {
         return 0;
     }

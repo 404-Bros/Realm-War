@@ -10,7 +10,7 @@ public class Farm extends Structure {
     @JsonIgnore
     private static final int[] FOOD_PRODUCTION_BY_LEVEL = {5, 8, 12};
     @JsonIgnore
-    private static final int[] BUILDING_COST_BY_LEVEL = {5, 10, 15};
+    private static final int[] BUILDING_COST_BY_LEVEL = {3, 10, 15};
     @JsonIgnore
     private static final int[] DURABILITY_BY_LEVEL = {50, 75, 100};
     
@@ -37,8 +37,6 @@ public class Farm extends Structure {
         this.foodProduction = FOOD_PRODUCTION_BY_LEVEL[getLevel() - 1];
     }
 
-    @Override
-    public void performTurnAction() {}
     
     public int getFoodProduction() {
         return foodProduction;

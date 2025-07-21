@@ -39,8 +39,8 @@ public class Kingdom {
         this.towers = new ArrayList<>();
         this.structures.add(townHall);
         this.totalUnitSpace = townHall.getUnitSpace();
-        this.gold = 20;
-        this.food = 20;
+        this.gold = 0;
+        this.food = 0;
         farmCount = 0;
         marketCount = 0;
         towerCount = 0;
@@ -189,10 +189,12 @@ public class Kingdom {
          if (gold<structure.getUpgradeCost()){
              throw new IllegalStateException("Not enough gold to upgrade");
          }
+         gold -= structure.getUpgradeCost();
          structure.upgrade();
     }
 
     public void removeUnit(Unit unit) {
+        usedUnitSpace -= unit.getUnitSpace();
         units.remove(unit);
     }
     public void removeStructure(Structure structure) {
