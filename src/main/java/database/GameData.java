@@ -2,8 +2,6 @@ package database;
 
 import javax.swing.JOptionPane;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import controllers.GameController;
@@ -25,7 +23,7 @@ public class GameData {
 
 
 
-    public void saveGame(String saveName) throws JsonProcessingException{
+    public void saveGame(String saveName){
 //        ObjectMapper mapper = new ObjectMapper();
 //        String gameStateJson = mapper.writeValueAsString(gameState);
 //        String player1Json = mapper.writeValueAsString(player1);
@@ -86,11 +84,7 @@ public class GameData {
                         return;
                     }
                 }
-                try {
-                    saveGame(saveName);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+                saveGame(saveName);
             }
             
             gameController.getPauseFrame().dispose();

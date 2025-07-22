@@ -5,23 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import controllers.GameController;
 import models.GameState;
 import models.Player;
-import models.blocks.Block;
-import models.blocks.EmptyBlock;
-import models.blocks.ForestBlock;
-import models.blocks.VoidBlock;
 import utils.GsonFactory;
-import views.GamePanel;
-import views.MainInfoPanel;
-
-
 
 public class DatabaseHandler {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";

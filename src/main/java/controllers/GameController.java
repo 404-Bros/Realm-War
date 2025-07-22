@@ -91,6 +91,9 @@ public class GameController {
 
                 gameFrame.getActionPanel().setBackground(new Color(0x1A2B44));
 
+                gameFrame.getLoadGamePanel().getComboLabel().setForeground(Color.white);
+                gameFrame.getLoadGamePanel().setBackground(new Color(0x1A2B44));
+
                 pauseFrame.setBackground(new Color(0x1A2B44));
             }
             else{
@@ -105,6 +108,9 @@ public class GameController {
                 gameFrame.getGetPlayerNamePanel().getPlayer2Label().setForeground(Color.BLACK);
 
                 gameFrame.getActionPanel().setBackground(new Color(0xEDEAE6));
+
+                gameFrame.getLoadGamePanel().getComboLabel().setForeground(Color.BLACK);
+                gameFrame.getLoadGamePanel().setBackground(new Color(0xEDEAE6));
 
                 pauseFrame.setBackground(new Color(0xEDEAE6));
 
