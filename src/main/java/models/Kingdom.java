@@ -39,8 +39,8 @@ public class Kingdom {
         this.towers = new ArrayList<>();
         this.structures.add(townHall);
         this.totalUnitSpace = townHall.getUnitSpace();
-        this.gold = 0;
-        this.food = 0;
+        this.gold = 10;
+        this.food = 10;
         farmCount = 0;
         marketCount = 0;
         towerCount = 0;
@@ -181,6 +181,7 @@ public class Kingdom {
         if (usedUnitSpace + unit.getUnitSpace() > totalUnitSpace) {
             throw new IllegalStateException("Not enough unit space");
         }
+        gold -= unit.getPaymentCost();
         units.add(unit);
         usedUnitSpace += unit.getUnitSpace();
     }
@@ -191,6 +192,9 @@ public class Kingdom {
          }
          gold -= structure.getUpgradeCost();
          structure.upgrade();
+         if (structure instanceof Barrack) {
+             totalUnitSpace += Barrack.getUnitSpaceByLevel(structure.getLevel()-1);
+         }
     }
 
     public void removeUnit(Unit unit) {
@@ -199,6 +203,9 @@ public class Kingdom {
     }
     public void removeStructure(Structure structure) {
         structures.remove(structure);
+        if (structure instanceof Barrack) {
+            totalUnitSpace -= Barrack.getUnitSpaceByLevel(structure.getLevel()-1);
+        }
     }
 
 
