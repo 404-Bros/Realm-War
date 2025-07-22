@@ -94,7 +94,7 @@ public class GameController {
                 gameFrame.getLoadGamePanel().getComboLabel().setForeground(Color.white);
                 gameFrame.getLoadGamePanel().setBackground(new Color(0x1A2B44));
 
-                pauseFrame.setBackground(new Color(0x1A2B44));
+                pauseFrame.getContentPane().setBackground(new Color(0x1A2B44));
             }
             else{
                 logHandler.log("Light mode activated");
@@ -1101,17 +1101,17 @@ public class GameController {
             else {
                 if (structureComboBox.getSelectedItem().equals("Farm")){
                     structureSelectionDialog.getDutyLabel().setText("Food Production: "+ Farm.getFoodProductionByLevel(0));
-                    structureSelectionDialog.getCostLabel().setText("Cost: "+Farm.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+                    structureSelectionDialog.getCostLabel().setText("Cost: "+Farm.getBuildingCost(gameState.getCurrentKingdom().getFarmCount()));
                 }
                 else {
                     if (structureComboBox.getSelectedItem().equals("Barrack")){
                         structureSelectionDialog.getDutyLabel().setText("Unit Space: "+ Barrack.getUnitSpaceByLevel(0));
-                        structureSelectionDialog.getCostLabel().setText("Cost: "+Barrack.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+                        structureSelectionDialog.getCostLabel().setText("Cost: "+Barrack.getBuildingCost(gameState.getCurrentKingdom().getBarrackCount()));
                     }
                     else{
                         if (structureComboBox.getSelectedItem().equals("Tower")){
                             structureSelectionDialog.getDutyLabel().setText("Attack Power: "+ Tower.getAttackPowerByLevel(0));
-                            structureSelectionDialog.getCostLabel().setText("Cost: "+Tower.getBuildingCost(gameState.getCurrentKingdom().getMarketCount()));
+                            structureSelectionDialog.getCostLabel().setText("Cost: "+Tower.getBuildingCost(gameState.getCurrentKingdom().getTowerCount()));
                         }
                         else {
                             structureSelectionDialog.getDutyLabel().setText("Duty:");
