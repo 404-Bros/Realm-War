@@ -24,7 +24,6 @@ public class LoadGamePanel extends JPanel {
         comboLabel = new JLabel("Your Saved Games:");
         comboLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         comboLabel.setBounds(50, 30, 300, 30);
-        comboLabel.setForeground(new Color(202, 141, 55));
         add(comboLabel);
 
         savesComboBox = new JComboBox<>();
