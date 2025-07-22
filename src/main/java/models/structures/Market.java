@@ -53,10 +53,4 @@ public class Market extends Structure {
     public static int geGoldProductionByLevel(int level) {
         return GOLD_PRODUCTION_BY_LEVEL[level];
     }
-
-    @Override
-    public void setBaseBlock(Block baseBlock) {
-        // TODO Auto-generated method stub
-        super.setBaseBlock(baseBlock);
-    }
 }

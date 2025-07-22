@@ -1,14 +1,9 @@
 package models.blocks;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import models.Position;
-import models.structures.Structure;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class VoidBlock extends Block {
-    public VoidBlock(@JsonProperty("position") Position position) {
+    public VoidBlock(Position position) {
         super(position);
     }
 

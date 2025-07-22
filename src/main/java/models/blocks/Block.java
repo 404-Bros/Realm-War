@@ -1,27 +1,15 @@
 package models.blocks;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import models.Position;
 import models.structures.Structure;
 import models.units.Unit;
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
-)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = VoidBlock.class, name = "voidBlock"),
-    @JsonSubTypes.Type(value = EmptyBlock.class, name = "emptyBlock"),
-    @JsonSubTypes.Type(value = VoidBlock.class, name = "voidBlock")
-})
+
 public abstract class Block {
     private Position position;
     private boolean isAbsorbed;
     private int kingdomId; // -1 if not absorbed
-    @JsonBackReference
     private Structure structure;
     private Unit unit;
 
