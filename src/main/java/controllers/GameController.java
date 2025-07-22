@@ -1076,6 +1076,7 @@ public class GameController {
                         gameState.nextTurn();
                         checkingStrAndUnit();
                         mainInfoPanel.getInfoPanel().updateInfo();
+                        logDependsOnPlayer("turn begins");
                         gamePanel.repaint();
                         gameFrame.revalidate();
                     });

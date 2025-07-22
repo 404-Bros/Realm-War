@@ -5,15 +5,9 @@ import models.blocks.Block;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tower extends Structure {
-    @JsonIgnore
     private static final int[] ATTACK_POWER_BY_LEVEL = {10, 15, 20};
-    @JsonIgnore
     private static final int[] BUILDING_COST_BY_LEVEL = {10, 20, 30};
-    @JsonIgnore
     private static final int[] DURABILITY_BY_LEVEL = {100, 150, 200};
     private List<Block> coveredBlock;
     private int attackPower;
@@ -59,11 +53,5 @@ public class Tower extends Structure {
 
     public static int getAttackPowerByLevel(int level){
         return ATTACK_POWER_BY_LEVEL[level];
-    }
-
-    @Override
-    public void setBaseBlock(Block baseBlock) {
-        // TODO Auto-generated method stub
-        super.setBaseBlock(baseBlock);
     }
 }
