@@ -47,4 +47,9 @@ public class Farm extends Structure {
     public static int getFoodProductionByLevel(int level) {
         return FOOD_PRODUCTION_BY_LEVEL[level];
     }
+
+    @Override
+    public int getUpgradeCostByLevel(int level) {
+        return BUILDING_COST_BY_LEVEL[level - 1];
+    }
 }

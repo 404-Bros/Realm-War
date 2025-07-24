@@ -64,7 +64,7 @@ public class LogHandler {
     }
 
     private void deleteOldestLog() {
-        int oldestId = currentLogId - currentCount + 1;
+        int oldestId = currentLogId - currentCount;
         File oldestLog = new File(LOG_DIR, "log_" + oldestId + ".txt");
         if (oldestLog.exists()) {
             oldestLog.delete();

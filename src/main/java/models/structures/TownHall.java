@@ -39,4 +39,9 @@ public class TownHall extends Structure {
     public int getUnitSpace() {
         return UNIT_SPACE;
     }
+
+    @Override
+    public int getUpgradeCostByLevel(int level) {
+        return 0;
+    }
 }

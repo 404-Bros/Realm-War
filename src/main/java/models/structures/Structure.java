@@ -48,6 +48,8 @@ public abstract class Structure {
     public int getKingdomId() { return kingdomId; }
     public int getMaxCount() { return maxCount; }
 
+    public abstract int getUpgradeCostByLevel(int level);
+
     public void setBaseBlock(Block baseBlock) {
         this.baseBlock = baseBlock;
     }

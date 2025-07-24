@@ -46,4 +46,9 @@ public class Barrack extends Structure {
     public static int getUnitSpaceByLevel(int level) {
         return UNIT_SPACE_BY_LEVEL[level];
     }
+
+    @Override
+    public int getUpgradeCostByLevel(int level) {
+        return BUILDING_COST_BY_LEVEL[level - 1];
+    }
 }
