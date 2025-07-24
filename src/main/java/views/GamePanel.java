@@ -499,14 +499,26 @@ public class GamePanel extends JPanel {
         Unit attacker= attackerBlock.getUnit();
         Unit attacked= attackedBlockButton.getBlock().getUnit();
         if (attackerBlock instanceof EmptyBlock){
-            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
-                    " attacked " + attacked.getClass().getSimpleName() + " unit at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
             attacked.setHitPoints((int) (attacked.getHitPoints()-(attacker.getAttackPower()*ForestBlock.getAttackBonus())));
+            if(attacked.getHitPoints() <= 0){
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                    " destroyed " + attacked.getClass().getSimpleName() + " unit at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
+            } else { 
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                        " attacked " + attacked.getClass().getSimpleName() + " unit at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY() +
+                        " and hp decreased " + attacked.getHitPoints());
+            }
         }
         else {
-            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
-                    " attacked " + attacked.getClass().getSimpleName() + " unit at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
             attacked.setHitPoints(attacked.getHitPoints()-attacker.getAttackPower());
+            if(attacked.getHitPoints() <= 0){
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                    " destroyed " + attacked.getClass().getSimpleName() + " unit at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
+            } else {
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                        " attacked " + attacked.getClass().getSimpleName() + " unit at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY() +
+                        " and hp decreased to " + attacked.getHitPoints());
+            }
         }
         if (attacked.getHitPoints() <= 0){
             removeUnit(attackedBlockButton);
@@ -516,14 +528,26 @@ public class GamePanel extends JPanel {
         Unit attacker= attackerBlock.getUnit();
         Structure attacked= attackedBlockButton.getBlock().getStructure();
         if (attackerBlock instanceof EmptyBlock){
-            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
-                    " attacked " + attacked.getClass().getSimpleName() + " structure at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
             attacked.setDurability((int) (attacked.getDurability()-(attacker.getAttackPower()*ForestBlock.getAttackBonus())));
+            if(attacked.getDurability() <= 0){
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                    " destroyed " + attacked.getClass().getSimpleName() + " structure at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
+            } else {
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                        " attacked " + attacked.getClass().getSimpleName() + " structure at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY() +
+                        " and durability decreased to " + attacked.getDurability());
+            }
         }
         else {
-            logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
-                    " attacked " + attacked.getClass().getSimpleName() + " structure at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
             attacked.setDurability((attacked.getDurability()-attacker.getAttackPower()));
+            if(attacked.getDurability() <= 0){
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                    " destroyed " + attacked.getClass().getSimpleName() + " structure at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY());
+            } else {
+                logHandler.logDependsOnPlayer(attacker.getClass().getSimpleName() + " unit at X=" + attackerBlock.getPosition().getX() + ", Y=" + attackerBlock.getPosition().getY() +
+                        " attacked " + attacked.getClass().getSimpleName() + " structure at X=" + attackedBlockButton.getPosition().getX() + ", Y=" + attackedBlockButton.getPosition().getY() +
+                        " and durability decreased to " + attacked.getDurability());
+            }
         }
         if (attacked.getDurability() <= 0){
             if (!(attacked instanceof TownHall)){

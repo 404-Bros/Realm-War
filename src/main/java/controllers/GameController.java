@@ -2,29 +2,21 @@ package controllers;
 
 import models.GameState;
 import models.Player;
-import models.Position;
-import models.blocks.Block;
 import models.structures.*;
 import models.units.*;
 import views.*;
 
-import javax.imageio.plugins.tiff.TIFFImageReadParam;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import database.DatabaseHandler;
 import database.GameData;
 import log.LogHandler;
 
 import java.awt.*;
-import java.awt.color.ICC_ColorSpace;
 import java.awt.event.*;
 import java.util.List;
-import java.util.Objects;
 
 public class GameController {
     public static final LogHandler logHandler = new LogHandler();
@@ -183,6 +175,7 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
+            paused = false;
             timerThread.start();
         });
 
@@ -635,11 +628,11 @@ public class GameController {
             if (answer==JOptionPane.YES_OPTION) {
                 try {
                     gameState.getCurrentKingdom().upgradeStructure(structure);
-                    logDependsOnPlayer("Upgraded " + structure.getClass().getSimpleName() + " at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " with " + structure.getUpgradeCost() + " golds");
+                    logDependsOnPlayer("Upgraded " + structure.getClass().getSimpleName() + " at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " with " + structure.getUpgradeCostByLevel(structure.getLevel()-1) + " golds");
                     JOptionPane.showMessageDialog(gameFrame, "Upgrade successful!", "Info", JOptionPane.INFORMATION_MESSAGE);
                     mainInfoPanel.getInfoPanel().updateInfo();
                 }catch (IllegalStateException exception){
-                    logDependsOnPlayer("not enough money for upgrade " + structure.getClass().getSimpleName());
+                    logDependsOnPlayer("not enough money for upgrade " + structure.getClass().getSimpleName() + " at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                     JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     paused=false;
                 }
@@ -778,14 +771,6 @@ public class GameController {
         gameFrame.getLoadGamePanel().addLoadButtonActionListener(e -> {
             String selected = (String) gameFrame.getLoadGamePanel().getSavesComboBox().getSelectedItem();
             String saveName = selected.split(":")[0].trim();
-
-//            try {
-//                DatabaseHandler.loadGame(saveName);
-//            } catch (JsonMappingException e1) {
-//                e1.printStackTrace();
-//            } catch (JsonProcessingException e1) {
-//                e1.printStackTrace();
-//            }
             DatabaseHandler.loadGame(saveName, this);
 
 
@@ -949,6 +934,7 @@ public class GameController {
                     if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
                         paused=true;
                         JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
+                        logDependsOnPlayer("Merge Unit Button clicked on a block not absorbed by current kingdom");
                         selectedButton.setBorder();
                         selectedButton=null;
                         paused=false;
@@ -957,6 +943,7 @@ public class GameController {
                     if (!selectedButton.getBlock().hasUnit()){
                         paused=true;
                         JOptionPane.showMessageDialog(gameFrame, "Pleas select an unit", "Error", JOptionPane.ERROR_MESSAGE);
+                        logDependsOnPlayer("Merge Unit Button clicked without selecting an unit");
                         selectedButton.setBorder();
                         selectedButton=null;
                         paused=false;
@@ -1030,9 +1017,11 @@ public class GameController {
             paused = true;
             pauseFrame.setLocationRelativeTo(gameFrame);
             pauseFrame.setVisible(true);
+            logDependsOnPlayer("Game Paused");
         });
         // resume Button Action Listener
         pauseFrame.addResumeButtonAL(e -> {
+            logDependsOnPlayer("Game Resumed");
             pauseFrame.dispose();
             paused = false;
         });
@@ -1040,7 +1029,7 @@ public class GameController {
     }
     private void createTimerThread(){
         timerThread = new Thread(() -> {
-            while (true){
+            for (;;){
                 isTurnEnded = false;
                 while (timeLeft > 0 && !isTurnEnded) {
                     try {

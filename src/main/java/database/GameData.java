@@ -24,10 +24,6 @@ public class GameData {
 
 
     public void saveGame(String saveName){
-//        ObjectMapper mapper = new ObjectMapper();
-//        String gameStateJson = mapper.writeValueAsString(gameState);
-//        String player1Json = mapper.writeValueAsString(player1);
-//        String player2Json = mapper.writeValueAsString(player2);
         Gson gson = GsonFactory.create();
         String gameStateJson = gson.toJson(gameState);
         String player1Json = gson.toJson(player1);
@@ -51,12 +47,6 @@ public class GameData {
             player1 = gameController.getPlayer1();
             player2 = gameController.getPlayer2();
             timer = gameController.getTimeLeft();
-            
-
-
-
-            String player1Name = player1.getName();
-            String player2Name = player2.getName();
 
             String saveName = JOptionPane.showInputDialog(gameFrame,"please enter file name:", "Save", JOptionPane.OK_CANCEL_OPTION);
             if(saveName == null){
@@ -72,6 +62,11 @@ public class GameData {
                 saveJoption(gameFrame, gameController);
                 return;
             }else{
+                if(saveName.length() > 100){
+                    JOptionPane.showMessageDialog(null, "Save name cannot be longer than 20 characters.");
+                    saveJoption(gameFrame, gameController);
+                    return;
+                }
                 for(int i = 0; i < saveName.length(); i++){
                     if(saveName.charAt(i) == ':'){
                         JOptionPane.showMessageDialog(

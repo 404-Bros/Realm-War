@@ -1,7 +1,5 @@
 package models.blocks;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import models.Position;
 import models.structures.Structure;
 import models.units.Unit;
