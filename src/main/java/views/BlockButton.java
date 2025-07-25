@@ -26,37 +26,12 @@ public class BlockButton extends JButton {
         this.position = block.getPosition();
         blockPanel = new BlockPanel();
         blockPanel.setBounds(0,190,200,410);
-
-        Border bevelBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
-        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 3);
-        Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, bevelBorder);
-
-
         /// /////////
         setPreferredSize(new Dimension(50, 50));
 
         setContentAreaFilled(false);
 
         setBorder();
-
-
-
-//        addActionListener(e -> {
-//            if (isCompound[0]) {
-//                if(block.isAbsorbed()){
-//                    setBorder(kingdomCompoundBorder);
-//                }
-//                else {
-//                    setBorder(bevelBorder);
-//                }
-//            } else {
-//                setBorder(compoundBorder); // مرکب
-//            }
-//            isCompound[0] = !isCompound[0]; // وضعیت را برعکس کن
-//        });
-
-
-
     }
 
     public void setBorder(){

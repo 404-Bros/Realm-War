@@ -26,7 +26,7 @@ public class MenuPanel extends JPanel{
         welcomeLabel = new JLabel("Welcome to Realm War Game");
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         welcomeLabel.setVerticalAlignment(SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        welcomeLabel.setFont(new Font("Thoma", Font.BOLD, 25));
         welcomeLabel.setForeground(new Color(202, 141, 55));
         welcomeLabel.setBackground(new Color(255, 255, 255));
 
@@ -54,7 +54,7 @@ public class MenuPanel extends JPanel{
         newGameButton.setForeground(Color.WHITE);
         //newGameButton.setOpaque(true);
         newGameButton.setPreferredSize(new Dimension(150, 50));
-        newGameButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        newGameButton.setFont(new Font("Thoma", Font.PLAIN, 15));
         centerPanel.add(newGameButton, gbc);
 
         gbc.gridx = 0;
@@ -67,7 +67,7 @@ public class MenuPanel extends JPanel{
         loadGameButton.setForeground(Color.WHITE);
         //loadGameButton.setOpaque(true);
         loadGameButton.setPreferredSize(new Dimension(150, 50));
-        loadGameButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        loadGameButton.setFont(new Font("Thoma", Font.PLAIN, 15));
         centerPanel.add(loadGameButton, gbc);
 
         /// /////////////////////////////
