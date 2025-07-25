@@ -17,7 +17,6 @@ public class InfoPanel extends JPanel {
     private JLabel unitSpaceLabel;
     private JLabel turnLabel;
     private JLabel timeLabel;
-    private int timeLeft=30;
     private String player1Name;
     private String player2Name;
     private GameState gameState;
@@ -86,18 +85,6 @@ public class InfoPanel extends JPanel {
         this.player2Name = player2Name;
     }
 
-
-    public int getTimeLeft() {
-        return timeLeft;
-    }
-
-    public void setTimeLeft(int timeLeft) {
-        this.timeLeft = timeLeft;
-    }
-
-
-
-
     public JLabel getGoldLabel() {
         return goldLabel;
     }
@@ -120,10 +107,5 @@ public class InfoPanel extends JPanel {
 
     public JLabel getPlayerLabel() {
         return playerLabel;
-    }
-
-    public GameState getGameState() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getGameState'");
     }
 }

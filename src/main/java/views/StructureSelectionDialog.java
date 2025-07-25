@@ -21,7 +21,6 @@ public class StructureSelectionDialog extends JDialog {
         setPreferredSize(new Dimension(400, 250));
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setBackground(new Color(0xEDEAE6));
-        // ساخت لیبل Choose Structure
         chooseLabel = new JLabel("Choose Structure:");
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -29,7 +28,6 @@ public class StructureSelectionDialog extends JDialog {
         gbc.insets = new Insets(10, 10, 5, 5);
         add(chooseLabel, gbc);
 
-        // ساخت کومبو باکس
         structureComboBox = new JComboBox<>(new String[]{"None", "Market", "Farm", "Barrack", "Tower"});
         structureComboBox.setPreferredSize(new Dimension(200, 25));
         gbc.gridx = 1;
@@ -38,16 +36,13 @@ public class StructureSelectionDialog extends JDialog {
         gbc.insets = new Insets(10, 5, 5, 10);
         add(structureComboBox, gbc);
 
-        // ساخت لیبل Duty
         dutyLabel = new JLabel("Duty:");
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        //gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(15, 10, 5, 5);
         add(dutyLabel, gbc);
 
-        // ساخت لیبل Cost
         costLabel = new JLabel("Cost:");
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -55,7 +50,6 @@ public class StructureSelectionDialog extends JDialog {
         gbc.insets = new Insets(15, 5, 5, 10);
         add(costLabel, gbc);
 
-        // ساخت دکمه‌ها
         doneButton = new JButton("Done");
 
         doneButton.setFocusable(false);
@@ -118,12 +112,4 @@ public class StructureSelectionDialog extends JDialog {
     public JButton getCancelButton() {
         return cancelButton;
     }
-//
-//    public static void main(String[] args) {
-//        JFrame dummyFrame = new JFrame(); // فقط برای تست
-//        dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        dummyFrame.setSize(400, 200);
-//        StructureSelectionDialog dialog = new StructureSelectionDialog(dummyFrame);
-//        dialog.setVisible(true);
-//    }
 }

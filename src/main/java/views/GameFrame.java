@@ -15,7 +15,6 @@ public class GameFrame extends JFrame {
 
     public GameFrame() {
         setIconImage(new ImageIcon(getClass().getResource("/gameIcon.jpg")).getImage());
-        this.gameState = gameState;
         setTitle("Realm War");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -65,11 +64,6 @@ public class GameFrame extends JFrame {
 
     public void setMainInfoPanel(MainInfoPanel mainInfoPanel) {
         this.mainInfoPanel = mainInfoPanel;
-    }
-
-    public void updateGameState() {
-        gamePanel.repaint();
-        mainInfoPanel.getInfoPanel().updateInfo();
     }
     
     public LoadGamePanel getLoadGamePanel() {
