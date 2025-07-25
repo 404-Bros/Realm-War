@@ -104,7 +104,7 @@ public class GameController {
                 gameFrame.getLoadGamePanel().getComboLabel().setForeground(Color.BLACK);
                 gameFrame.getLoadGamePanel().setBackground(new Color(0xEDEAE6));
 
-                pauseFrame.setBackground(new Color(0xEDEAE6));
+                pauseFrame.getContentPane().setBackground(new Color(0xEDEAE6));
 
             }
         });
