@@ -15,7 +15,7 @@ import utils.GsonFactory;
 public class DatabaseHandler {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "f465";
+    private static final String PASSWORD = "";
 
     public static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS game_saves (" + 
@@ -69,11 +69,6 @@ public class DatabaseHandler {
                 String saveName = rs.getString("save_name");
                 String player1Json = rs.getString("player1");
                 String player2Json = rs.getString("player2");
-
-//                ObjectMapper mapper = new ObjectMapper();
-//
-//                Player player1 = mapper.readValue(player1Json, Player.class);
-//                Player player2 = mapper.readValue(player2Json, Player.class);
                 Gson gson = GsonFactory.create();
                 Player player1 = gson.fromJson(player1Json, Player.class);
                 Player player2 = gson.fromJson(player2Json, Player.class);
@@ -147,13 +142,6 @@ public class DatabaseHandler {
             String player1Json = rs.getString("player1");
             String player2Json = rs.getString("player2");
             int timer = rs.getInt("timer");
-
-//            ObjectMapper mapper = new ObjectMapper();
-//
-//            GameState gameState = mapper.readValue(gameStateJson, GameState.class);
-//            Player player1 = mapper.readValue(player1Json, Player.class);
-//            Player player2 = mapper.readValue(player2Json, Player.class);
-
             Gson gson = GsonFactory.create();
 
             GameState gameState = gson.fromJson(gameStateJson, GameState.class);
