@@ -30,9 +30,8 @@ public class GameController {
     private boolean isDarkMode = false;
     private GamePanel gamePanel;
     private MainInfoPanel mainInfoPanel;
-    private Thread timerThread;
+    private Timer timer;
     private int timeLeft = 31;
-    private boolean paused = false;
     private boolean isTurnEnded = false;
     private StructureSelectionDialog structureSelectionDialog;
     private UnitSelectionDialog unitSelectionDialog;
@@ -159,7 +158,7 @@ public class GameController {
             mainInfoPanel.getInfoPanel().setPlayer2Name(player2name);
 
             gameState.getCurrentKingdom().startTurn();
-            createTimerThread();
+            createTimer();
             mainInfoPanel.getInfoPanel().updateInfo();
 
             gameFrame.setGamePanel(gamePanel);
@@ -175,8 +174,7 @@ public class GameController {
             gameFrame.revalidate();
             gameFrame.repaint();
             gameFrame.setLocationRelativeTo(null);
-            paused = false;
-            timerThread.start();
+            timer.start();
         });
 
         // End Turn Button AL
@@ -184,7 +182,7 @@ public class GameController {
             moveUnitActived=false;
             attackModeActived=false;
             selectedUnit=null;
-            paused=true;
+            timer.stop();
             isTurnEnded=true;
             mergeUnitActived=false;
             JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
@@ -203,9 +201,7 @@ public class GameController {
 
             logDependsOnPlayer("turn begins");
 
-            timeLeft=31;
-            isTurnEnded=false;
-            paused=false;
+            resetTimer();
             checkingStrAndUnit();
             
             mainInfoPanel.getInfoPanel().updateInfo();
@@ -221,49 +217,49 @@ public class GameController {
                 moveUnitActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Move Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             if (attackModeActived){
                 attackModeActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Attack Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             mergeUnitActived=false;
             if (selectedButton == null) {
                 logDependsOnPlayer("Build Button clicked without selecting a block");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
 
             if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
                 logDependsOnPlayer("Build Button clicked on a block not absorbed by current kingdom");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().hasStructure()){
                 logDependsOnPlayer("Build Button clicked on a block with existing structure");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block has a structure!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().hasUnit()){
                 logDependsOnPlayer("Build Button clicked on a block with existing unit");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block has a unit!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
-            paused=true;
+            timer.stop();
             addStructureComboBoxAL();
             logDependsOnPlayer("Build Button clicked, oppening structure selection");
             structureSelectionDialog.setVisible(true);
@@ -290,16 +286,16 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         structureSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }
                     catch (IllegalStateException ex){
                         logDependsOnPlayer("not enough money to build " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
@@ -315,16 +311,16 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         structureSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }
                     catch (IllegalStateException ex){
                         logDependsOnPlayer("not enough money to build " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
@@ -340,16 +336,16 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         structureSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         mainInfoPanel.getInfoPanel().updateInfo();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }
                     catch (IllegalStateException ex){
                         logDependsOnPlayer("not enough money to build " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
@@ -366,31 +362,31 @@ public class GameController {
                             selectedButton=null;
                             lastClickedButton=null;
                             structureSelectionDialog.dispose();
-                            paused=false;
+                            timer.start();
                             mainInfoPanel.getInfoPanel().updateInfo();
                             gameFrame.revalidate();
                             gameFrame.repaint();
                         }
                         catch (IllegalStateException ex){
                             logDependsOnPlayer("not enough money to build " + selectedItem);
-                            paused=true;
+                            timer.stop();
                             JOptionPane.showMessageDialog(gameFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                            paused=false;
+                            timer.start();
                         }finally {
                             break;
                         }
                     }
                     else {
                         logDependsOnPlayer(selectedItem + " build failed at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, "You can't build a Tower in this block!", "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                         break;
                     }
                 case "None":
-                    paused=true;
+                    timer.stop();
                     JOptionPane.showMessageDialog(gameFrame, "Please select a structure", "Error", JOptionPane.ERROR_MESSAGE);
-                    paused=false;
+                    timer.start();
                     break;
             }
         });
@@ -398,7 +394,7 @@ public class GameController {
         // Cancel Button in structure Selection Dialog AL
         structureSelectionDialog.getCancelButton().addActionListener(e -> {
            logDependsOnPlayer("Structure Selection cancelled");
-           paused=false;
+           timer.start();
            structureSelectionDialog.dispose();
         });
 
@@ -410,48 +406,48 @@ public class GameController {
                 moveUnitActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Move Mode Closed");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             if (attackModeActived){
                 attackModeActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Attack Mode Closed");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             mergeUnitActived=false;
             if (selectedButton == null) {
                 logDependsOnPlayer("Recruit Button clicked without selecting a block");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
                 logDependsOnPlayer("Recruit Button clicked on a block not absorbed by current kingdom");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().hasStructure()){
                 logDependsOnPlayer("Recruit Button clicked on a block with existing structure");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block has a structure!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().hasUnit()){
                 logDependsOnPlayer("Recruit Button clicked on a block with existing unit");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block has a unit!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
-            paused=true;
+            timer.stop();
             addUnitComboBoxAL();
             logDependsOnPlayer("Recruit Button clicked, opening unit selection");
             unitSelectionDialog.setVisible(true);
@@ -476,14 +472,14 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         unitSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
                         logDependsOnPlayer("not enough money to recruit " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
@@ -498,14 +494,14 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         unitSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
                         logDependsOnPlayer("not enough money to recruit " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
@@ -520,14 +516,14 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         unitSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
                         logDependsOnPlayer("not enough money to recruit " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
@@ -542,21 +538,21 @@ public class GameController {
                         selectedButton=null;
                         lastClickedButton=null;
                         unitSelectionDialog.dispose();
-                        paused=false;
+                        timer.start();
                         gameFrame.revalidate();
                         gameFrame.repaint();
                     }catch (IllegalStateException exception){
                         logDependsOnPlayer("not enough money to recruit " + selectedItem);
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        paused=false;
+                        timer.start();
                     }finally {
                         break;
                     }
                 case "None":
-                    paused=true;
+                    timer.stop();
                     JOptionPane.showMessageDialog(gameFrame, "Please select a unit", "Error", JOptionPane.ERROR_MESSAGE);
-                    paused=false;
+                    timer.start();
             }
 
         });
@@ -565,7 +561,7 @@ public class GameController {
         unitSelectionDialog.getCancelButton().addActionListener(e -> {
            logDependsOnPlayer("Unit Selection cancelled");
            unitSelectionDialog.dispose();
-           paused=false;
+           timer.start();
         });
 
         // Upgrade Structure Button AL
@@ -574,56 +570,56 @@ public class GameController {
                 moveUnitActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Move Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             if (attackModeActived){
                 attackModeActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Attack Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             mergeUnitActived=false;
             if (selectedButton == null) {
                 logDependsOnPlayer("Upgrade Structure Button clicked without selecting a block");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
                 logDependsOnPlayer("Upgrade Structure Button clicked on a block not absorbed by current kingdom");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().hasUnit()){
                 logDependsOnPlayer("Upgrade Structure Button clicked on a block with existing unit");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block has a unit!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (!selectedButton.getBlock().hasStructure()){
                 logDependsOnPlayer("Upgrade Structure Button clicked on a block without existing structure");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Please select a structure", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().getStructure() instanceof TownHall){
                 logDependsOnPlayer("Upgrade Structure Button clicked on a TownHall while TownHall cannot be upgraded");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "TownHall cannot be upgraded","Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             Structure structure=selectedButton.getBlock().getStructure();
-            paused=true;
+            timer.stop();
             int answer=JOptionPane.showConfirmDialog(gameFrame,"it cost "+structure.getUpgradeCost()+" gold to upgrade,do you want to upgrade?","Upgrade",JOptionPane.YES_NO_OPTION);
             if (answer==JOptionPane.YES_OPTION) {
                 try {
@@ -634,10 +630,10 @@ public class GameController {
                 }catch (IllegalStateException exception){
                     logDependsOnPlayer("not enough money for upgrade " + structure.getClass().getSimpleName() + " at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
                     JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    paused=false;
+                    timer.start();
                 }
             }
-            paused=false;
+            timer.start();
             if (selectedButton != null) {
                 selectedButton.setBorder();
             }
@@ -651,17 +647,17 @@ public class GameController {
                 moveUnitActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Move Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             if (attackModeActived){
                 attackModeActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Attack Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             if (mergeUnitActived){
                 mergeUnitActived=false;
@@ -669,31 +665,31 @@ public class GameController {
             }
             if (selectedButton == null) {
                 logDependsOnPlayer("Merge Unit Button clicked without selecting a block");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Please first select a block", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
                 logDependsOnPlayer("Merge Unit Button clicked on a block that not absorbed by current kingdom");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             if (!selectedButton.getBlock().hasUnit()){
                 logDependsOnPlayer("Merge Unit Button clicked on a block without existing unit");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Pleas select an unit", "Error", JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 return;
             }
             logDependsOnPlayer("Merge Unit Button clicked at Block at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY());
             lastClickedButton=selectedButton;
             selectedButton=null;
-            paused=true;
+            timer.stop();
             JOptionPane.showMessageDialog(gameFrame, "select an unit that you want merge with it", "Notice", JOptionPane.INFORMATION_MESSAGE);
-            paused=false;
+            timer.start();
             mergeUnitActived=true;
         });
 
@@ -709,9 +705,9 @@ public class GameController {
                 attackModeActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Attack Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             selectedButton=null;
             lastClickedButton=null;
@@ -719,16 +715,16 @@ public class GameController {
                 moveUnitActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Move Mode Closed!");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             else {
                 moveUnitActived = true;
                 logDependsOnPlayer("Move Mode Activated");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Actived!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
 
         });
@@ -782,7 +778,7 @@ public class GameController {
             
             
             gameState.getCurrentKingdom().startTurn();
-            createTimerThread();
+            createTimer();
             mainInfoPanel.getInfoPanel().updateInfo();
 
             gamePanel.loadGamePanel(gameState);
@@ -807,10 +803,9 @@ public class GameController {
 
             mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: "+timeLeft);
             logDependsOnPlayer("start turn with time: " + timeLeft);
-            paused=true;
+            timer.stop();
             JOptionPane.showMessageDialog(gameFrame, "Click on OK whenever you're ready!", "Info", JOptionPane.INFORMATION_MESSAGE);
-            paused=false;
-            timerThread.start();
+            timer.start();
         });
 
         // Save And Back Button AL
@@ -834,24 +829,24 @@ public class GameController {
                 moveUnitActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Move Mode Closed");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Move Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             if (attackModeActived){
                 attackModeActived=false;
                 selectedUnit=null;
                 logDependsOnPlayer("Attack Mode Closed");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame, "Attack Mode Closed!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
             else {
                 attackModeActived=true;
                 logDependsOnPlayer("Attack Mode Activated");
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame,"Attack Mode Actived!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
             }
         });
 
@@ -932,21 +927,21 @@ public class GameController {
 
                 if (mergeUnitActived){
                     if (selectedButton.getBlock().getKingdomId()!=gameState.getCurrentKingdom().getId()) {
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, "This block is not absorbed by your kingdom!", "Error", JOptionPane.ERROR_MESSAGE);
                         logDependsOnPlayer("Merge Unit Button clicked on a block not absorbed by current kingdom");
                         selectedButton.setBorder();
                         selectedButton=null;
-                        paused=false;
+                        timer.start();
                         return;
                     }
                     if (!selectedButton.getBlock().hasUnit()){
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, "Pleas select an unit", "Error", JOptionPane.ERROR_MESSAGE);
                         logDependsOnPlayer("Merge Unit Button clicked without selecting an unit");
                         selectedButton.setBorder();
                         selectedButton=null;
-                        paused=false;
+                        timer.start();
                         return;
                     }
 
@@ -959,10 +954,10 @@ public class GameController {
                         mergeUnitActived=false;
 
                     }catch (IllegalStateException exception){
-                        paused=true;
+                        timer.stop();
                         JOptionPane.showMessageDialog(gameFrame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         mergeUnitActived=false;
-                        paused=false;
+                        timer.start();
                         return;
                     }
                 }
@@ -1014,7 +1009,7 @@ public class GameController {
             moveUnitActived=false;
             mergeUnitActived=false;
             attackModeActived=false;
-            paused = true;
+            timer.stop();
             pauseFrame.setLocationRelativeTo(gameFrame);
             pauseFrame.setVisible(true);
             logDependsOnPlayer("Game Paused");
@@ -1023,33 +1018,70 @@ public class GameController {
         pauseFrame.addResumeButtonAL(e -> {
             logDependsOnPlayer("Game Resumed");
             pauseFrame.dispose();
-            paused = false;
+            timer.start();
         });
 
     }
-    private void createTimerThread(){
-        timerThread = new Thread(() -> {
-            for (;;){
-                isTurnEnded = false;
-                while (timeLeft > 0 && !isTurnEnded) {
-                    try {
-                        if (!paused) {
-                            SwingUtilities.invokeLater(() -> {
-                                mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: " + timeLeft);
-                                mainInfoPanel.getInfoPanel().revalidate();
-                                mainInfoPanel.getInfoPanel().repaint();
-                            });
-                            timeLeft--;
-                            Thread.sleep(1000);
-                        } else {
-                            Thread.sleep(100);
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (!isTurnEnded) {
+    private void createTimer(){
+//        timerThread = new Thread(() -> {
+//            for (;;){
+//                isTurnEnded = false;
+//                while (timeLeft > 0 && !isTurnEnded) {
+//                    try {
+//                        if (!paused) {
+//                            SwingUtilities.invokeLater(() -> {
+//                                mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: " + timeLeft);
+//                                mainInfoPanel.getInfoPanel().revalidate();
+//                                mainInfoPanel.getInfoPanel().repaint();
+//                            });
+//                            timeLeft--;
+//                            Thread.sleep(1000);
+//                        } else {
+//                            Thread.sleep(100);
+//                        }
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                if (!isTurnEnded) {
+//                    structureSelectionDialog.dispose();
+//                    unitSelectionDialog.dispose();
+//                    JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+//                    logDependsOnPlayer("timer reached 0, turn ended");
+//                    mergeUnitActived=false;
+//                    SwingUtilities.invokeLater(() -> {
+//                        if (lastClickedButton != null) {
+//                            lastClickedButton.setBorder();
+//                            lastClickedButton = null;
+//                        }
+//                        if (selectedButton != null) {
+//                            selectedButton.setBorder();
+//                        }
+//                        selectedButton=null;
+//                        moveUnitActived=false;
+//                        attackModeActived=false;
+//                        selectedUnit=null;
+//                        mergeUnitActived=false;
+//                        gameState.nextTurn();
+//                        checkingStrAndUnit();
+//                        mainInfoPanel.getInfoPanel().updateInfo();
+//                        logDependsOnPlayer("turn begins");
+//                        gamePanel.repaint();
+//                        gameFrame.revalidate();
+//                    });
+//                }
+//                timeLeft=31;
+//            }
+//        });
+        timer = new Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                timeLeft--;
+                mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: " + timeLeft);
+                mainInfoPanel.getInfoPanel().revalidate();
+                mainInfoPanel.getInfoPanel().repaint();
+                if (timeLeft <= 0) {
+                    ((Timer) e.getSource()).stop();
                     structureSelectionDialog.dispose();
                     unitSelectionDialog.dispose();
                     JOptionPane.showMessageDialog(gameFrame, "Your turn ended!", "Notice", JOptionPane.INFORMATION_MESSAGE);
@@ -1063,22 +1095,29 @@ public class GameController {
                         if (selectedButton != null) {
                             selectedButton.setBorder();
                         }
-                        selectedButton=null;
-                        moveUnitActived=false;
-                        attackModeActived=false;
-                        selectedUnit=null;
-                        mergeUnitActived=false;
+                        selectedButton = null;
+                        moveUnitActived = false;
+                        attackModeActived = false;
+                        selectedUnit = null;
+                        mergeUnitActived = false;
                         gameState.nextTurn();
                         checkingStrAndUnit();
                         mainInfoPanel.getInfoPanel().updateInfo();
                         logDependsOnPlayer("turn begins");
                         gamePanel.repaint();
                         gameFrame.revalidate();
+                        resetTimer();
                     });
                 }
-                timeLeft=31;
             }
         });
+    }
+    private void resetTimer(){
+        mainInfoPanel.getInfoPanel().getTimeLabel().setText("Time Left: 30");
+        mainInfoPanel.getInfoPanel().revalidate();
+        mainInfoPanel.getInfoPanel().repaint();
+        timeLeft=30;
+        timer.start();
     }
     private void addStructureComboBoxAL(){
         JComboBox<String> structureComboBox =structureSelectionDialog.getStructureComboBox();
@@ -1156,9 +1195,9 @@ public class GameController {
                 selectedUnit = gamePanel.findUnitAt(selectedButton);
                 if (!selectedUnit.canMove()){
                     logDependsOnPlayer("unit at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " can't move");
-                    paused=true;
+                    timer.stop();
                     JOptionPane.showMessageDialog(gameFrame,"Unit Can't Move");
-                    paused=false;
+                    timer.start();
                     selectedUnit = null;
                     selectedButton.setBorder();
                     selectedButton = null;
@@ -1171,9 +1210,9 @@ public class GameController {
                 selectedButton.setBorder(compoundBorder);
                 lastClickedButton=selectedButton;
             }catch (IllegalStateException ex){
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 selectedButton.setBorder();
                 selectedButton = null;
             }
@@ -1189,9 +1228,9 @@ public class GameController {
                 gamePanel.repaint();
             }
             else {
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame,"Invalid Move");
-                paused=false;
+                timer.start();
                 logDependsOnPlayer("Invalid " + selectedUnit.getClass().getSimpleName() + " Move from X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " to X=" + lastClickedButton.getPosition().getX() + ", Y=" + lastClickedButton.getPosition().getY());
                 selectedUnit = null;
                 selectedButton.setBorder();
@@ -1210,9 +1249,9 @@ public class GameController {
                 selectedUnit = gamePanel.findUnitAt(selectedButton);
                 if (!selectedUnit.isCanAttack()){
                     logDependsOnPlayer("unit at X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " can't attack");
-                    paused=true;
+                    timer.stop();
                     JOptionPane.showMessageDialog(gameFrame,"Unit Can't Attack","Error",JOptionPane.ERROR_MESSAGE);
-                    paused=false;
+                    timer.start();
                     selectedUnit = null;
                     selectedButton.setBorder();
                     selectedButton = null;
@@ -1227,9 +1266,9 @@ public class GameController {
                 selectedButton.setBorder(compoundBorder);
                 lastClickedButton=selectedButton;
             }catch (IllegalStateException ex){
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-                paused=false;
+                timer.start();
                 selectedButton.setBorder();
                 selectedButton = null;
             }
@@ -1248,9 +1287,9 @@ public class GameController {
                         }
                     }
                 }
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame,"Attacked successfully","Info",JOptionPane.INFORMATION_MESSAGE);
-                paused=false;
+                timer.start();
                 selectedUnit.setCanAttack(false);
                 selectedUnit = null;
                 lastClickedButton.setBorder();
@@ -1261,9 +1300,9 @@ public class GameController {
             }
             else {
                 logDependsOnPlayer("Invalid " + selectedUnit.getClass().getSimpleName() + " Attack from X=" + selectedButton.getPosition().getX() + ", Y=" + selectedButton.getPosition().getY() + " to X=" + lastClickedButton.getPosition().getX() + ", Y=" + lastClickedButton.getPosition().getY());
-                paused=true;
+                timer.stop();
                 JOptionPane.showMessageDialog(gameFrame,"Invalid Attack");
-                paused=false;
+                timer.start();
                 selectedUnit = null;
                 selectedButton.setBorder();
                 selectedButton=null;
@@ -1307,7 +1346,7 @@ public class GameController {
             logHandler.log(player2.getName() + " won the game!");
         }
 
-        paused=true;
+        timer.stop();
         JOptionPane.showMessageDialog(gameFrame,"Great !! You Won!","Info",JOptionPane.INFORMATION_MESSAGE);
         logHandler.log("going back to main menu");
         gameFrame.remove(gamePanel);
